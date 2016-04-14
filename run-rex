@@ -590,7 +590,7 @@ function run_examples()
        [ ! -e $dir/DESCRIPTION ] || 
        [ ! -e $dir/MODULES ] || 
        [ ! -e $dir/example.conf* ]; then
-      echov "warning: $dir does not look like example dir, skipping"
+      echo "warning: $dir does not look like example dir, skipping"
       continue
     fi
     run_example $dir $n $count
