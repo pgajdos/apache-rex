@@ -37,6 +37,11 @@ for example
     $ run-rex 052-mod_proxy_fcgi-php-fpm
     $ run-rex "*proxy* 03*"
 
+Another possibility is to pass a file with the ordered list of example
+dirs:
+
+    $ run-rex <contents-file>
+
 There are options that can be passed to the `run-rex` script by environment
 variables, for example
 
