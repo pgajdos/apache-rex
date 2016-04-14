@@ -3,7 +3,7 @@ CookieName     trackcookie
 LogFormat      "%{trackcookie}C %r %t"       log_usertrack
 CustomLog      @AREX_RUN_DIR@/usertrack_log   log_usertrack
 
-<Directory @AREX_DOCUMENT_ROOT@>a
+<Directory @AREX_DOCUMENT_ROOT@>
   @AREX_ALLOW_FROM_LOCALHOST@
 </Directory>
 
