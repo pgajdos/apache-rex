@@ -1,0 +1,8 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  Options +Includes
+  AddType text/html .shtml
+  AddOutputFilter INCLUDES .shtml
+  XBitHack on
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+

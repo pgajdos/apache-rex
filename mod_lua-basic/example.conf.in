@@ -1,0 +1,7 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  <Files "*.lua">
+    SetHandler lua-script
+  </Files>
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>

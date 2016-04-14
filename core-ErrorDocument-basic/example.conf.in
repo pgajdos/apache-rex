@@ -1,0 +1,13 @@
+ErrorDocument 404 "the page not found\n"
+ErrorDocument 403 "/errors/403.html"
+
+LogLevel trace8
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+<Directory "@AREX_DOCUMENT_ROOT@/private">
+  @AREX_DENY_FROM_ALL@
+</Directory>
+

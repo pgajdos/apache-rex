@@ -1,0 +1,30 @@
+Listen @AREX_RUN_PORT1@
+<VirtualHost *:@AREX_RUN_PORT1@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh1
+
+  RewriteEngine on
+  RewriteCond "%{HTTP_REFERER}"  "!^$"
+  RewriteCond "%{HTTP_REFERER}"  "!www.ourdomain.org" [NC]
+  # stop redirecting
+  RewriteCond "%{REQUEST_URI}"   "!^/go-away.png$"
+  RewriteRule "\.(gif|jpg|png)$" "/go-away.png" [R,NC]
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh1">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT2@
+<VirtualHost *:@AREX_RUN_PORT2@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh2
+
+  RewriteEngine on
+  RewriteMap    hosts-deny "txt:@AREX_RUN_DIR@/hosts.deny"
+  RewriteCond   "${hosts-deny:%{REMOTE_ADDR}|NOT-FOUND}" "!=NOT-FOUND"
+  RewriteRule   "^" "-" [F]
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh2">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+

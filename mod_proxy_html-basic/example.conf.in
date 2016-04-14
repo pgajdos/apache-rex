@@ -1,0 +1,28 @@
+Listen @AREX_RUN_PORT1@
+<VirtualHost *:@AREX_RUN_PORT1@>
+  ErrorLog "@AREX_RUN_DIR@/error_log-internal1"
+  DocumentRoot "@AREX_RUN_DIR@/htdocs-internal1"
+  <Directory "@AREX_RUN_DIR@/htdocs-internal1">
+    Require local
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT2@
+<VirtualHost *:@AREX_RUN_PORT2@>
+  ErrorLog "@AREX_RUN_DIR@/error_log-internal2"
+  DocumentRoot "@AREX_RUN_DIR@/htdocs-internal2"
+  <Directory "@AREX_RUN_DIR@/htdocs-internal2">
+    Require local
+  </Directory>
+</VirtualHost>
+
+<VirtualHost *:@AREX_RUN_PORT@>
+  ServerName       www.frontend.com
+  ProxyPass          /app1/ http://localhost:@AREX_RUN_PORT1@/
+  ProxyPass          /app2/ http://localhost:@AREX_RUN_PORT2@/
+  ProxyHTMLEnable on
+  # see https://github.com/lightyear/mod_proxy_content/blob/master/proxy_html.conf
+  ProxyHTMLLinks  a  href
+  ProxyHTMLURLMap http://localhost:@AREX_RUN_PORT1@ /app1
+</VirtualHost>
+

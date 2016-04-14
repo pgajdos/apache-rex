@@ -1,0 +1,8 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+Alias         /app/                      @AREX_DOCUMENT_ROOT@/dir/application1/start/
+AliasMatch    ^/app([0-9])/(.*)$         @AREX_DOCUMENT_ROOT@/dir/application$1/start/$2
+Redirect      /application              /dir/application1/start
+RedirectMatch ^/application([0-9])      /dir/application$1/start
+

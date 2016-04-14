@@ -1,0 +1,83 @@
+Listen @AREX_RUN_PORT1@
+<VirtualHost *:@AREX_RUN_PORT1@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh1
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh1">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT2@
+<VirtualHost *:@AREX_RUN_PORT2@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh2
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh2">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT3@
+<VirtualHost *:@AREX_RUN_PORT3@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh3
+
+  RewriteEngine on
+  RewriteRule   "^" "/new-user.html"
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh3">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+RewriteEngine on
+RewriteMap    user-to-host    "txt:@AREX_RUN_DIR@/user-to-host.map"
+RewriteRule   "^/users/(.+)$" "${user-to-host:$1|http://localhost:@AREX_RUN_PORT3@}/home/$1"
+
+Listen @AREX_RUN_PORT4@
+<VirtualHost *:@AREX_RUN_PORT4@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh4
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh4">
+    RewriteEngine on
+    RewriteBase   "/"
+    RewriteCond   "%{REQUEST_FILENAME}" !-f
+    RewriteCond   "%{REQUEST_FILENAME}" !-d
+    RewriteRule   "^(.+)\.html$" "generate-page.cgi" [L]
+
+    AddType application/x-httpd-cgi .cgi
+    Options ExecCGI FollowSymlinks
+    
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+
+</VirtualHost>
+
+Listen @AREX_RUN_PORT5@
+<VirtualHost *:@AREX_RUN_PORT5@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh5
+
+  RewriteEngine on
+  RewriteRule   "^/~(([a-z])[a-z0-9]+)(.*)" @AREX_RUN_DIR@/htdocs-vh5/$2/$1/public_html$3
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh5">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT6@
+<VirtualHost *:@AREX_RUN_PORT6@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh6
+
+  RewriteEngine on
+  RewriteRule "^/one.html"   "/two.html#beginning" [R]
+  RewriteRule "^/three.html" "/four.html#beginning" [NE,R]
+
+  # just a nonsense here
+  RewriteRule "^/five.html"       "/six.html" [E=rewritten:1]
+  RewriteCond "%{ENV:rewritten}" "=1"
+  RewriteRule "^/six.html"        "/6.html"   [L]
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh6">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+
+</VirtualHost>

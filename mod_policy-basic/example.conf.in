@@ -1,0 +1,9 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  # mod_mime is not included, so Content-Type is missing
+  SetOutputFilter POLICY_TYPE
+  PolicyType enforce */*
+</Directory>
+
+<Directory "@AREX_DOCUMENT_ROOT@/pub">
+  PolicyFilter off
+</Directory>

@@ -1,0 +1,28 @@
+Alias /icons/ "@AREX_RUN_DIR@/icons/"
+
+RewriteEngine on
+
+# internal tolower RewriteMap
+RewriteMap lowercase "int:tolower"
+# custom RewriteMap to map address to dir
+RewriteMap vhost     "txt:@AREX_RUN_DIR@/vhost.map"
+
+# allow Alias /icons/ to work
+RewriteCond "%{REQUEST_URI}"              "!^/icons/"
+# allow CGIs to work
+RewriteCond "%{REQUEST_URI}"              "!^/cgi-bin/"
+# file based remap
+RewriteCond "${lowercase:%{SERVER_NAME}}" "^(.+)$"
+RewriteCond "${vhost:%1}"                 "^(/.*)$"
+RewriteRule "^/(.*)$"                     "%1/$1"
+
+# CGIs - we have to force a handler
+RewriteCond "%{REQUEST_URI}"              "^/cgi-bin/"
+RewriteCond "${lowercase:%{SERVER_NAME}}"  "^(.+)$"
+RewriteCond "${vhost:%1}"                 "^(/.*)$"
+RewriteRule "^/cgi-bin/(.*)$"             "%1/cgi-bin/$1" [H=cgi-script]
+
+<Directory "@AREX_RUN_DIR@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+  Options ExecCGI
+</Directory>

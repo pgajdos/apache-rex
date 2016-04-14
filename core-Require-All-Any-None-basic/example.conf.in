@@ -1,0 +1,37 @@
+<Directory "@AREX_DOCUMENT_ROOT@/any">
+  AuthType Basic
+  AuthName "Restricted Area"
+  AuthUserFile @AREX_RUN_DIR@/password-file
+
+  <RequireAny>
+    Require valid-user
+    Require local
+  </RequireAny>
+</Directory>
+
+<Directory "@AREX_DOCUMENT_ROOT@/all">
+  AuthType Basic
+  AuthName "Restricted Area"
+  AuthUserFile @AREX_RUN_DIR@/password-file
+
+  <RequireAll>
+    Require valid-user
+    Require local
+  </RequireAll>
+</Directory>
+
+<Directory "@AREX_DOCUMENT_ROOT@/none">
+  AuthType Basic
+  AuthName "Restricted Area"
+  AuthUserFile @AREX_RUN_DIR@/password-file
+
+  <RequireAll>
+    Require valid-user
+    Require local
+    <RequireNone>
+      Require user blatouch
+      Require user puskvorec
+    </RequireNone> 
+  </RequireAll>
+</Directory>
+

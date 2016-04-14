@@ -1,0 +1,21 @@
+RewriteEngine on
+
+<Directory "@AREX_RUN_DIR@/mirror">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+RewriteRule "^/play(.*)"       "/games$1"
+RewriteRule "^/games(.*)"      "@AREX_RUN_DIR@/mirror$1"
+RewriteRule "^/play-wrong(.*)" "/games$1"
+
+Listen @AREX_RUN_PORT1@
+<VirtualHost *:@AREX_RUN_PORT1@>
+  ErrorLog "@AREX_RUN_DIR@/error_log-backend"
+  DocumentRoot "@AREX_RUN_DIR@/htdocs-backend"
+  <Directory "@AREX_RUN_DIR@/htdocs-backend">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+RewriteRule "^/game([12])/" "http://localhost:@AREX_RUN_PORT1@/dir$1" [R]
+

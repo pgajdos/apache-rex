@@ -1,0 +1,26 @@
+CacheQuickHandler off
+
+CacheSocache shmcb
+CacheSocacheMaxSize 102400
+CacheEnable socache "/"
+
+CacheHeader on
+
+LogFormat "%s %U %{cache-status}e" cache_format
+CustomLog "@AREX_RUN_DIR@/uncached-requests.log" cache_format env=cache-miss
+CustomLog "@AREX_RUN_DIR@/cached-requests.log" cache_format env=cache-hit
+CustomLog "@AREX_RUN_DIR@/revalidated-requests.log" cache_format env=cache-revalidate
+
+<Directory "@AREX_DOCUMENT_ROOT@/cached-after-ssi">
+  Options +Includes
+  AddOutputFilter INCLUDES;CACHE .shtml
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+<Directory "@AREX_DOCUMENT_ROOT@/cached-before-ssi">
+  Options +Includes
+  AddOutputFilter CACHE;INCLUDES .shtml
+
+  @AREX_ALLOW_FROM_LOCALHOST@  
+</Directory>

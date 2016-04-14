@@ -1,0 +1,4 @@
+<Location "/server-info/">
+  SetHandler server-info
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Location>

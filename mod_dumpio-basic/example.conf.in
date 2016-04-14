@@ -1,0 +1,13 @@
+<IfVersion >= 2.4>
+LogLevel info dumpio:trace7
+</IfVersion>
+<IfVersion < 2.4>
+LogLevel debug
+</IfVersion>
+DumpIOInput  on
+DumpIOOutput on
+
+<Directory @AREX_DOCUMENT_DIR@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+

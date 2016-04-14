@@ -1,0 +1,5 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  DirectoryIndex index.txt
+  DirectoryIndex index.php
+</Directory>
+

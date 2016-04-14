@@ -1,0 +1,12 @@
+RewriteEngine on
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+RewriteCond "%{HTTP_HOST}" "(.*):"
+RewriteRule "^/(.*)" "/sites/%1/$1"
+
+RewriteCond "%{QUERY_STRING}" "page=([^&]+)"
+RewriteRule "(.*)index.html" "$1page%1.html"
+

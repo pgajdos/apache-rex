@@ -1,0 +1,11 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+  Options None
+</Directory>
+<Directory "@AREX_DOCUMENT_ROOT@/foo">
+  AllowOverride none
+</Directory>
+<Directory "@AREX_DOCUMENT_ROOT@/bar">
+  AllowOverride all
+</Directory>
+

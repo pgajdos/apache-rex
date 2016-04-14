@@ -1,0 +1,36 @@
+# https://httpd.apache.org/docs/2.4/mod/mod_auth_form.html
+<Location "/dologin.html">
+  SetHandler form-login-handler
+
+  AuthFormUsername userid_field
+  AuthFormPassword password_field
+
+  AuthFormLoginRequiredLocation "/login.html"
+  AuthFormLoginSuccessLocation "/success.html"
+
+  AuthFormProvider file
+  AuthUserFile "@AREX_RUN_DIR@/password-file"
+  AuthType form
+  AuthName 'MyRealm'
+
+  Require valid-user
+
+  Session On
+  SessionCookieName mysession path=/private
+</Location>
+
+<Directory "@AREX_RUN_DIR@/htdocs/private">
+
+  AuthFormProvider file
+  AuthUserFile "@AREX_RUN_DIR@/password-file"
+  AuthType form
+  AuthName 'MyRealm'
+
+  AuthFormLoginRequiredLocation "/login.html"
+
+  Require valid-user
+
+  Session On
+  SessionCookieName mysession path=/private
+</Directory>
+

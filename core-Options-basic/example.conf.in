@@ -1,0 +1,12 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+  Options None
+</Directory>
+<Directory "@AREX_DOCUMENT_ROOT@/foo">
+  Options FollowSymlinks Indexes
+</Directory>
+<Directory "@AREX_DOCUMENT_ROOT@/bar">
+  Options Multiviews
+</Directory>
+
+

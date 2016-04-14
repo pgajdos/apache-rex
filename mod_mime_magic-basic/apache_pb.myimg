@@ -1,0 +1,5 @@
+MyImgPPoowweerreeddBByy AAAAPPPPAAAACCCCHHHHEEEE
+! content of this file needs to be at least 
+! offset + 64 bytes (that is sizeof(union VALUETYPE)) 
+! long, otherwise mime_magic module will bail out, 
+! see beginning of mget() function in mod_mime_magic.c

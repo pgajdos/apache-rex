@@ -1,0 +1,17 @@
+# not ScriptAlias, so not all is treat as cgi script
+Alias /cgi/ "@AREX_RUN_DIR@/cgi/"
+<Directory "@AREX_RUN_DIR@/cgi/">
+  Options +ExecCGI
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+AddType application/x-httpd-cgi .my-cgi
+AddHandler cgi-script .my-cgicgi
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+AddOutputFilter CaseFilter html
+AddHandler cgi-script .cgi
+Action add-layout /cgi/layout.cgi
+AddHandler add-layout .doc
+

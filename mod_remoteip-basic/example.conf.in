@@ -1,0 +1,33 @@
+Listen @AREX_RUN_PORT1@
+<VirtualHost *:@AREX_RUN_PORT1@>
+  DocumentRoot "@AREX_RUN_DIR@/htdocs-vh1"
+
+  RemoteIPHeader my-header-ip
+
+  RewriteEngine on
+  RewriteCond   "%{REMOTE_ADDR}" "=1.2.3.4"
+  RewriteRule    "^" "-" [F]
+
+  ErrorDocument 403 "disallowed\n"
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh1">
+    # note that another ip addresses needs
+    # to be allowed, otherwise 403 for
+    # them
+    @AREX_ALLOW_FROM_ALL@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT2@
+<VirtualHost *:@AREX_RUN_PORT2@>
+  RequestHeader set my-header-ip "1.2.3.4" 
+  ProxyPass "/" http://localhost:@AREX_RUN_PORT1@/
+</VirtualHost>
+
+Listen @AREX_RUN_PORT3@
+<VirtualHost *:@AREX_RUN_PORT3@>
+  RequestHeader set my-header-ip "1.1.1.1" 
+  ProxyPass "/" http://localhost:@AREX_RUN_PORT1@/
+</VirtualHost>
+
+

@@ -1,0 +1,31 @@
+LogLevel trace8
+ProxyExpressEnable on
+ProxyExpressDBMType db
+ProxyExpressDBMFile @AREX_RUN_DIR@/emap.db
+
+Listen @AREX_RUN_PORT1@
+<VirtualHost *:@AREX_RUN_PORT1@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh1
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh1">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT2@
+<VirtualHost *:@AREX_RUN_PORT2@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh2
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh2">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT3@
+<VirtualHost *:@AREX_RUN_PORT3@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh3
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh3">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>

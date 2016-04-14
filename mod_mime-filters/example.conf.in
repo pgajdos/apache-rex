@@ -1,0 +1,18 @@
+ExtFilterDefine mySed   mode=output cmd="@AREX_SED_COMMAND@ 's/sample/SAMPLE/g'"
+ExtFilterDefine mySedIn mode=input  cmd="@AREX_SED_COMMAND@ 's/sample/SAMPLE/g'"
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+  AddOutputFilter mySed  .html
+</Directory>
+<Directory "@AREX_DOCUMENT_ROOT@/foo">
+  RemoveOutputFilter     .html
+</Directory>
+<Directory "@AREX_DOCUMENT_ROOT@/cgi">
+  Options +ExecCGI
+  AddHandler cgi-script  .cgi
+  AddInputFilter mySedIn .cgi
+</Directory>
+<Directory "@AREX_DOCUMENT_ROOT@/cgi/foo">
+  RemoveInputFilter      .cgi
+</Directory>
+

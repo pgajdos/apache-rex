@@ -1,0 +1,638 @@
+#!/bin/bash
+
+#
+# CONFIGURATION
+#
+
+# PATH environment variable for running tests
+PATH="$PATH:/bin/:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
+
+# used MPM
+if [ -z "$HTTPD_MPM" ]; then
+  HTTPD_MPM=prefork
+fi
+
+# module PATH
+if [ -z "$MODULE_PATH" ]; then
+  MODULE_PATH="/usr/lib64/apache2:/usr/lib64/apache2-$HTTPD_MPM:/usr/lib/apache2:/usr/lib/apache2-$HTTPD_MPM"
+fi
+
+# writeable dir for running the example
+if [ -z "$RUN_DIR_BASE" ]; then
+  RUN_DIR_BASE=/tmp/apache-rex/
+fi
+
+# ports where httpd can listen from (start + 6)
+if [ -z "$HTTP_PORT_START" ]; then
+  HTTP_PORT_START=60080
+fi
+
+# port where ftp daemon can listen
+if [ -z "$FTP_PORT" ]; then
+  FTP_PORT=60021
+fi
+
+# port where fcgi starter can listen
+if [ -z "$FCGI_PORT" ]; then
+  FCGI_PORT=60009
+fi
+
+# verbosity of the output: normal=0, verbose=1, debug=2
+if [ -z "$VERBOSITY" ]; then
+  VERBOSITY=0
+fi
+
+#
+# HELPER FUNCTIONS
+#
+
+function echov()
+{
+  if [ $VERBOSITY -ge 1 ]; then
+    echo "$@"
+  fi
+}
+
+function echod()
+{
+  if [ $VERBOSITY -ge 2 ]; then
+    echo "$@"
+  fi
+}
+
+
+function usage()
+{
+  echo "Run example or examples of httpd configuration."
+  echo
+  echo "$0 \"<example-dir-list>\""
+  echo "$0 <contents-file>"
+  echo
+  echo "  <example-dir-list> is a list of examples to be"
+  echo "  run (e. g. $0 \"*proxy* 03*\")"
+  echo "  <contents-file> is list examples dirs to be run"
+  echo "  in that order"
+}
+
+function find_module()
+{
+  name=$1
+  for mp in $(echo $MODULE_PATH | tr ':' ' '); do
+    if [ -e $mp ]; then
+      find $mp -name "mod_$name.so"
+    fi
+  done | tail -n 1
+}
+
+
+#
+# SYSTEM CHECK
+#
+
+function httpd_command()
+{
+  which httpd-$HTTPD_MPM httpd2-$HTTPD_MPM httpd httpd2 2>/dev/null | head -n 1
+}
+
+function htpasswd_command()
+{
+  which htpasswd htpasswd2 2>/dev/null | head -n 1
+}
+
+function htdbm_command()
+{
+  which htdbm htdbm2 2>/dev/null | head -n 1
+}
+
+function httxt2dbm_command()
+{
+  which httxt2dbm 2>/dev/null
+}
+
+function curl_command()
+{
+  which curl 2>/dev/null
+}
+
+function curl_have_resolve()
+{
+  curl -h | grep -q '\--resolve' && echo -n 1 || echo -n 0
+}
+
+function sed_command()
+{
+  which sed 2>/dev/null
+}
+
+function sqlite_command()
+{
+  which sqlite sqlite3 2>/dev/null | head -n 1
+}
+
+function openssl_an_engine()
+{
+  openssl engine | head -n 1 | sed 's:^(\([^()]*\)).*:\1:'
+}
+
+function openssl_have_alpn()
+{
+  objdump -T $(ldconfig -p | grep 'libssl\.so\.' | sed 's:.* => ::') | grep alpn > /dev/null && echo -n '1' || echo -n '0'
+}
+
+function have_python_tornado()
+{
+  python -c "help('modules');" | grep tornado > /dev/null && echo -n '1' || echo -n '0'
+}
+
+function have_python_websocket_client()
+{
+  python -c "help('modules');" | grep websocket > /dev/null && echo -n '1' || echo -n '0'
+}
+
+function check_system()
+{
+  mkdir -p $RUN_DIR_BASE/bin
+
+  echod -n "Checking the system "
+  echod -n '.'
+  HTTPD_COMMAND=$(httpd_command)
+  ln -sf $HTTPD_COMMAND     $RUN_DIR_BASE/bin/httpd
+  echod -n '.'
+  HTPASSWD_COMMAND=$(htpasswd_command)
+  ln -sf $HTPASSWD_COMMAND  $RUN_DIR_BASE/bin/htpasswd
+  echod -n '.'
+  HTDBM_COMMAND=$(htdbm_command)
+  ln -sf $HTDBM_COMMAND     $RUN_DIR_BASE/bin/htdbm
+  echod -n '.'
+  HTTXT2DBM_COMMAND=$(httxt2dbm_command)
+  ln -sf $HTTXT2DBM_COMMAND $RUN_DIR_BASE/bin/httxt2dbm
+  echod -n '.'
+  CURL_COMMAND=$(curl_command)
+  ln -sf $CURL_COMMAND      $RUN_DIR_BASE/bin/curl
+  echod -n '.'
+  SQLITE_COMMAND=$(sqlite_command)
+  ln -sf $SQLITE_COMMAND    $RUN_DIR_BASE/bin/sqlite
+  echod -n '.'
+  # filter definitions need full path, otherwise
+  # it is expected that sed is in the PATH
+  export AREX_SED_COMMAND=$(sed_command)
+  echod -n '.'
+  export AREX_CURL_HAVE_RESOLVE=$(curl_have_resolve)
+  echod -n '.'
+  export AREX_AN_OPENSSL_ENGINE=$(openssl_an_engine)
+  echod -n '.'
+  export AREX_OPENSSL_HAVE_ALPN=$(openssl_have_alpn)
+  echod -n '.'
+  export AREX_HAVE_PYTHON_TORNADO=$(have_python_tornado)
+  echod -n '.'
+  export AREX_HAVE_PYTHON_WEBSOCKET_CLIENT=$(have_python_websocket_client)
+  echod ' done.'
+  
+  echod "httpd command ............................ $HTTPD_COMMAND"
+  echod "htpasswd command ......................... $HTPASSWD_COMMAND"
+  echod "htdbm command ............................ $HTDBM_COMMAND"
+  echod "httxt2dbm command ........................ $HTTXT2DBM_COMMAND"
+  echod "curl command ............................. $CURL_COMMAND"
+  echod "curl have --resolve switch ............... $AREX_CURL_HAVE_RESOLVE"
+  echod "sed command .............................. $AREX_SED_COMMAND"
+  echod "sqlite command ........................... $SQLITE_COMMAND"
+  echod "openssl engine ........................... $AREX_AN_OPENSSL_ENGINE"
+  echod "openssl have alpn support ................ $AREX_OPENSSL_HAVE_ALPN"
+  echod "system have python-tornado ............... $AREX_HAVE_PYTHON_TORNADO"
+  echod "system have python-websocket-client ...... $AREX_HAVE_PYTHON_WEBSOCKET_CLIENT"
+  echod
+
+  if [ -z "$HTTPD_COMMAND" ]; then
+    echo 'fatal: httpd binary not found' >2
+    exit 2
+  fi
+
+  if [ -z "$CURL_COMMAND" ]; then
+    echo 'fatal: curl binary not found' >2
+    exit 2
+  fi
+
+  # take symlinks created in the account
+  export PATH="$PATH:$RUN_DIR_BASE/bin"
+}
+
+#
+# RUN ENVIRONMENT
+#
+
+function prepare_env()
+{
+  echod 'Setting environment for running examples.'
+
+  export AREX_APACHE_BRANCH=$(httpd -v | grep 'Server version' | sed 's:.*Apache/\([0-9\.]\+\).*:\1:' | tr '.' ' ' | { read maj min patch; printf "%d%02d" $maj $min;})
+  echod "httpd branch ............................. $AREX_APACHE_BRANCH"
+
+  export AREX_MPM=$HTTPD_MPM
+  echod "httpd MPM ................................ $AREX_MPM"
+
+  export AREX_RUN_PORT=$HTTP_PORT_START
+  echod "httpd will listen on ..................... $AREX_RUN_PORT"
+  export AREX_RUN_PORT1=$((HTTP_PORT_START+1))
+  export AREX_RUN_PORT2=$((HTTP_PORT_START+2))
+  export AREX_RUN_PORT3=$((HTTP_PORT_START+3))
+  export AREX_RUN_PORT4=$((HTTP_PORT_START+4))
+  export AREX_RUN_PORT5=$((HTTP_PORT_START+5))
+  export AREX_RUN_PORT6=$((HTTP_PORT_START+6))
+  echod "other available ports ...................."\
+    "$AREX_RUN_PORT1 $AREX_RUN_PORT2 $AREX_RUN_PORT3 $AREX_RUN_PORT4 $AREX_RUN_PORT5 $AREX_RUN_PORT6"
+
+  export AREX_FTP_PORT=$FTP_PORT
+  echod "ftp daemon will listen on ................ $AREX_FTP_PORT"
+
+  export AREX_FCGI_PORT=$FCGI_PORT
+  echod "fcgi daemon will listen on ............... $AREX_FCGI_PORT"
+  
+  echod -n "authz_core module present ................ "
+  if [ -n "$(find_module authz_core)" ]; then
+    echod '1'
+    export AREX_ALLOW_FROM_LOCALHOST="Require local"
+    export AREX_DENY_FROM_ALL="Require all denied"
+    export AREX_ALLOW_FROM_ALL="Require all granted"
+  else
+    echod '0'
+    export AREX_ALLOW_FROM_LOCALHOST="Order deny,allow\nDeny from all\nAllow from localhost 127.0.0.1"
+    export AREX_DENY_FROM_ALL="Order deny,allow\nDeny from all"
+    export AREX_ALLOW_FROM_ALL="Order allow,deny\nAllow from all"
+  fi
+
+  export AREX_USER=$USER
+  echod "httpd user ............................... $AREX_USER"
+  export AREX_GROUP=$(id -gn)
+  echod "httpd user group ......................... $AREX_GROUP"
+  echod
+}
+
+function check_open_ports()
+{
+  lsof -i | grep -q ":$AREX_RUN_PORT (LISTEN)"  && { echo "fatal: $AREX_RUN_PORT is already opened";  exit 2; }
+  lsof -i | grep -q ":$AREX_RUN_PORT1 (LISTEN)" && { echo "fatal: $AREX_RUN_PORT1 is already opened"; exit 2; }
+  lsof -i | grep -q ":$AREX_RUN_PORT2 (LISTEN)" && { echo "fatal: $AREX_RUN_PORT2 is already opened"; exit 2; }
+  lsof -i | grep -q ":$AREX_RUN_PORT3 (LISTEN)" && { echo "fatal: $AREX_RUN_PORT3 is already opened"; exit 2; }
+  lsof -i | grep -q ":$AREX_RUN_PORT4 (LISTEN)" && { echo "fatal: $AREX_RUN_PORT4 is already opened"; exit 2; }
+  lsof -i | grep -q ":$AREX_RUN_PORT5 (LISTEN)" && { echo "fatal: $AREX_RUN_PORT5 is already opened"; exit 2; }
+  lsof -i | grep -q ":$AREX_RUN_PORT6 (LISTEN)" && { echo "fatal: $AREX_RUN_PORT6 is already opened"; exit 2; }
+}
+
+#
+# RUN LOOP (it is possible to run more examples)
+#
+
+function load_modules()
+{
+  conf=$1
+
+  modules="auth_basic dir authz_host $(cat MODULES | tr ':' ' ')"
+  modules_opt="authz_core"
+  if [ -e MODULES_OPT ]; then
+    modules_opt="$modules_opt $(cat MODULES_OPT | tr ':' ' ')"
+  fi
+
+  for m in $modules; do
+    module_path=$(find_module $m)
+    echov "Will load module $m ($module_path)"
+    echo "LoadModule ${m}_module $module_path"    >> $conf
+  done
+
+  for m in $modules_opt; do
+    module_path=$(find_module $m)
+    if [ -n "$module_path" ]; then
+      echov "Will load module $m ($module_path)"
+      echo "LoadModule ${m}_module $module_path"  >> $conf
+    fi
+  done
+}
+
+function prepare_run()
+{
+  dir=$1
+
+  export AREX_RUN_DIR="$RUN_DIR_BASE$dir"
+
+  # prepare dir to write
+  [ -e $AREX_RUN_DIR ] && rm -r $AREX_RUN_DIR
+  mkdir -p $AREX_RUN_DIR
+
+  # prepare config
+  conf=$AREX_RUN_DIR/httpd.conf
+  echo "ServerName test"                                > $conf
+  echo "User $AREX_USER"                               >> $conf
+  echo "Group $AREX_GROUP"                             >> $conf
+  echo "Listen $AREX_RUN_PORT"                        >> $conf
+  echo "PidFile $AREX_RUN_DIR/pid"                    >> $conf
+  echo "ErrorLog $AREX_RUN_DIR/error_log"             >> $conf
+  load_modules $conf
+  export AREX_DOCUMENT_ROOT=$AREX_RUN_DIR/htdocs
+  echo "DocumentRoot $AREX_DOCUMENT_ROOT"              >> $conf
+  echo "DirectoryIndex index.html"                     >> $conf
+  echo                                                 >> $conf
+  echo "### example configuration"                     >> $conf
+  echo                                                 >> $conf
+
+  if [ -e example.conf.in ]; then
+    cat example.conf.in >> $AREX_RUN_DIR/httpd.conf
+
+    sed -i "s:@AREX_RUN_DIR@:$AREX_RUN_DIR:"                         $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_RUN_PORT@:$AREX_RUN_PORT:"                       $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_RUN_PORT1@:$AREX_RUN_PORT1:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_RUN_PORT2@:$AREX_RUN_PORT2:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_RUN_PORT3@:$AREX_RUN_PORT3:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_RUN_PORT4@:$AREX_RUN_PORT4:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_RUN_PORT5@:$AREX_RUN_PORT5:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_RUN_PORT6@:$AREX_RUN_PORT6:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_DOCUMENT_ROOT@:$AREX_DOCUMENT_ROOT:"               $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_ALLOW_FROM_LOCALHOST@:$AREX_ALLOW_FROM_LOCALHOST:" $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_DENY_FROM_ALL@:$AREX_DENY_FROM_ALL:"               $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_ALLOW_FROM_ALL@:$AREX_ALLOW_FROM_ALL:"             $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_AN_OPENSSL_ENGINE@:$AREX_AN_OPENSSL_ENGINE:"       $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_FTP_PORT@:$AREX_FTP_PORT:"                         $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_FCGI_PORT@:$AREX_FCGI_PORT:"                       $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_SED_COMMAND@:$AREX_SED_COMMAND:"                   $AREX_RUN_DIR/httpd.conf
+  else
+    cat example.conf >> $AREX_RUN_DIR/httpd.conf
+  fi
+
+  # run preparation script of the example
+  if [ -e pre-run.sh ]; then
+    cp pre-run.sh $AREX_RUN_DIR
+    sh $AREX_RUN_DIR/pre-run.sh
+  fi
+
+  # create default DocumentRoot
+  mkdir -p $AREX_RUN_DIR/htdocs
+}
+
+function syntax_check()
+{
+  syntax_ok=1
+  httpd -f $AREX_RUN_DIR/httpd.conf -t 2>$AREX_RUN_DIR/syntax_check || syntax_ok=0
+  echo $syntax_ok
+}
+
+function start_apache()
+{
+  start_ok=1
+  httpd -f $AREX_RUN_DIR/httpd.conf -k start 2>$AREX_RUN_DIR/start_log || start_ok=0
+  if [ $start_ok -ne 1 ]; then
+    echo '0'
+    return
+  fi
+  # wait for the apache to settle down
+  sleep 2
+  if [ ! -e $AREX_RUN_DIR/pid ]; then
+    echo '0'
+    return
+  fi
+  
+  echo '1'
+  return
+}
+
+function run()
+{
+  cp run.sh $AREX_RUN_DIR
+  run_exit_code=0
+  sh $AREX_RUN_DIR/run.sh 2>&1 || run_exit_code=$?
+}
+
+function stop_apache()
+{
+  pid=$(cat $AREX_RUN_DIR/pid)
+  kill -TERM -$pid
+  sleep 1
+  if [ -e $AREX_RUN_DIR/pid ]; then
+    kill -KILL -$pid || true
+    sleep 1
+    if [ -e $AREX_RUN_DIR/pid ]; then
+      echo '0'
+      return
+    fi
+  fi
+  echo '1'
+}
+
+function missing_binaries()
+{
+  if [ ! -e BINARIES ]; then
+    echo ""
+    return
+  fi
+
+  req_binaries=$(cat BINARIES)
+  result=""
+
+  for b in $req_binaries; do
+    if [ -z "$(which $b 2>/dev/null)" ]; then
+      result="$result$b "
+    fi
+  done
+
+  echo $result
+}
+
+function missing_modules()
+{
+  req_modules=$(cat MODULES | tr ':' ' ')
+  result=""
+
+  for m in $req_modules; do
+    if [ -z "$(find_module $m)" ]; then
+      result="$result$m "
+    fi
+  done
+
+  echo $result
+}
+
+run_result=255
+function run_example()
+{
+  dir=$1
+  n=$2
+  count=$3
+  run=$(echo $dir | sed 's:^[0-9]*-::')
+
+  # run started
+  cd $dir
+
+  echo "==========================================================="
+  echo "EXAMPLE $dir ($n/$count)"
+  echo
+  cat DESCRIPTION
+  echo "-----------------------------------------------------------"
+  echo
+
+  mb=$(missing_binaries)
+  mm=$(missing_modules)
+
+  if [ -e skip.sh ] && sh skip.sh; then
+    echo 'SKIPPED'
+    head -n 1 skip.sh | sed 's:#::'
+    run_result=1
+  elif [ -n "$mb" ]; then
+    echo 'SKIPPED'
+    echo "Following utilities are missing: $mb"
+    run_result=1
+  elif [ -n "$mm" ]; then
+    echo 'SKIPPED'
+    echo "Following modules are missing: $mm"
+    run_result=1
+  else
+    # prepare the config, dir, run pre-run.sh, etc.
+    prepare_run $dir
+
+    # check the syntax of the example configuration
+    echo -n 'Checking syntax ... '
+    syntax_ok="$(syntax_check)"
+    if [ "$syntax_ok" == '1' ]; then
+      echo 'OK.'
+    else
+      echo 'FAILURE.'
+      echo
+      echo 'SKIPPED'
+      cat $AREX_RUN_DIR/syntax_check
+      run_result=1
+    fi
+
+    start_ok='0'
+    if [ "$syntax_ok" == '1' ]; then
+      echo -n 'Starting httpd ... '
+      start_ok=$(start_apache)
+      if [ "$start_ok" == '1' ]; then
+        echo 'SUCCESS'
+      else
+        echo 'SKIPPED'
+        echo 'start_log:'
+        cat $AREX_RUN_DIR/start_log
+        echo 'error_log:'
+        cat $AREX_RUN_DIR/error_log
+        run_result=1
+      fi
+    fi
+
+    if [ "$start_ok" == '1' ]; then
+      echov
+      echov 'Running the example'
+      echov
+      echov "+++++++++ $AREX_RUN_DIR/httpd.conf ++++++++++"
+      if [ $VERBOSITY -ge 1 ]; then
+        cat  $AREX_RUN_DIR/httpd.conf
+      fi
+      echov "+++++++++ $AREX_RUN_DIR/httpd.conf ++++++++++"
+      echov
+      echov "++++++++++ $AREX_RUN_DIR/run.sh ++++++++++"
+      if [ $VERBOSITY -ge 1 ]; then
+        cat run.sh
+      fi
+      echov "++++++++++ $AREX_RUN_DIR/run.sh ++++++++++"
+      echov 
+      echo
+      run
+      echo
+      if [ $run_exit_code == 0 ]; then
+        echo "Example result: PASSED"
+        run_result=0
+      else
+        echo "Example FAILED (subexample #$run_exit_code):"
+        for log in $AREX_RUN_DIR/error_log*; do
+          echo "++++++++++ $log ++++++++++"
+          cat  $log
+          echo "++++++++++ $log ++++++++++"
+          echo
+        done
+        run_result=2
+      fi
+      echo
+  
+      echo -n 'Stopping httpd ... '
+      stop_ok=$(stop_apache)
+      if [ $stop_ok == '1' ]; then
+        echo OK.
+      else
+        # should not happen
+        echo FAILURE.
+      fi
+    fi
+ 
+    echo
+    echo "See for details: $AREX_RUN_DIR"
+  fi
+
+  echo "==========================================================="
+
+  cd ..
+}
+
+function run_examples()
+{
+  dirs=$1
+
+  passed=""
+  skipped=""
+  failed=""
+
+  count=$(echo $dirs | wc -w)
+  n=0
+
+  # iterate over examples
+  for dir in $dirs; do
+    n=$((n+1))
+    if [ ! -e $dir ]; then
+      echo "error: $dir not found"
+      continue
+    fi
+    if [ ! -d $dir ] || 
+       [ ! -e $dir/run.sh ] || 
+       [ ! -e $dir/DESCRIPTION ] || 
+       [ ! -e $dir/MODULES ] || 
+       [ ! -e $dir/example.conf* ]; then
+      echov "warning: $dir does not look like example dir, skipping"
+      continue
+    fi
+    run_example $dir $n $count
+    case $run_result in
+      0) passed="$passed$dir " ;;
+      1) skipped="$skipped$dir "   ;;
+      2) failed="$failed$dir "     ;;
+      # should not happen
+      *) echo 'wrong return code from run_example()'; exit 1;;
+    esac
+  done
+
+  echo
+  echo "SUMMARY"
+  echo "======="
+  echo "PASSED:  $(echo $passed | wc -w)"
+  if [ -n "$passed" ]; then
+    echov "PASSED RUNS:  $passed"
+  fi
+  echo "FAILED:  $(echo $failed  | wc -w)"
+  if [ -n "$failed" ]; then
+    echov "FAILED RUNS:  $failed"
+  fi
+  echo "SKIPPED: $(echo $skipped | wc -w)"
+  if [ -n "$skipped" ]; then
+    echov "SKIPPED RUNS: $skipped"
+  fi
+}
+
+if [ "$1" == "-h" -o "$1" == "--help" -o "$1" == "" ]; then
+  usage
+  exit 0
+elif [ -f "$1" ]; then
+  dirs=$(cat $1 | tr '\n' ' ')
+else
+  dirs="$@"
+fi
+
+check_system
+prepare_env
+check_open_ports
+run_examples "$dirs"
+
+exit 0
+

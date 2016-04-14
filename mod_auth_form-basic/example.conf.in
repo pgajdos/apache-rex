@@ -1,0 +1,19 @@
+# https://httpd.apache.org/docs/2.4/mod/mod_auth_form.html
+# for more exhaustive and descriptive example see mod_session
+<Location "/dologin.html">
+  SetHandler form-login-handler
+ 
+  AuthFormUsername userid_field
+  AuthFormPassword password_field
+
+  AuthFormLoginRequiredLocation "/login.html"
+  AuthFormLoginSuccessLocation "/success.html"
+
+  AuthFormProvider file
+  AuthUserFile "@AREX_RUN_DIR@/password-file"
+  AuthType form
+  AuthName 'MyRealm'
+
+  Require valid-user
+</Location>
+

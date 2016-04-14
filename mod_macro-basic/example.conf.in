@@ -1,0 +1,41 @@
+<IfVersion >= 2.4.2>
+  DefaultRuntimeDir @AREX_RUN_DIR@/run
+</IfVersion>
+
+# Using proxy example, there are certainly more lightweight examples.
+# https://httpd.apache.org/docs/2.4/mod/mod_macro.html
+## Define macro for repetitive configurations
+<Macro Backend $id $port>
+  Listen $port
+  <VirtualHost *:$port>
+
+    ServerName $id
+    DocumentRoot "@AREX_RUN_DIR@/htdocs-vh-$id"
+    ErrorLog "@AREX_RUN_DIR@/error_log-$id"
+
+    # Public document root
+    <Directory "@AREX_RUN_DIR@/htdocs-vh-$id">
+        @AREX_ALLOW_FROM_LOCALHOST@
+    </Directory>
+  </VirtualHost>
+</Macro>
+
+## Use macro with different arguments.
+Use Backend backend1 @AREX_RUN_PORT1@
+Use Backend backend2 @AREX_RUN_PORT2@
+Use Backend fallback @AREX_RUN_PORT3@
+
+UndefMacro Backend
+
+Listen @AREX_RUN_PORT4@
+<VirtualHost *:@AREX_RUN_PORT4@>
+  ProxyPass / balancer://cluster/
+  <Proxy balancer://cluster>
+    BalancerMember http://localhost:@AREX_RUN_PORT1@/ loadfactor=20
+    BalancerMember http://localhost:@AREX_RUN_PORT2@/ loadfactor=20
+    BalancerMember http://localhost:@AREX_RUN_PORT3@/ loadfactor=1
+    # just try another lbmethod
+    ProxySet lbmethod=bytraffic
+  </Proxy>
+</VirtualHost>
+

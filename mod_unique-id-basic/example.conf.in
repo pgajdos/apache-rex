@@ -1,0 +1,6 @@
+LogFormat "%{UNIQUE_ID}e %{%d/%b/%Y %T}t.%{msec_frac}t %f %s" mylog
+CustomLog "@AREX_RUN_DIR@/access.log" mylog
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>

@@ -1,0 +1,27 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  AuthType Basic
+  AuthName "Private Area"
+  AuthUserFile "@AREX_RUN_DIR@/password-file"
+
+  # other methods than GET disallowed for
+  # everyone else than admin
+  <IfVersion >= 2.4>
+    <RequireAll> 
+      Require local
+
+      <LimitExcept GET>
+        Require user admin
+      </LimitExcept>
+    </RequireAll>
+  </IfVersion>
+  <IfVersion < 2.4>
+    # Satisfy all is the default
+    Order deny,allow
+    Deny from all
+    Allow from localhost 127.0.0.1
+  
+    <LimitExcept GET>
+      Require user admin
+    </LimitExcept>
+  </IfVersion>
+</Directory>

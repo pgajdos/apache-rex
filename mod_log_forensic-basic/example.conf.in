@@ -1,0 +1,6 @@
+ForensicLog @AREX_RUN_DIR@/forensic_log
+
+<Directory @AREX_DOCUMENT_DIR@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+

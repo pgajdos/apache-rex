@@ -1,0 +1,6 @@
+LogLevel info
+RequestReadTimeout header=1 body=1
+
+<Directory "@AREX_DOCUMENT_ROOT@/">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>

@@ -1,0 +1,2 @@
+Before the fix: after 500, backend was put in error state even if 500 was not on failonstatus list.
+Apache bugzilla 56925, SUSE bugzilla 951692

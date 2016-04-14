@@ -1,0 +1,37 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  AuthType Basic
+  AuthBasicProvider file
+  AuthName "Restricted Area"
+  AuthUserFile  @AREX_RUN_DIR@/htpasswd
+  AuthGroupFile @AREX_RUN_DIR@/htgroup
+  <IfVersion >= 2.4>
+    <RequireAll>
+      Require group users
+      Require valid-user
+    </RequireAll>
+  </IfVersion>
+  <IfVersion < 2.4>
+    Require group users
+    Require valid-user
+    Satisfy all
+  </IfVersion>
+</Directory>
+<Directory "@AREX_DOCUMENT_ROOT@/admin">
+  AuthType Basic
+  AuthBasicProvider file
+  AuthName "Restricted Area"
+  AuthUserFile  @AREX_RUN_DIR@/htpasswd
+  AuthGroupFile @AREX_RUN_DIR@/htgroup
+  <IfVersion >= 2.4>
+    <RequireAll>
+      Require group admin
+      Require valid-user
+    </RequireAll>
+  </IfVersion>
+  <IfVersion < 2.4>
+    Require group admin
+    Require valid-user
+    Satisfy all
+  </IfVersion>
+</Directory>
+

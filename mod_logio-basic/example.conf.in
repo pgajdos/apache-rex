@@ -1,0 +1,9 @@
+<IfVersion >= 2.4.13>
+  LogIOTrackTTFB on
+  LogFormat "%a %s %^FB %I %O" my_format
+</IfVersion>
+<IfVersion <  2.4.13>
+  LogFormat "%a %s %I %O" my_format
+</IfVersion>
+CustomLog @AREX_RUN_DIR@/my_log my_format
+

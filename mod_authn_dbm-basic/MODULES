@@ -1,0 +1,1 @@
+auth_basic authn_dbm authz_user

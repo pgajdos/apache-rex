@@ -1,0 +1,20 @@
+<IfVersion <= 2.3.11>
+NameVirtualHost *:@AREX_RUN_PORT@
+</IfVersion>
+
+<VirtualHost *:@AREX_RUN_PORT@>
+  ServerName www.domain.tld
+  DocumentRoot "@AREX_RUN_DIR@/htdocs-domain"
+  <Directory "@AREX_RUN_DIR@/htdocs-domain">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+<VirtualHost *:@AREX_RUN_PORT@>
+  ServerName www.otherdomain.tld
+  DocumentRoot "@AREX_RUN_DIR@/htdocs-otherdomain"
+  <Directory "@AREX_RUN_DIR@/htdocs-otherdomain">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+

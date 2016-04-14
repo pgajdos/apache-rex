@@ -1,0 +1,26 @@
+<Directory "@AREX_DOCUMENT_ROOT@/any">
+  AuthType Basic
+  AuthName "Restricted Area"
+  AuthUserFile @AREX_RUN_DIR@/password-file
+  Require valid-user
+
+  Order deny,allow
+  Deny from all
+  Allow from localhost 127.0.0.1
+
+  Satisfy any
+</Directory>
+
+<Directory "@AREX_DOCUMENT_ROOT@/all">
+  AuthType Basic
+  AuthName "Restricted Area"
+  AuthUserFile @AREX_RUN_DIR@/password-file
+  Require valid-user
+
+  Order deny,allow
+  Deny from all
+  Allow from localhost 127.0.0.1
+
+  Satisfy all
+</Directory>
+

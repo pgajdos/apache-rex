@@ -1,0 +1,13 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+  SetOutputFilter Sed
+  OutputSed "s/does not work/works/g"
+</Directory>
+<Directory "@AREX_DOCUMENT_ROOT@/cgi">
+  Options +ExecCGI
+  AddHandler cgi-script .cgi
+  @AREX_ALLOW_FROM_LOCALHOST@
+  SetInputFilter Sed
+  InputSed "s/does not work/works/g"
+</Directory>
+

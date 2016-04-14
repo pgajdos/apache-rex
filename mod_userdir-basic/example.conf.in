@@ -1,0 +1,16 @@
+UserDir public_html
+<Directory "/home/*/public_html">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+Listen @AREX_RUN_PORT1@
+<VirtualHost *:@AREX_RUN_PORT1@>
+  ErrorLog "@AREX_RUN_DIR@/error_log-virtualhost"
+  UserDir @AREX_RUN_DIR@/users/*/my_html
+  UserDir disabled root
+  <Directory "@AREX_RUN_DIR@/users/*/my_html">
+    AllowOverride All
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+

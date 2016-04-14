@@ -1,0 +1,11 @@
+<Directory "@AREX_DOCUMENT_ROOT@/get">
+  AllowMethods GET
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+<Directory "@AREX_DOCUMENT_ROOT@/post">
+  AllowMethods POST
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>

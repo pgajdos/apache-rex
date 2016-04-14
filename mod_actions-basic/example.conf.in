@@ -1,0 +1,31 @@
+Alias /cgi/ "@AREX_RUN_DIR@/cgi/"
+<Directory "@AREX_RUN_DIR@/cgi/">
+  Options +ExecCGI
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+AddHandler cgi-script .cgi
+
+<Directory "@AREX_DOCUMENT_ROOT@/doc">
+  @AREX_ALLOW_FROM_LOCALHOST@
+
+  Action text/html /cgi/variables.cgi
+
+  Action add-layout /cgi/layout.cgi
+  AddHandler add-layout .doc
+</Directory>
+
+<Location /system-info>
+  Action system-info /cgi/system-info.cgi virtual
+  SetHandler system-info
+</Location>
+
+<Location /other-info>
+  Action other-info /cgi/other-info.cgi
+  SetHandler other-info
+</Location>
+
+<Directory "@AREX_DOCUMENT_ROOT@/test-script/">
+  @AREX_ALLOW_FROM_LOCALHOST@
+  Script GET /cgi/script-get.cgi
+  Script PUT /cgi/script-put.cgi
+</Directory>

@@ -1,0 +1,5 @@
+<Directory "@AREX_DOCUMENT_ROOT@/data/images">
+  SetOutputFilter DATA
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+

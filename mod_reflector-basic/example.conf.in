@@ -1,0 +1,7 @@
+<Location /fix>
+  @AREX_ALLOW_FROM_LOCALHOST@
+  SetHandler reflector
+  SetOutputFilter Sed
+  OutputSed "s/does not work/works/g"
+</Location>
+

@@ -1,0 +1,18 @@
+# this is the default
+CacheQuickHandler on
+
+CacheSocache shmcb
+CacheSocacheMaxSize 102400
+CacheEnable socache "/"
+
+CacheHeader on
+
+LogFormat "%s %{cache-status}e" cache_format
+CustomLog "@AREX_RUN_DIR@/uncached-requests.log" cache_format env=cache-miss
+CustomLog "@AREX_RUN_DIR@/cached-requests.log" cache_format env=cache-hit
+CustomLog "@AREX_RUN_DIR@/revalidated-requests.log" cache_format env=cache-revalidate
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+

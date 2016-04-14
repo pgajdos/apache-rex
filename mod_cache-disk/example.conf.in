@@ -1,0 +1,19 @@
+# this is the default
+CacheQuickHandler on
+
+CacheRoot "@AREX_RUN_DIR@/cacheroot"
+CacheDirLevels 5
+CacheDirLength 3
+
+CacheHeader on
+
+CacheEnable disk "/"
+
+LogFormat "%s %{cache-status}e" cache_format
+CustomLog "@AREX_RUN_DIR@/uncached-requests.log" cache_format env=cache-miss
+CustomLog "@AREX_RUN_DIR@/cached-requests.log" cache_format env=cache-hit
+CustomLog "@AREX_RUN_DIR@/revalidated-requests.log" cache_format env=cache-revalidate
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>

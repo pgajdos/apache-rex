@@ -1,0 +1,1 @@
+rewrite remoteip proxy proxy_http headers

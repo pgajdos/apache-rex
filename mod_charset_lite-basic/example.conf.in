@@ -1,0 +1,7 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+  CharsetSourceEnc ISO-8859-2
+  CharsetDefault   UTF-8
+  CharsetOptions   ImplicitAdd
+</Directory>
+

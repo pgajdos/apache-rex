@@ -1,0 +1,68 @@
+# https://httpd.apache.org/docs/trunk/rewrite/remapping.html
+Listen @AREX_RUN_PORT1@
+<VirtualHost *:@AREX_RUN_PORT1@>
+  DocumentRoot @AREX_RUN_DIR@/host1-htdocs
+  
+  RewriteEngine on
+  RewriteRule "^(.*)one\.html$"   "$1two.html"  [PT,L]
+  RewriteRule "^(.*)three\.html$" "$1four.html" [R,L]
+
+  <Directory "@AREX_RUN_DIR@/host1-htdocs">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT2@
+<VirtualHost *:@AREX_RUN_PORT2@>
+  DocumentRoot @AREX_RUN_DIR@/host2-htdocs
+
+  RewriteEngine on
+  RewriteRule "^(.*)$"  "http://localhost:@AREX_RUN_PORT1@/$1" [R,L]
+</VirtualHost>
+
+Listen @AREX_RUN_PORT3@
+<VirtualHost *:@AREX_RUN_PORT3@>
+  DocumentRoot @AREX_RUN_DIR@/host3-htdocs
+
+  RewriteEngine on
+  RewriteRule "^(.*)foo\.html$" "$1foo.cgi" [H=cgi-script,L]
+
+  <Directory @AREX_RUN_DIR@/host3-htdocs/~quux/>
+    Options ExecCGI
+  
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT4@
+<VirtualHost *:@AREX_RUN_PORT4@>
+  DocumentRoot @AREX_RUN_DIR@/host4-htdocs
+
+  <Directory "@AREX_RUN_DIR@/host4-htdocs">
+    RewriteEngine on
+    RewriteCond "%{DOCUMENT_ROOT}/$1.php"   -f
+    RewriteCond "%{DOCUMENT_ROOT}/$1.html" !-f
+    RewriteRule "^(.*).html$" "$1.php"
+
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT5@
+<VirtualHost *:@AREX_RUN_PORT5@>
+  DocumentRoot @AREX_RUN_DIR@/host5-htdocs
+
+  RewriteEngine on
+
+  RewriteCond "%{DOCUMENT_ROOT}/dir1/%{REQUEST_URI}" -f
+  RewriteRule "^(.+)" "%{DOCUMENT_ROOT}/dir1/$1" [L]
+
+  RewriteCond "%{DOCUMENT_ROOT}/dir2/%{REQUEST_URI}" -f
+  RewriteRule "^(.+)" "%{DOCUMENT_ROOT}/dir2/$1" [L]
+
+  RewriteRule "^" "-" [PT]
+
+  <Directory "@AREX_RUN_DIR@/host5-htdocs">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>

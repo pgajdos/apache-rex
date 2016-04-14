@@ -1,0 +1,15 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+<Directory "@AREX_DOCUMENT_ROOT@/foo">
+  Order deny,allow
+  Deny from all
+</Directory>
+
+<Directory "@AREX_DOCUMENT_ROOT@/bar">
+  Require all denied
+</Directory>
+

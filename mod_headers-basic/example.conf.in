@@ -1,0 +1,24 @@
+Listen @AREX_RUN_PORT1@
+<VirtualHost *:@AREX_RUN_PORT1@>
+  Header echo ^my-header
+
+  Header unset my-header-user
+  Header set  my-header-rqinfo "recived at: %t UTC (seconds since the epoch), duration: %D us"
+
+  SetEnvIf Referer "^(.*)$" REFERER=$1
+  Header set my-header-referer "%{REFERER}e"
+
+  <Directory "@AREX_DOCUMENT_ROOT@">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT2@
+<VirtualHost *:@AREX_RUN_PORT2@>
+  RequestHeader set my-header-ip   1.2.3.4
+  RequestHeader set my-header-port 50
+  RequestHeader set my-header-user "joe"
+  SetEnvIf Referer "^(.*)$" REFERER=$1
+  RequestHeader set Referer "%{REFERER}e"
+  ProxyPass "/" http://localhost:@AREX_RUN_PORT1@/
+</VirtualHost>

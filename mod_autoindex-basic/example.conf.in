@@ -1,0 +1,17 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  Options Indexes
+  IndexOptions SuppressLastModified FancyIndexing HTMLTable SuppressColumnSorting
+
+  AddIcon /icons/image.png .gif .png .svg
+  AddIcon /icons/dir.png ^^DIRECTORY^^
+  AddAlt  IMG              .gif .png .svg
+  AddIconByType (TXT,/icons/text.png) text/*
+  AddIconByType (CMP,/icons/compressed.png) application/x-gzip
+
+  DefaultIcon /icons/unknown.png
+
+  ReadmeName /includes/footer.html
+  HeaderName /includes/header.html
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>

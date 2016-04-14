@@ -1,0 +1,2 @@
+ProxyPass        / ftp://127.0.0.1:@AREX_FTP_PORT@/
+ProxyPassReverse / ftp://127.0.0.1:@AREX_FTP_PORT@/

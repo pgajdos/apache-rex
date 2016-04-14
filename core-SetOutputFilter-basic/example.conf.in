@@ -1,0 +1,6 @@
+ExtFilterDefine mySed mode=output cmd="@AREX_SED_COMMAND@ 's/does not work/works/g'"
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+  SetOutputFilter mySed
+</Directory>
+

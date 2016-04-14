@@ -1,0 +1,8 @@
+AuthnzFcgiDefineProvider authnz myauthnz fcgi://127.0.0.1:@AREX_FCGI_PORT@/
+<Directory "@AREX_DOCUMENT_ROOT@/protected/">
+  AuthType Basic
+  AuthName "Restricted Area"
+  AuthBasicProvider myauthnz
+  Require myauthnz
+</Directory>
+

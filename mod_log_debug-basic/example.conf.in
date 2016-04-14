@@ -1,0 +1,11 @@
+ErrorLogFormat '[%{cu}t] %M'
+LogLevel info
+<Directory "@AREX_DOCUMENT_ROOT@/foo/">
+  RewriteEngine on
+  RewriteBase "/foo/"
+  RewriteRule "(.*)\.html" "welcome.html" [L]
+  LogMessage  "%{REQUEST_URI} has been requested, serving %{REQUEST_FILENAME}" hook=all
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+

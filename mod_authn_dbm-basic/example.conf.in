@@ -1,0 +1,9 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  AuthType Basic
+  # for file example see mod_authz_user example
+  AuthBasicProvider dbm
+  AuthName "Restricted Area"
+  AuthDBMUserFile @AREX_RUN_DIR@/htdbm
+  Require valid-user
+</Directory>
+

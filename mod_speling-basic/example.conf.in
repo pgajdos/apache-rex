@@ -1,0 +1,7 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  CheckSpelling on
+  CheckCaseOnly off
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+

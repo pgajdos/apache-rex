@@ -1,0 +1,6 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  SetOutputFilter RATE_LIMIT
+  SetEnv rate-limit 1
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>

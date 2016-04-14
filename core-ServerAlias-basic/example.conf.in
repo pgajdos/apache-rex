@@ -1,0 +1,19 @@
+<VirtualHost *>
+  ServerName domain.com
+  ServerAlias www.domain.com
+
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh1
+  <Directory "@AREX_RUN_DIR@/htdocs-vh1/">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+<VirtualHost *>
+  ServerName otherdomain.com
+  ServerAlias *.otherdomain.com
+
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh2
+  <Directory "@AREX_RUN_DIR@/htdocs-vh2/">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>

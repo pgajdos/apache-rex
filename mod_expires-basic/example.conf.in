@@ -1,0 +1,8 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  ExpiresActive on
+  ExpiresDefault "now plus 1 day"
+  # images are not changed that often
+  ExpiresByType image/png "now plus 1 week"
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>

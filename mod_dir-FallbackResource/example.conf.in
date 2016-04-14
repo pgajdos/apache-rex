@@ -1,0 +1,4 @@
+<Directory "@AREX_DOCUMENT_ROOT@/dir">
+  DirectoryIndex welcome.txt
+  FallbackResource /dir/thumbnail.php
+</Directory>

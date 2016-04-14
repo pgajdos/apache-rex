@@ -1,0 +1,2 @@
+AH00112: Warning: DocumentRoot [/tmp/003-VirtualHost-name-based/htdocs-domain] does not exist
+AH00112: Warning: DocumentRoot [/tmp/003-VirtualHost-name-based/htdocs-otherdomain] does not exist

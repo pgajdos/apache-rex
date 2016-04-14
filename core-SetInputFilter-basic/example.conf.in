@@ -1,0 +1,8 @@
+ExtFilterDefine mySed mode=input cmd="@AREX_SED_COMMAND@ 's/does not work/works/g'"
+<Directory "@AREX_DOCUMENT_ROOT@">
+  Options +ExecCGI
+  AddHandler cgi-script .cgi
+  @AREX_ALLOW_FROM_LOCALHOST@
+  SetInputFilter mySed
+</Directory>
+

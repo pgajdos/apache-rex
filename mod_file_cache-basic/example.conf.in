@@ -1,0 +1,7 @@
+CacheFile "@AREX_DOCUMENT_ROOT@/cached.html"
+MMapFile  "@AREX_DOCUMENT_ROOT@/mmaped.html"
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+

@@ -1,0 +1,49 @@
+# http://stackoverflow.com/questions/21347768/what-does-rewritebase-do-and-how-to-use-it
+
+# Using AliasMatch instead of Alias for testing RewriteBase: "In Apache 
+# HTTP Server 2.4.13 and later, this directive may be omitted when the 
+# request is mapped via Alias or mod_userdir."
+# See: http://httpd.apache.org/docs/current/mod/mod_rewrite.html#rewritebase
+AliasMatch "^/subdir1/(.*)$" "@AREX_RUN_DIR@/mirror/subdir1/$1"
+<Directory "@AREX_RUN_DIR@/mirror/subdir1">
+  RewriteEngine on
+  RewriteBase /subdir1/
+  RewriteRule ^foo$ bar.html [L]
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+AliasMatch "^/subdir2/(.*)" "@AREX_RUN_DIR@/mirror/subdir2/$1"
+<Directory "@AREX_RUN_DIR@/mirror/subdir2/subsubdir/">
+  RewriteEngine on
+  RewriteBase /subdir2/subsubdir/
+  # more rules
+  RewriteRule ^foo$ bar.html [L]
+  # choose correct one
+  RewriteRule ^index.html$ welcome.html [L]
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+AliasMatch "^/subdir3/(.*)" "@AREX_RUN_DIR@/mirror/subdir3/$1"
+<Directory "@AREX_RUN_DIR@/mirror/subdir3">
+  RewriteEngine on
+  # RewriteBase /subdir3/ missing
+  RewriteRule ^foo$ bar.html [L]
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+# https://codex.wordpress.org/htaccess
+AliasMatch "^/wordpress/(.*)" "@AREX_RUN_DIR@/mirror/wp/$1"
+<Directory "@AREX_RUN_DIR@/mirror/wp">
+  RewriteEngine On
+  RewriteBase /wordpress/
+  RewriteRule ^index\.php$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . index.php [L]
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+

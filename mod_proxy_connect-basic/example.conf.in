@@ -1,0 +1,45 @@
+<IfVersion >= 2.4.2>
+  DefaultRuntimeDir @AREX_RUN_DIR@/run
+</IfVersion>
+
+AddType application/x-x509-ca-cert .crt
+AddType application/x-pkcs7-crl    .crl
+
+Listen @AREX_RUN_PORT1@
+<VirtualHost *:@AREX_RUN_PORT1@>
+  ErrorLog "@AREX_RUN_DIR@/error_log-backend"
+  DocumentRoot "@AREX_RUN_DIR@/htdocs-backend"
+
+  <Directory "@AREX_RUN_DIR@/htdocs-backend">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+
+  SSLEngine             on
+
+  SSLCertificateFile    @AREX_RUN_DIR@/test-server.crt
+  SSLCertificateKeyFile @AREX_RUN_DIR@/test-server.key
+
+  CustomLog             @AREX_RUN_DIR@/test-server_log   ssl_combined
+</VirtualHost>
+
+Listen @AREX_RUN_PORT2@
+<VirtualHost *:@AREX_RUN_PORT2@>
+  ErrorLog "@AREX_RUN_DIR@/error_log-proxy"
+
+  AllowCONNECT @AREX_RUN_PORT1@
+
+  ProxyRequests On
+  <Proxy *>
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Proxy>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT3@
+<VirtualHost *:@AREX_RUN_PORT3@>
+  ErrorLog "@AREX_RUN_DIR@/error_log-proxy"
+
+  ProxyRequests On
+  <Proxy *>
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Proxy>
+</VirtualHost>

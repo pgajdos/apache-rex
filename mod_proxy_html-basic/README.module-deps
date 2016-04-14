@@ -1,0 +1,3 @@
+It seems that mime module is essential for proxy_html. If not loaded, for this case the match fails with
+
+[proxy_html:trace1] [pid 20579] mod_proxy_html.c(827): [client 127.0.0.1:60172] No content-type; bailing out of proxy-html filter

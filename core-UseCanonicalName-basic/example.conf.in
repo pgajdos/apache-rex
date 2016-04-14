@@ -1,0 +1,11 @@
+<VirtualHost *>
+  ServerName www.domain.com
+  DocumentRoot @AREX_DOCUMENT_ROOT@
+
+  UseCanonicalName on
+
+  <Directory "@AREX_DOCUMENT_ROOT@">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+

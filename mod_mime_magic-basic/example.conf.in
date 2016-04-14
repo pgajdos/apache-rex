@@ -1,0 +1,6 @@
+MimeMagicFile @AREX_RUN_DIR@/magic
+
+<Directory "@AREX_DOCUMENT_ROOT@/img">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+

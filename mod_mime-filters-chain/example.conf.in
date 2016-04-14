@@ -1,0 +1,10 @@
+ExtFilterDefine mySed1 mode=output cmd="@AREX_SED_COMMAND@ 's/sample/SAMPLE/g'"
+ExtFilterDefine mySed2 mode=output cmd="@AREX_SED_COMMAND@ 's/text/TEXT/g'"
+ExtFilterDefine mySed3 mode=output cmd="@AREX_SED_COMMAND@ 's/SAMPLE/SaMpLe/g'"
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+  AddOutputFilter mySed1;mySed2  .html
+  AddOutputFilter mySed1;mySed3  .doc
+  AddOutputFilter mySed3;mySed1  .txt
+</Directory>
+

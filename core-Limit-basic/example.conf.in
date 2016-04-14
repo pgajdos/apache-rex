@@ -1,0 +1,7 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_DENY_FROM_ALL@
+  <Limit GET>
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Limit>
+</Directory>
+

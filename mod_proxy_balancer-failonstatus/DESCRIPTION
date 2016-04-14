@@ -1,0 +1,1 @@
+Put backend server into error state for specified timeout when it returns given error code.

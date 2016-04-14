@@ -1,0 +1,33 @@
+DavLockDB @AREX_RUN_DIR@/dav.lockdb
+
+# http://httpd.apache.org/docs/current/mod/mod_dav.html#example
+<Directory "@AREX_DOCUMENT_ROOT@/dav">
+  @AREX_ALLOW_FROM_LOCALHOST@
+  Dav On
+
+  # user authorization is not required for dav function
+  AuthType Basic
+  AuthName "DAV realm"
+  AuthUserFile "@AREX_RUN_DIR@/password-file"
+
+  <IfVersion >= 2.4>
+    <RequireAll>
+      Require local
+
+      <LimitExcept GET POST PROPFIND>
+         Require user admin
+      </LimitExcept>
+    </RequireAll>
+  </IfVersion>
+  <IfVersion < 2.4>
+    # Satisfy all is the default
+    Order deny,allow
+    Deny from all
+    Allow from localhost 127.0.0.1
+
+    <LimitExcept GET POST PROPFIND>
+       Require user admin
+    </LimitExcept>
+  </IfVersion>
+</Directory>
+

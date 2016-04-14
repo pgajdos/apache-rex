@@ -1,0 +1,17 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  <If "-f '@AREX_DOCUMENT_ROOT@/forbid'">
+    @AREX_DENY_FROM_ALL@
+  </If>
+  <Else>
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Else>
+</Directory>
+<Directory "@AREX_DOCUMENT_ROOT@/dir">
+  <If "-f '@AREX_DOCUMENT_ROOT@/dir/forbid'">
+    @AREX_DENY_FROM_ALL@
+  </If>
+  <Else>
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Else>
+</Directory>
+

@@ -1,0 +1,7 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  AuthType Basic
+  AuthName "Restricted Area"
+  AuthUserFile @AREX_RUN_DIR@/htpasswd
+  Require valid-user
+</Directory>
+

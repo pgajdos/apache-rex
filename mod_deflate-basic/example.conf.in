@@ -1,0 +1,14 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+  SetOutputFilter DEFLATE
+</Directory>
+
+Listen @AREX_RUN_PORT1@
+<VirtualHost *:@AREX_RUN_PORT1@>
+  ErrorLog "@AREX_RUN_DIR@/error_log-vh1"
+  <Location "/">
+    ProxyPass "http://localhost:@AREX_RUN_PORT@/"
+    SetOutputFilter INFLATE
+  </Location>
+</VirtualHost>
+

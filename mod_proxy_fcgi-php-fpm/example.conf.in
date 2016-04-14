@@ -1,0 +1,2 @@
+# https://wiki.apache.org/httpd/PHP-FPM
+ProxyPassMatch ^/(.*\.php)$ fcgi://127.0.0.1:@AREX_FCGI_PORT@/@AREX_DOCUMENT_ROOT@/$1

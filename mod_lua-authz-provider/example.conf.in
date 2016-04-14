@@ -1,0 +1,8 @@
+LuaAuthzProvider foo @AREX_RUN_DIR@/authz_provider.lua authz_check_foo
+<Directory "@AREX_DOCUMENT_ROOT@">
+  AuthType Basic
+  AuthName "Restricted Area"
+  AuthUserFile @AREX_RUN_DIR@/myhtpasswd
+  Require foo ::1 john_doe
+</Directory>
+
