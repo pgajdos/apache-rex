@@ -4,6 +4,7 @@ core-VirtualHost-name-based
 core-ServerAlias-basic
 core-ServerSignature-basic
 core-DirectoryMatch-basic
+core-DirectoryMatch-env
 core-Options-basic
 core-AllowOverride-basic
 core-ErrorLogFormat-basic
