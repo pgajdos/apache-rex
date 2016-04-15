@@ -1,0 +1,8 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_DENY_FROM_ALL@
+</Directory>
+
+<DirectoryMatch "@AREX_DOCUMENT_ROOT@/(.+/)?[0-9]{3}/">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</DirectoryMatch>
+

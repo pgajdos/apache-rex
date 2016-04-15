@@ -311,7 +311,11 @@ function prepare_run()
 {
   dir=$1
 
-  export AREX_RUN_DIR="$RUN_DIR_BASE$dir"
+  export AREX_RUN_DIR="$RUN_DIR_BASE/$dir"
+
+  # merge double slashes (// -> /), remove trailing /, 
+  # essential e. g. for core-DirectoryMatch example
+  AREX_RUN_DIR=$(echo $AREX_RUN_DIR | sed 's://:/:g' | sed 's:/$::')
 
   # prepare dir to write
   [ -e $AREX_RUN_DIR ] && rm -r $AREX_RUN_DIR

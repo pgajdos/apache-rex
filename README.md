@@ -80,7 +80,7 @@ Each example has its own directory, which contains:
   States required helper binaries for running the example.
 * `DESCRIPTION` (required)  
   Contains summary what the example is showing.
-* `MODULES` (required)  
+* `MODULES` (required, even if empty)  
   Lists required modules apache should provide to run the example. Module
   names in the list can be separated by white space or colon.
 * `MODULES_OPT` (optional)  
