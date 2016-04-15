@@ -1,0 +1,10 @@
+# extended mod_userdir-basic example
+UserDir @AREX_RUN_DIR@/users/*/my_html
+UserDir disabled root
+<DirectoryMatch "@AREX_RUN_DIR@/users/(?<username>[^/]+)/my_html">
+  AuthType     Basic
+  AuthName     "User Home Dir"
+  AuthUserFile @AREX_RUN_DIR@/password-file
+  Require      user "%{env:MATCH_USERNAME}"
+</DirectoryMatch>
+
