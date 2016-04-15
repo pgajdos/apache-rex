@@ -224,8 +224,8 @@ function prepare_env()
 {
   echod 'Setting environment for running examples.'
 
-  export AREX_APACHE_BRANCH=$(httpd -v | grep 'Server version' | sed 's:.*Apache/\([0-9\.]\+\).*:\1:' | tr '.' ' ' | { read maj min patch; printf "%d%02d" $maj $min;})
-  echod "httpd branch ............................. $AREX_APACHE_BRANCH"
+  export AREX_APACHE_VERSION=$(httpd -v | grep 'Server version' | sed 's:.*Apache/\([0-9\.]\+\).*:\1:' | tr '.' ' ' | { read maj min patch; printf "%d%02d%02d" $maj $min $patch;})
+  echod "httpd version ............................ $AREX_APACHE_VERSION"
 
   export AREX_MPM=$HTTPD_MPM
   echod "httpd MPM ................................ $AREX_MPM"
