@@ -1,0 +1,10 @@
+LuaQuickHandler      "@AREX_RUN_DIR@/hooks.lua" quick_handler
+LuaHookTranslateName "@AREX_RUN_DIR@/hooks.lua" hook_translate_name
+LuaHookMapToStorage  "@AREX_RUN_DIR@/hooks.lua" hook_map_to_storage
+LuaHookAccessChecker "@AREX_RUN_DIR@/hooks.lua" hook_access_checker
+LuaHookCheckUserID   "@AREX_RUN_DIR@/hooks.lua" hook_check_user_id
+LuaHookAuthChecker   "@AREX_RUN_DIR@/hooks.lua" hook_auth_checker
+LuaHookTypeChecker   "@AREX_RUN_DIR@/hooks.lua" hook_type_checker
+LuaHookFixups        "@AREX_RUN_DIR@/hooks.lua" hook_fixups
+LuaMapHandler        "@AREX_RUN_DIR@/hooks.lua" map_hanlder
+LuaHookLog           "@AREX_RUN_DIR@/hooks.lua" hook_log
