@@ -104,6 +104,7 @@ mod_expires-basic
 mod_unique-id-basic
 mod_lua-basic
 mod_lua-authz-provider
+mod_lua-hooks
 mod_mime_magic-basic
 mod_policy-basic
 mod_negotiation-basic
