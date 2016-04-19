@@ -12,7 +12,8 @@ listen=YES
 listen_address=127.0.0.1
 listen_port=$AREX_FTP_PORT
 run_as_launching_user=YES
-xferlog_file=$AREX_RUN_DIR/vsftpd.log
+xferlog_enable=YES
+vsftpd_log_file=$AREX_RUN_DIR/vsftpd.log
 EOF
 
 ######
@@ -20,7 +21,6 @@ echo -n 'Starting vsftpd ... '
 vsftpd $AREX_RUN_DIR/vsftpd.conf&
 sleep 1
 vsftpd_pid=$(lsof -i | grep ":$AREX_FTP_PORT (LISTEN)" | sed 's:[^ ]\+[ ]\+\([0-9]\+\).*:\1:')
-
 if [ -z "$vsftpd_pid" ]; then
   echo "FAILED."
   echo +++++++ vsftpd.log ++++++++
@@ -28,8 +28,8 @@ if [ -z "$vsftpd_pid" ]; then
   echo +++++++ vsftpd.log ++++++++
   exit 1
 fi
-
 echo $vsftpd_pid
+echo
 ########
 
 echo "[1] demonstrate directory listing on ftp server"
@@ -39,7 +39,7 @@ echo "[2] show file contents on ftp server"
 curl -s http://localhost:$AREX_RUN_PORT/welcome | grep 'FTP HELLO' || exit_code=2
 
 ########
-if [ $exit_code -ge 0 ]; then
+if [ $exit_code -gt 0 ]; then
   echo +++++++ vsftpd.log ++++++++
   cat $AREX_RUN_DIR/vsftpd.log
   echo +++++++ vsftpd.log ++++++++
