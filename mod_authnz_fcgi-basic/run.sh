@@ -22,4 +22,6 @@ curl -s -u puskvorec:WrongPassword http://localhost:$AREX_RUN_PORT/protected/ \
 grep 'authenticating puskvorec' $AREX_RUN_DIR/error_log || exit_code=2
 grep 'user puskvorec: authentication failure.*Password Mismatch' $AREX_RUN_DIR/error_log || exit_code=2
 
+kill -TERM $(cat $AREX_RUN_DIR/spawn-fcgi.pid)
+
 exit $exit_code
