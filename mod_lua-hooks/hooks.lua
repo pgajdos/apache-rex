@@ -1,3 +1,5 @@
+require 'apache2'
+
 function quick_handler(r)
   local logname = r.document_root .. "/hook_log"
   local f = io.open(logname, "a")

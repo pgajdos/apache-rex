@@ -1,7 +1,8 @@
 -- https://httpd.apache.org/docs/trunk/mod/mod_lua.html#writinghandlers
 -- example handler
 
-require "string"
+require 'apache2'
+require 'string'
 
 --[[
      This is the default method name for Lua handlers, see the optional
