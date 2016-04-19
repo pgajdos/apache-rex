@@ -1,0 +1,8 @@
+ServerAdmin i@apache.org
+
+ScriptAlias /cgi-bin/ "@AREX_RUN_DIR@/cgi-bin/"
+<Directory "@AREX_RUN_DIR@/cgi-bin/">
+  Options +ExecCGI
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
