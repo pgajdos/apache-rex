@@ -507,7 +507,7 @@ function run_example()
       echo -n 'Starting httpd ... '
       start_ok=$(start_apache)
       if [ "$start_ok" == '1' ]; then
-        echo 'SUCCESS'
+        cat $AREX_RUN_DIR/pid
       else
         echo 'SKIPPED'
         echo 'start_log:'
