@@ -1,0 +1,1 @@
+LuaQuickHandler "@AREX_RUN_DIR@/hooks.lua" 'server_in_maintenance'
