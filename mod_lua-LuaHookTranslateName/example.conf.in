@@ -1,0 +1,31 @@
+LogLevel warn lua:info
+
+Listen @AREX_RUN_PORT1@
+<VirtualHost *:@AREX_RUN_PORT1@>
+  LuaHookTranslateName "@AREX_RUN_DIR@/hooks.lua" old_to_new
+
+  <Directory @AREX_DOCUMENT_ROOT@>
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT2@
+<VirtualHost *:@AREX_RUN_PORT2@>
+  Redirect "/old-location" "/new"
+  LuaHookTranslateName "@AREX_RUN_DIR@/hooks.lua" old_to_new early
+
+  <Directory @AREX_DOCUMENT_ROOT@>
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_RUN_PORT3@
+<VirtualHost *:@AREX_RUN_PORT3@>
+  Redirect "/old-location" "/new"
+  LuaHookTranslateName "@AREX_RUN_DIR@/hooks.lua" old_to_new late
+
+  <Directory @AREX_DOCUMENT_ROOT@>
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
