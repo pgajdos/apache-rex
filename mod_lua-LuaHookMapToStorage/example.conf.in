@@ -1,0 +1,10 @@
+LogLevel warn lua:info
+
+SetEnvIf Request_URI "\.png$" CACHE_DIR=/tmp/apache-rex/mod_lua-LuaHookMapToStorage/quick-disk/png/
+SetEnvIf Request_URI "\.gif$" CACHE_DIR=/tmp/apache-rex/mod_lua-LuaHookMapToStorage/quick-disk/gif/
+LuaHookMapToStorage "@AREX_RUN_DIR@/hooks.lua" check_cache
+
+<Directory @AREX_DOCUMENT_ROOT@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
