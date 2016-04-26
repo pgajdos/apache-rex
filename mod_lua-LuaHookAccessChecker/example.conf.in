@@ -1,0 +1,10 @@
+LogLevel warn lua:info
+
+<Directory @AREX_DOCUMENT_ROOT@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+<Directory @AREX_DOCUMENT_ROOT@/admin>
+  LuaHookAccessChecker "@AREX_RUN_DIR@/hooks.lua" localhost_only
+</Directory>
+
