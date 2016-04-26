@@ -109,6 +109,7 @@ mod_lua-hooks
 mod_lua-LuaQuickHandler
 mod_lua-LuaHookTranslateName
 mod_lua-LuaHookMapToStorage
+mod_lua-LuaHookAccessChecker
 mod_mime_magic-basic
 mod_policy-basic
 mod_negotiation-basic
