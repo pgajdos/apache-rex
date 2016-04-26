@@ -108,6 +108,7 @@ mod_lua-authz-provider-abz57204
 mod_lua-hooks
 mod_lua-LuaQuickHandler
 mod_lua-LuaHookTranslateName
+mod_lua-LuaHookMapToStorage
 mod_mime_magic-basic
 mod_policy-basic
 mod_negotiation-basic
