@@ -2,8 +2,6 @@ exit_code=0
 
 # http://events.linuxfoundation.org/sites/events/files/slides/AC2014-FastCGI.pdf
 
-echo '<?php print strtoupper("hello from php"); ?>' > $AREX_DOCUMENT_ROOT/welcome.php
-
 # run fcgi application via spawn-fcgi
 cp showenv.pl $AREX_RUN_DIR
 chmod 755     $AREX_RUN_DIR/showenv.pl

@@ -67,6 +67,8 @@ utility. See the `CONFIGURATION` section of `run-rex` for defaults.
   Port that can be opened by testing FTP daemon.
 * `FCGI_PORT`  
   Port that can be used by testing FCGI application.
+* `SCGI_PORT`  
+  Port that can be used by testing SCGI application.
 * `VERBOSITY`  
   Amount of information written by `run-rex` to the stdout. Possible
   values are 0 (normal), 1 (verbose) and 2 (debug).
@@ -134,6 +136,8 @@ in `run.sh`.
   Port reserved for test instance of FTP daemon.
 * `AREX_FCGI_PORT`  
   Port reserverd for test FCGI application.
+* `AREX_SCGI_PORT`  
+  Port reserverd for test SCGI application.
 * `AREX_SED_COMMAND`  
   Full path to `sed` command (required for some Filter example definitions).
 

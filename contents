@@ -54,6 +54,7 @@ mod_proxy_connect-basic
 mod_proxy_ftp-basic
 mod_proxy_fcgi-basic
 mod_proxy_fcgi-php-fpm
+mod_proxy_scgi-basic
 mod_proxy_wstunnel-basic
 mod_cgi-basic
 mod_xml2enc-basic

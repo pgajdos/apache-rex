@@ -1,0 +1,1 @@
+ProxyPass /app/ scgi://127.0.0.1:@AREX_SCGI_PORT@/
