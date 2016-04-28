@@ -1,6 +1,7 @@
 apache-example-framework
 core-VirtualHost-basic
 core-VirtualHost-name-based
+core-ServerRoot-basic
 core-ServerAlias-basic
 core-ServerSignature-basic
 core-DirectoryMatch-basic
