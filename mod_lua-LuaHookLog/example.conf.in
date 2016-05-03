@@ -1,0 +1,12 @@
+CookieTracking on
+CookieName     trackcookie
+LogFormat      "%{trackcookie}C %r %t"       log_usertrack
+CustomLog      @AREX_RUN_DIR@/usertrack_log   log_usertrack
+
+LuaHookLog "@AREX_RUN_DIR@/hooks.lua" log_refuse_private
+
+<Directory @AREX_DOCUMENT_ROOT@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+
