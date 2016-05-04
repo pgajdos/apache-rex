@@ -16,7 +16,11 @@ curl -s http://localhost:$AREX_RUN_PORT/spelling.htlm  | grep 301 || exit_code=4
 
 echo "[5] fix transposition, non adjacent letters"
 # do not know why following returns 300, there just one doc there
+if [ $AREX_APACHE_VERSION -ge 20500 ]; then
+curl -s http://localhost:$AREX_RUN_PORT/spelling.ltmh  | grep 404 || exit_code=5
+else
 curl -s http://localhost:$AREX_RUN_PORT/spelling.ltmh  | grep 300 || exit_code=5
+fi
 
 echo "[6] combination case + onecharacter fix"
 curl -s http://localhost:$AREX_RUN_PORT/Pselling.html  | grep 301 || exit_code=6
