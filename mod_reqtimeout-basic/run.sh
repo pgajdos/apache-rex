@@ -1,5 +1,7 @@
 exit_code=0
 
+cp timeout-test.py $AREX_RUN_DIR
+
 echo 'main index' > $AREX_DOCUMENT_ROOT/index.html
 
 if [ $AREX_APACHE_VERSION -ge 20400 ]; then
@@ -8,15 +10,21 @@ else
   HEADER_TIMEOUT_ERROR='400 Bad Request'
 fi
 
+if [ $AREX_APACHE_VERSION -ge 20500 ]; then
+  BODY_TIMEOUT_ERROR='408 Request Timeout'
+else
+  BODY_TIMEOUT_ERROR='400 Bad Request'
+fi
+
 echo "[1] header read timeout"
-python timeout-test.py localhost $AREX_RUN_PORT / 2 header | grep "$HEADER_TIMEOUT_ERROR" || exit_code=1
+python $AREX_RUN_DIR/timeout-test.py localhost $AREX_RUN_PORT / 2 header | grep "$HEADER_TIMEOUT_ERROR" || exit_code=1
 cat $AREX_RUN_DIR/error_log | grep 'Request header read timeout' || exit_code=1
 
 echo "[2] body read timeout"
-python timeout-test.py localhost $AREX_RUN_PORT / 2 body   | grep '400 Bad Request'     || exit_code=2
+python $AREX_RUN_DIR/timeout-test.py localhost $AREX_RUN_PORT / 2 body   | grep "$BODY_TIMEOUT_ERROR"   || exit_code=2
 cat $AREX_RUN_DIR/error_log | grep 'Request body read timeout'   || exit_code=2
 
 echo "[3] no timeout"
-python timeout-test.py localhost $AREX_RUN_PORT /          | grep 'main index'          || exit_code=3
+python $AREX_RUN_DIR/timeout-test.py localhost $AREX_RUN_PORT /          | grep 'main index'            || exit_code=3
 
 exit $exit_code
