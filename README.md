@@ -34,8 +34,8 @@ Example can be run by
 
 for example
 
-    $ run-rex 052-mod_proxy_fcgi-php-fpm
-    $ run-rex "*proxy* 03*"
+    $ run-rex mod_proxy_fcgi-php-fpm
+    $ run-rex "*proxy*"
 
 Another possibility is to pass a file with the ordered list of example
 dirs:
