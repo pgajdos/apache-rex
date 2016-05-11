@@ -1,0 +1,6 @@
+LogLevel warn lua:info
+
+LuaRoot "@AREX_RUN_DIR@"
+LuaHookTranslateName hooks.lua language_document
+LuaHookTypeChecker   hooks.lua set_language
+
