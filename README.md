@@ -12,7 +12,7 @@ Prerequisites
 2. Some examples require also higher level helper commands (e. g. sqlite, 
    python) in the `PATH`, see `BINARIES` file in the example directory. 
    Before the test is run, these binaries are checked for existence.
-3. All examples require `httpd` (`http2`) and `curl` commands in the `PATH`.
+3. All examples require `httpd` (`httpd2`) and `curl` commands in the `PATH`.
    These two binaries are checked via system check before any of examples
    are run.
 4. Examples can be run offline, do not use network connection.
