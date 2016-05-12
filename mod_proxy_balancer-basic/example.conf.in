@@ -10,8 +10,8 @@
   DefaultRuntimeDir @AREX_RUN_DIR@/run
 </IfVersion>
 
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
     ErrorLog "@AREX_RUN_DIR@/error_log-backend1"
     DocumentRoot "@AREX_RUN_DIR@/htdocs-backend1"
     <Directory "@AREX_RUN_DIR@/htdocs-backend1">
@@ -19,8 +19,8 @@ Listen @AREX_RUN_PORT1@
     </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
     ErrorLog "@AREX_RUN_DIR@/error_log-backend2"
     DocumentRoot "@AREX_RUN_DIR@/htdocs-backend2"
     <Directory "@AREX_RUN_DIR@/htdocs-backend2">
@@ -28,13 +28,13 @@ Listen @AREX_RUN_PORT2@
     </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT3@
-<VirtualHost *:@AREX_RUN_PORT3@>
+Listen @AREX_PORT3@
+<VirtualHost *:@AREX_PORT3@>
   ErrorLog "@AREX_RUN_DIR@/error_log-balancer"
   ProxyPass / balancer://cluster/ nocanon
   <Proxy balancer://cluster>
-    BalancerMember http://localhost:@AREX_RUN_PORT1@/
-    BalancerMember http://localhost:@AREX_RUN_PORT2@/
+    BalancerMember http://localhost:@AREX_PORT1@/
+    BalancerMember http://localhost:@AREX_PORT2@/
   </Proxy>
 </VirtualHost>
 

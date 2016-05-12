@@ -17,14 +17,14 @@ else
 fi
 
 echo "[1] header read timeout"
-python $AREX_RUN_DIR/timeout-test.py localhost $AREX_RUN_PORT / 2 header | grep "$HEADER_TIMEOUT_ERROR" || exit_code=1
+python $AREX_RUN_DIR/timeout-test.py localhost $AREX_PORT / 2 header | grep "$HEADER_TIMEOUT_ERROR" || exit_code=1
 cat $AREX_RUN_DIR/error_log | grep 'Request header read timeout' || exit_code=1
 
 echo "[2] body read timeout"
-python $AREX_RUN_DIR/timeout-test.py localhost $AREX_RUN_PORT / 2 body   | grep "$BODY_TIMEOUT_ERROR"   || exit_code=2
+python $AREX_RUN_DIR/timeout-test.py localhost $AREX_PORT / 2 body   | grep "$BODY_TIMEOUT_ERROR"   || exit_code=2
 cat $AREX_RUN_DIR/error_log | grep 'Request body read timeout'   || exit_code=2
 
 echo "[3] no timeout"
-python $AREX_RUN_DIR/timeout-test.py localhost $AREX_RUN_PORT /          | grep 'main index'            || exit_code=3
+python $AREX_RUN_DIR/timeout-test.py localhost $AREX_PORT /          | grep 'main index'            || exit_code=3
 
 exit $exit_code

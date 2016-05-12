@@ -8,9 +8,9 @@ cat << EOF > $AREX_RUN_DIR/express-map.txt
 ##express-map.txt:
 ##
 
-www1.example.com http://localhost:$AREX_RUN_PORT1
-www2.example.com http://localhost:$AREX_RUN_PORT2
-www3.example.com http://localhost:$AREX_RUN_PORT3
+www1.example.com http://localhost:$AREX_PORT1
+www2.example.com http://localhost:$AREX_PORT2
+www3.example.com http://localhost:$AREX_PORT3
 EOF
 httxt2dbm -f DB -i $AREX_RUN_DIR/express-map.txt -o $AREX_RUN_DIR/emap.db
 
@@ -21,7 +21,7 @@ done
 
 echo "[1] backend is chosen via Host header"
 for i in 1 2 3; do
-  curl -s -H "Host: www$i.example.com" http://localhost:$AREX_RUN_PORT/ | grep "backend $i" || exit_code=1
+  curl -s -H "Host: www$i.example.com" http://localhost:$AREX_PORT/ | grep "backend $i" || exit_code=1
 done
 
 exit $exit_code

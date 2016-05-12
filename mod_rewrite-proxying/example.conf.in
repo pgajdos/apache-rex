@@ -1,6 +1,6 @@
 # old server
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh1
 
   <Directory "@AREX_RUN_DIR@/htdocs-vh1">
@@ -9,16 +9,16 @@ Listen @AREX_RUN_PORT1@
 </VirtualHost>
 
 # new server
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh2
 
   RewriteEngine on
   RewriteCond   "%{REQUEST_FILENAME}" !-f
   RewriteCond   "%{REQUEST_FILENAME}" !-d
-  RewriteRule   "^/(.*)" "http://localhost:@AREX_RUN_PORT1@/$1" [P]
+  RewriteRule   "^/(.*)" "http://localhost:@AREX_PORT1@/$1" [P]
   # ProxyPassReverse for completeness; it is not needed for this example
-  ProxyPassReverse "/" "http://localhost:@AREX_RUN_PORT1@/"
+  ProxyPassReverse "/" "http://localhost:@AREX_PORT1@/"
 
   <Directory "@AREX_RUN_DIR@/htdocs-vh2">
     @AREX_ALLOW_FROM_LOCALHOST@

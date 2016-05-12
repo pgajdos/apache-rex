@@ -1,8 +1,8 @@
 <Directory "@AREX_DOCUMENT_ROOT@">
   @AREX_ALLOW_FROM_LOCALHOST@
 </Directory>
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   DocumentRoot "@AREX_DOCUMENT_ROOT@-virtualhost"
   ErrorLog "@AREX_RUN_DIR@/error_log-virtualhost"
   <Directory "@AREX_DOCUMENT_ROOT@-virtualhost">

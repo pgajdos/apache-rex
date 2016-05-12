@@ -21,19 +21,19 @@
 </Macro>
 
 ## Use macro with different arguments.
-Use Backend backend1 @AREX_RUN_PORT1@
-Use Backend backend2 @AREX_RUN_PORT2@
-Use Backend fallback @AREX_RUN_PORT3@
+Use Backend backend1 @AREX_PORT1@
+Use Backend backend2 @AREX_PORT2@
+Use Backend fallback @AREX_PORT3@
 
 UndefMacro Backend
 
-Listen @AREX_RUN_PORT4@
-<VirtualHost *:@AREX_RUN_PORT4@>
+Listen @AREX_PORT4@
+<VirtualHost *:@AREX_PORT4@>
   ProxyPass / balancer://cluster/
   <Proxy balancer://cluster>
-    BalancerMember http://localhost:@AREX_RUN_PORT1@/ loadfactor=20
-    BalancerMember http://localhost:@AREX_RUN_PORT2@/ loadfactor=20
-    BalancerMember http://localhost:@AREX_RUN_PORT3@/ loadfactor=1
+    BalancerMember http://localhost:@AREX_PORT1@/ loadfactor=20
+    BalancerMember http://localhost:@AREX_PORT2@/ loadfactor=20
+    BalancerMember http://localhost:@AREX_PORT3@/ loadfactor=1
     # just try another lbmethod
     ProxySet lbmethod=bytraffic
   </Proxy>

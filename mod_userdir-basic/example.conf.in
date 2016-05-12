@@ -3,8 +3,8 @@ UserDir public_html
   @AREX_ALLOW_FROM_LOCALHOST@
 </Directory>
 
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   ErrorLog "@AREX_RUN_DIR@/error_log-virtualhost"
   UserDir @AREX_RUN_DIR@/users/*/my_html
   UserDir disabled root

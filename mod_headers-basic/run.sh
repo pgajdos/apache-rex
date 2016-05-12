@@ -7,7 +7,7 @@ curl -s -i \
   -H 'my-header-ip: 1.2.3.4' \
   -H 'my-header-port: 50' \
   -H 'my-header-user: joe' \
-  http://localhost:$AREX_RUN_PORT1/ > $AREX_RUN_DIR/header-out.txt
+  http://localhost:$AREX_PORT1/ > $AREX_RUN_DIR/header-out.txt
 grep 'my-header-ip: 1.2.3.4'            $AREX_RUN_DIR/header-out.txt || exit_code=1
 grep 'my-header-port: 50'               $AREX_RUN_DIR/header-out.txt || exit_code=1
 grep 'my-header-rqinfo:.*UTC.*duration' $AREX_RUN_DIR/header-out.txt || exit_code=1
@@ -16,7 +16,7 @@ grep 'my-header-user'                   $AREX_RUN_DIR/header-out.txt && exit_cod
 
 # the same, but custom headers given trough proxy
 echo "[2] demonstrate RequestHeader directive"
-curl -s --referer hans.ex.com -i http://localhost:$AREX_RUN_PORT2/ > $AREX_RUN_DIR/header-proxy-out.txt
+curl -s --referer hans.ex.com -i http://localhost:$AREX_PORT2/ > $AREX_RUN_DIR/header-proxy-out.txt
 grep 'my-header-ip: 1.2.3.4'            $AREX_RUN_DIR/header-proxy-out.txt || exit_code=2
 grep 'my-header-port: 50'               $AREX_RUN_DIR/header-proxy-out.txt || exit_code=2
 grep 'my-header-rqinfo:.*UTC.*duration' $AREX_RUN_DIR/header-proxy-out.txt || exit_code=2

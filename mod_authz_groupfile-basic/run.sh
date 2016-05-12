@@ -14,10 +14,10 @@ admin: ann
 EOF
 
 echo "[1] access allowed to user content for ordinary user"
-curl -s -u bob:bobsStrongPassword http://localhost:$AREX_RUN_PORT/       | grep 'user content'  || exit_code=1
+curl -s -u bob:bobsStrongPassword http://localhost:$AREX_PORT/       | grep 'user content'  || exit_code=1
 echo "[2] access denied to admin content for ordinary user"
-curl -s -u joe:joesStrongPassword http://localhost:$AREX_RUN_PORT/admin/ | grep '401.*uthoriz'  || exit_code=2
+curl -s -u joe:joesStrongPassword http://localhost:$AREX_PORT/admin/ | grep '401.*uthoriz'  || exit_code=2
 echo "[3] access allowed to admin content for admin user"
-curl -s -u ann:annsStrongPassword http://localhost:$AREX_RUN_PORT/admin/ | grep 'admin content' || exit_code=3
+curl -s -u ann:annsStrongPassword http://localhost:$AREX_PORT/admin/ | grep 'admin content' || exit_code=3
 
 exit $exit_code

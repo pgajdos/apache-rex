@@ -15,12 +15,12 @@ nogroup:  nobody
 EOF
 
 echo "[1] access allowed for owner"
-curl -s -u $AREX_USER:StrongPassword   http://localhost:$AREX_RUN_PORT/$AREX_USER.html | grep "user $AREX_USER secret"  || exit_code=1
+curl -s -u $AREX_USER:StrongPassword   http://localhost:$AREX_PORT/$AREX_USER.html | grep "user $AREX_USER secret"  || exit_code=1
 echo "[2] access denied for non owner, even in the same group"
-curl -s -u bob:bobsStrongPassword http://localhost:$AREX_RUN_PORT/$AREX_USER.html | grep '401.*uthoriz' || exit_code=2
+curl -s -u bob:bobsStrongPassword http://localhost:$AREX_PORT/$AREX_USER.html | grep '401.*uthoriz' || exit_code=2
 echo "[3] access allowed for group member"
-curl -s -u bob:bobsStrongPassword http://localhost:$AREX_RUN_PORT/common/$AREX_GROUP.html | grep "group $AREX_GROUP secret" || exit_code=3
+curl -s -u bob:bobsStrongPassword http://localhost:$AREX_PORT/common/$AREX_GROUP.html | grep "group $AREX_GROUP secret" || exit_code=3
 echo "[4] access denied for non group member"
-curl -s -u nobody:nobodyPassword  http://localhost:$AREX_RUN_PORT/common/$AREX_GROUP.html | grep '401.*uthoriz' || exit_code=4
+curl -s -u nobody:nobodyPassword  http://localhost:$AREX_PORT/common/$AREX_GROUP.html | grep '401.*uthoriz' || exit_code=4
 
 exit $exit_code

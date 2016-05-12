@@ -18,8 +18,8 @@ CustomLog             @AREX_RUN_DIR@/test-server_log   ssl_combined
 SSLCertificateFile    @AREX_RUN_DIR@/test-server.crt
 SSLCertificateKeyFile @AREX_RUN_DIR@/test-server.key
 
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   SSLEngine             on
   
   Protocols h2  http/1.1
@@ -29,8 +29,8 @@ Listen @AREX_RUN_PORT1@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
   SSLEngine             on
   
   <Directory "@AREX_DOCUMENT_ROOT@/vh2">
@@ -38,15 +38,15 @@ Listen @AREX_RUN_PORT2@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT3@
-<VirtualHost *:@AREX_RUN_PORT3@>
+Listen @AREX_PORT3@
+<VirtualHost *:@AREX_PORT3@>
   <Directory "@AREX_DOCUMENT_ROOT@/vh3">
     @AREX_ALLOW_FROM_LOCALHOST@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT4@
-<VirtualHost *:@AREX_RUN_PORT4@>
+Listen @AREX_PORT4@
+<VirtualHost *:@AREX_PORT4@>
   Protocols h2c http/1.1
 
   <Directory "@AREX_DOCUMENT_ROOT@/vh4">

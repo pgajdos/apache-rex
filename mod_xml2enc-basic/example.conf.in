@@ -1,5 +1,5 @@
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   DocumentRoot "@AREX_RUN_DIR@/htdocs-backend"
   <Directory "@AREX_RUN_DIR@/htdocs-backend">
     # in case mod_mime would not be activated,
@@ -10,9 +10,9 @@ Listen @AREX_RUN_PORT1@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
-  ProxyPass /pangrams/ http://localhost:@AREX_RUN_PORT1@/
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
+  ProxyPass /pangrams/ http://localhost:@AREX_PORT1@/
   ProxyHTMLEnable on
   xml2EncDefault ISO-8859-2
   # at least one ProxyHTMLLinks needs to be defined to
@@ -20,9 +20,9 @@ Listen @AREX_RUN_PORT2@
   ProxyHTMLLinks  a  href
 </VirtualHost>
 
-Listen @AREX_RUN_PORT3@
-<VirtualHost *:@AREX_RUN_PORT3@>
-  ProxyPass /pangrams/ http://localhost:@AREX_RUN_PORT1@/
+Listen @AREX_PORT3@
+<VirtualHost *:@AREX_PORT3@>
+  ProxyPass /pangrams/ http://localhost:@AREX_PORT1@/
   ProxyHTMLEnable on
   ProxyHTMLMeta on
   # at least one ProxyHTMLLinks needs to be defined to
@@ -30,8 +30,8 @@ Listen @AREX_RUN_PORT3@
   ProxyHTMLLinks  a  href
 </VirtualHost>
 
-Listen @AREX_RUN_PORT4@
-<VirtualHost *:@AREX_RUN_PORT4@>
+Listen @AREX_PORT4@
+<VirtualHost *:@AREX_PORT4@>
   DocumentRoot "@AREX_RUN_DIR@/htdocs-backend"
   <Directory "@AREX_RUN_DIR@/htdocs-backend">
     Header set Content-type: "text/html;charset=iso-8859-2"
@@ -39,9 +39,9 @@ Listen @AREX_RUN_PORT4@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT5@
-<VirtualHost *:@AREX_RUN_PORT5@>
-  ProxyPass /pangrams/ http://localhost:@AREX_RUN_PORT4@/
+Listen @AREX_PORT5@
+<VirtualHost *:@AREX_PORT5@>
+  ProxyPass /pangrams/ http://localhost:@AREX_PORT4@/
   ProxyHTMLEnable on
   ProxyHTMLLinks  a  href
 </VirtualHost>

@@ -9,8 +9,8 @@ EOF
 cat << EOF > $AREX_DOCUMENT_ROOT/document.txt
 If you are on linux: Have a lot of fun!
 EOF
-curl -s http://localhost:$AREX_RUN_PORT/document.shtml | grep 'Have a lot of FUN!' || exit_code=1
-curl -s http://localhost:$AREX_RUN_PORT/document.txt | grep 'If you are on LINUX: Have a lot of FUN!' || exit_code=1
+curl -s http://localhost:$AREX_PORT/document.shtml | grep 'Have a lot of FUN!' || exit_code=1
+curl -s http://localhost:$AREX_PORT/document.txt | grep 'If you are on LINUX: Have a lot of FUN!' || exit_code=1
 
 exit $exit_code
 

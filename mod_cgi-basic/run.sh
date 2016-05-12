@@ -11,7 +11,7 @@ echo ''
 echo 'CGI Bash Example'
 EOF
 chmod 755 $cgi_dir/correct.cgi
-curl -s http://localhost:$AREX_RUN_PORT/cgi-bin/correct.cgi | grep 'CGI Bash Example' || exit_code=1
+curl -s http://localhost:$AREX_PORT/cgi-bin/correct.cgi | grep 'CGI Bash Example' || exit_code=1
 
 echo "[2] incorrect cgi script"
 cat << EOF > $cgi_dir/wrong.cgi
@@ -19,11 +19,11 @@ cat << EOF > $cgi_dir/wrong.cgi
 echo 'CGI Bash Example'
 EOF
 chmod 755 $cgi_dir/wrong.cgi
-curl -s http://localhost:$AREX_RUN_PORT/cgi-bin/wrong.cgi | grep '500 Internal Server Error' || exit_code=2
+curl -s http://localhost:$AREX_PORT/cgi-bin/wrong.cgi | grep '500 Internal Server Error' || exit_code=2
 
 echo "[3] correct cgi script without executable bits"
 chmod 644 $cgi_dir/correct.cgi
-curl -s http://localhost:$AREX_RUN_PORT/cgi-bin/correct.cgi | grep '500 Internal Server Error' || exit_code=3
+curl -s http://localhost:$AREX_PORT/cgi-bin/correct.cgi | grep '500 Internal Server Error' || exit_code=3
 
 exit $exit_code
 

@@ -1,5 +1,5 @@
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh1
 
   RewriteEngine on
@@ -14,8 +14,8 @@ Listen @AREX_RUN_PORT1@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh2
 
   RewriteEngine on

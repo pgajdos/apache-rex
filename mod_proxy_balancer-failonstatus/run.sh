@@ -10,10 +10,10 @@ echo 'access forbidden here' > $AREX_RUN_DIR/htdocs-backend2/foo/index.html
 echo "[1] when error code is on failonstatus list, then backend is put in error state for retry=1 second"
 # cause 404 error code to put one of the backend in error state
 # (404 is on failonstatus list)
-curl -s http://localhost:$AREX_RUN_PORT3/notexisting.document
+curl -s http://localhost:$AREX_PORT3/notexisting.document
 # now only one backend should respond in 1 second, then both
 for i in $(seq 1 20); do
-  curl -s http://localhost:$AREX_RUN_PORT3/
+  curl -s http://localhost:$AREX_PORT3/
   sleep 0.1
 done > $AREX_RUN_DIR/backends-echo.txt
 orphaned_backend=$(tail -n 1 $AREX_RUN_DIR/backends-echo.txt)
@@ -31,10 +31,10 @@ echo "Backend 2: $count_backend2 times"
 # the same as [1], but 403 is not on failonstatus list
 echo "[2] when error code is NOT on failonstatus list, then backend is not put in error state"
 # cause 403 error
-curl -s http://localhost:$AREX_RUN_PORT3/foo/index.html
+curl -s http://localhost:$AREX_PORT3/foo/index.html
 # both backends should respond
 for i in $(seq 1 20); do
-  curl -s http://localhost:$AREX_RUN_PORT3/
+  curl -s http://localhost:$AREX_PORT3/
   sleep 0.1
 done > $AREX_RUN_DIR/backends-echo.txt
 count_backend1=$(grep -c 'Backend 1' $AREX_RUN_DIR/backends-echo.txt)

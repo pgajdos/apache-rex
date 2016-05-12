@@ -4,13 +4,13 @@
 
 VirtualDocumentRoot @AREX_DOCUMENT_ROOT@/%0
 
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   VirtualDocumentRoot "@AREX_DOCUMENT_ROOT@/%3/%2/%1"
 </VirtualHost>
 
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
   VirtualDocumentRoot "@AREX_RUN_DIR@/home/%1/public_html"
 </VirtualHost>
 

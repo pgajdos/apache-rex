@@ -1,7 +1,7 @@
 LuaAuthzProvider LuaAuthz @AREX_RUN_DIR@/lua_authz.lua lua_authz
 
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   <Directory "@AREX_DOCUMENT_ROOT@">
     Require LuaAuthz 1
   </Directory>
@@ -11,8 +11,8 @@ Listen @AREX_RUN_PORT1@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
   <Directory "@AREX_DOCUMENT_ROOT@/dir">
     Require LuaAuthz 3
   </Directory>

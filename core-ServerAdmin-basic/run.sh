@@ -12,7 +12,7 @@ echo ''
 echo "server admin: \$SERVER_ADMIN"
 EOF
 chmod 755 $cgi_dir/server-admin.cgi
-curl -s http://localhost:$AREX_RUN_PORT/cgi-bin/server-admin.cgi | grep 'server admin: i@apache.org' || exit_code=1
+curl -s http://localhost:$AREX_PORT/cgi-bin/server-admin.cgi | grep 'server admin: i@apache.org' || exit_code=1
 
 
 exit $exit_code

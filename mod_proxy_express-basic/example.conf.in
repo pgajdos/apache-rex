@@ -3,8 +3,8 @@ ProxyExpressEnable on
 ProxyExpressDBMType db
 ProxyExpressDBMFile @AREX_RUN_DIR@/emap.db
 
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh1
 
   <Directory "@AREX_RUN_DIR@/htdocs-vh1">
@@ -12,8 +12,8 @@ Listen @AREX_RUN_PORT1@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh2
 
   <Directory "@AREX_RUN_DIR@/htdocs-vh2">
@@ -21,8 +21,8 @@ Listen @AREX_RUN_PORT2@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT3@
-<VirtualHost *:@AREX_RUN_PORT3@>
+Listen @AREX_PORT3@
+<VirtualHost *:@AREX_PORT3@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh3
 
   <Directory "@AREX_RUN_DIR@/htdocs-vh3">

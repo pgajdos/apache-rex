@@ -1,5 +1,5 @@
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
     ErrorLog "@AREX_RUN_DIR@/error_log-vh1"
     DocumentRoot "@AREX_RUN_DIR@/htdocs-vh1"
     <Directory "@AREX_RUN_DIR@/htdocs-vh1">
@@ -7,8 +7,8 @@ Listen @AREX_RUN_PORT1@
     </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
     ErrorLog "@AREX_RUN_DIR@/error_log-vh2"
     DocumentRoot "@AREX_RUN_DIR@/htdocs-vh2"
     <Directory "@AREX_RUN_DIR@/htdocs-vh2">
@@ -17,15 +17,15 @@ Listen @AREX_RUN_PORT2@
 </VirtualHost>
 
 <Location "/vh1/">
-    ProxyPass "http://localhost:@AREX_RUN_PORT1@/"
+    ProxyPass "http://localhost:@AREX_PORT1@/"
 </Location>
 
 <Location "/vh2/">
-    ProxyPass "http://localhost:@AREX_RUN_PORT2@/"
+    ProxyPass "http://localhost:@AREX_PORT2@/"
 </Location>
 
-Listen @AREX_RUN_PORT3@
-<VirtualHost *:@AREX_RUN_PORT3@>
+Listen @AREX_PORT3@
+<VirtualHost *:@AREX_PORT3@>
     ErrorLog "@AREX_RUN_DIR@/error_log-vh3"
     ProxyRequests On
     <Proxy "*">
@@ -33,8 +33,8 @@ Listen @AREX_RUN_PORT3@
     </Proxy>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT4@
-<VirtualHost *:@AREX_RUN_PORT4@>
+Listen @AREX_PORT4@
+<VirtualHost *:@AREX_PORT4@>
     ErrorLog "@AREX_RUN_DIR@/error_log-vh4"
     ProxyRequests On
     <Proxy "*">

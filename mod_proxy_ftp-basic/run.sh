@@ -33,10 +33,10 @@ echo
 ########
 
 echo "[1] demonstrate directory listing on ftp server"
-curl -s http://localhost:$AREX_RUN_PORT/ | grep '<a href="welcome">welcome</a>' || exit_code=1
+curl -s http://localhost:$AREX_PORT/ | grep '<a href="welcome">welcome</a>' || exit_code=1
 
 echo "[2] show file contents on ftp server"
-curl -s http://localhost:$AREX_RUN_PORT/welcome | grep 'FTP HELLO' || exit_code=2
+curl -s http://localhost:$AREX_PORT/welcome | grep 'FTP HELLO' || exit_code=2
 
 ########
 if [ $exit_code -gt 0 ]; then

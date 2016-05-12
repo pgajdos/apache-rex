@@ -1,5 +1,5 @@
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh1
 
   <Directory "@AREX_RUN_DIR@/htdocs-vh1">
@@ -7,8 +7,8 @@ Listen @AREX_RUN_PORT1@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh2
 
   <Directory "@AREX_RUN_DIR@/htdocs-vh2">
@@ -16,8 +16,8 @@ Listen @AREX_RUN_PORT2@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT3@
-<VirtualHost *:@AREX_RUN_PORT3@>
+Listen @AREX_PORT3@
+<VirtualHost *:@AREX_PORT3@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh3
 
   RewriteEngine on
@@ -30,10 +30,10 @@ Listen @AREX_RUN_PORT3@
 
 RewriteEngine on
 RewriteMap    user-to-host    "txt:@AREX_RUN_DIR@/user-to-host.map"
-RewriteRule   "^/users/(.+)$" "${user-to-host:$1|http://localhost:@AREX_RUN_PORT3@}/home/$1"
+RewriteRule   "^/users/(.+)$" "${user-to-host:$1|http://localhost:@AREX_PORT3@}/home/$1"
 
-Listen @AREX_RUN_PORT4@
-<VirtualHost *:@AREX_RUN_PORT4@>
+Listen @AREX_PORT4@
+<VirtualHost *:@AREX_PORT4@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh4
 
   <Directory "@AREX_RUN_DIR@/htdocs-vh4">
@@ -51,8 +51,8 @@ Listen @AREX_RUN_PORT4@
 
 </VirtualHost>
 
-Listen @AREX_RUN_PORT5@
-<VirtualHost *:@AREX_RUN_PORT5@>
+Listen @AREX_PORT5@
+<VirtualHost *:@AREX_PORT5@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh5
 
   RewriteEngine on
@@ -63,8 +63,8 @@ Listen @AREX_RUN_PORT5@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT6@
-<VirtualHost *:@AREX_RUN_PORT6@>
+Listen @AREX_PORT6@
+<VirtualHost *:@AREX_PORT6@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh6
 
   RewriteEngine on

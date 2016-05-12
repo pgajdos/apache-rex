@@ -1,5 +1,5 @@
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   Header echo ^my-header
 
   Header unset my-header-user
@@ -13,12 +13,12 @@ Listen @AREX_RUN_PORT1@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
   RequestHeader set my-header-ip   1.2.3.4
   RequestHeader set my-header-port 50
   RequestHeader set my-header-user "joe"
   SetEnvIf Referer "^(.*)$" REFERER=$1
   RequestHeader set Referer "%{REFERER}e"
-  ProxyPass "/" http://localhost:@AREX_RUN_PORT1@/
+  ProxyPass "/" http://localhost:@AREX_PORT1@/
 </VirtualHost>

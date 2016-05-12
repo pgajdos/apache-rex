@@ -3,11 +3,11 @@
   SetOutputFilter DEFLATE
 </Directory>
 
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   ErrorLog "@AREX_RUN_DIR@/error_log-vh1"
   <Location "/">
-    ProxyPass "http://localhost:@AREX_RUN_PORT@/"
+    ProxyPass "http://localhost:@AREX_PORT@/"
     SetOutputFilter INFLATE
   </Location>
 </VirtualHost>

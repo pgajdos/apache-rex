@@ -1,7 +1,7 @@
 exit_code=0
 echo "[1] directory autoindex output"
 cp -r data/* includes icons  $AREX_DOCUMENT_ROOT
-curl -s http://localhost:$AREX_RUN_PORT/ > $AREX_RUN_DIR/i.html
+curl -s http://localhost:$AREX_PORT/ > $AREX_RUN_DIR/i.html
 (grep '<title>Index of /</title>' $AREX_RUN_DIR/i.html && 
  grep '<th>Name</th>' $AREX_RUN_DIR/i.html && 
  grep '/icons/image.png.*alt="\[IMG\].*href="apache_pb.svg".*apache_pb.svg' $AREX_RUN_DIR/i.html &&

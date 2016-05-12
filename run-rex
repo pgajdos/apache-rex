@@ -244,16 +244,16 @@ function prepare_env()
   export AREX_MPM=$HTTPD_MPM
   echod "httpd MPM ................................ $AREX_MPM"
 
-  export AREX_RUN_PORT=$HTTP_PORT_START
-  echod "httpd will listen on ..................... $AREX_RUN_PORT"
-  export AREX_RUN_PORT1=$((HTTP_PORT_START+1))
-  export AREX_RUN_PORT2=$((HTTP_PORT_START+2))
-  export AREX_RUN_PORT3=$((HTTP_PORT_START+3))
-  export AREX_RUN_PORT4=$((HTTP_PORT_START+4))
-  export AREX_RUN_PORT5=$((HTTP_PORT_START+5))
-  export AREX_RUN_PORT6=$((HTTP_PORT_START+6))
+  export AREX_PORT=$HTTP_PORT_START
+  echod "httpd will listen on ..................... $AREX_PORT"
+  export AREX_PORT1=$((HTTP_PORT_START+1))
+  export AREX_PORT2=$((HTTP_PORT_START+2))
+  export AREX_PORT3=$((HTTP_PORT_START+3))
+  export AREX_PORT4=$((HTTP_PORT_START+4))
+  export AREX_PORT5=$((HTTP_PORT_START+5))
+  export AREX_PORT6=$((HTTP_PORT_START+6))
   echod "other available ports ...................."\
-    "$AREX_RUN_PORT1 $AREX_RUN_PORT2 $AREX_RUN_PORT3 $AREX_RUN_PORT4 $AREX_RUN_PORT5 $AREX_RUN_PORT6"
+    "$AREX_PORT1 $AREX_PORT2 $AREX_PORT3 $AREX_PORT4 $AREX_PORT5 $AREX_PORT6"
 
   export AREX_FTP_PORT=$FTP_PORT
   echod "ftp daemon will listen on ................ $AREX_FTP_PORT"
@@ -286,13 +286,13 @@ function prepare_env()
 
 function check_open_ports()
 {
-  lsof -i | grep -q ":$AREX_RUN_PORT (LISTEN)"  && { echo "fatal: $AREX_RUN_PORT is already opened";  exit 2; }
-  lsof -i | grep -q ":$AREX_RUN_PORT1 (LISTEN)" && { echo "fatal: $AREX_RUN_PORT1 is already opened"; exit 2; }
-  lsof -i | grep -q ":$AREX_RUN_PORT2 (LISTEN)" && { echo "fatal: $AREX_RUN_PORT2 is already opened"; exit 2; }
-  lsof -i | grep -q ":$AREX_RUN_PORT3 (LISTEN)" && { echo "fatal: $AREX_RUN_PORT3 is already opened"; exit 2; }
-  lsof -i | grep -q ":$AREX_RUN_PORT4 (LISTEN)" && { echo "fatal: $AREX_RUN_PORT4 is already opened"; exit 2; }
-  lsof -i | grep -q ":$AREX_RUN_PORT5 (LISTEN)" && { echo "fatal: $AREX_RUN_PORT5 is already opened"; exit 2; }
-  lsof -i | grep -q ":$AREX_RUN_PORT6 (LISTEN)" && { echo "fatal: $AREX_RUN_PORT6 is already opened"; exit 2; }
+  lsof -i | grep -q ":$AREX_PORT (LISTEN)"  && { echo "fatal: $AREX_PORT is already opened";  exit 2; }
+  lsof -i | grep -q ":$AREX_PORT1 (LISTEN)" && { echo "fatal: $AREX_PORT1 is already opened"; exit 2; }
+  lsof -i | grep -q ":$AREX_PORT2 (LISTEN)" && { echo "fatal: $AREX_PORT2 is already opened"; exit 2; }
+  lsof -i | grep -q ":$AREX_PORT3 (LISTEN)" && { echo "fatal: $AREX_PORT3 is already opened"; exit 2; }
+  lsof -i | grep -q ":$AREX_PORT4 (LISTEN)" && { echo "fatal: $AREX_PORT4 is already opened"; exit 2; }
+  lsof -i | grep -q ":$AREX_PORT5 (LISTEN)" && { echo "fatal: $AREX_PORT5 is already opened"; exit 2; }
+  lsof -i | grep -q ":$AREX_PORT6 (LISTEN)" && { echo "fatal: $AREX_PORT6 is already opened"; exit 2; }
 }
 
 #
@@ -343,7 +343,7 @@ function prepare_run()
   echo "ServerName test"                                > $conf
   echo "User $AREX_USER"                               >> $conf
   echo "Group $AREX_GROUP"                             >> $conf
-  echo "Listen $AREX_RUN_PORT"                        >> $conf
+  echo "Listen $AREX_PORT"                        >> $conf
   echo "PidFile $AREX_RUN_DIR/pid"                    >> $conf
   echo "ErrorLog $AREX_RUN_DIR/error_log"             >> $conf
   load_modules $conf
@@ -358,13 +358,13 @@ function prepare_run()
     cat example.conf.in >> $AREX_RUN_DIR/httpd.conf
 
     sed -i "s:@AREX_RUN_DIR@:$AREX_RUN_DIR:"                         $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_RUN_PORT@:$AREX_RUN_PORT:"                       $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_RUN_PORT1@:$AREX_RUN_PORT1:"                     $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_RUN_PORT2@:$AREX_RUN_PORT2:"                     $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_RUN_PORT3@:$AREX_RUN_PORT3:"                     $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_RUN_PORT4@:$AREX_RUN_PORT4:"                     $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_RUN_PORT5@:$AREX_RUN_PORT5:"                     $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_RUN_PORT6@:$AREX_RUN_PORT6:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT@:$AREX_PORT:"                       $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT1@:$AREX_PORT1:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT2@:$AREX_PORT2:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT3@:$AREX_PORT3:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT4@:$AREX_PORT4:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT5@:$AREX_PORT5:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT6@:$AREX_PORT6:"                     $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_DOCUMENT_ROOT@:$AREX_DOCUMENT_ROOT:"               $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_ALLOW_FROM_LOCALHOST@:$AREX_ALLOW_FROM_LOCALHOST:" $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_DENY_FROM_ALL@:$AREX_DENY_FROM_ALL:"               $AREX_RUN_DIR/httpd.conf

@@ -14,7 +14,7 @@ echo
 
 echo "[1] run proxy on scgi server which returns its environment"
 
-curl -s http://localhost:$AREX_RUN_PORT/app/ > $AREX_RUN_DIR/env-scgi-server.out
+curl -s http://localhost:$AREX_PORT/app/ > $AREX_RUN_DIR/env-scgi-server.out
 grep 'REQUEST_METHOD.*GET' $AREX_RUN_DIR/env-scgi-server.out || exit_code=1
 grep 'SCGI.*1'             $AREX_RUN_DIR/env-scgi-server.out || exit_code=1
 

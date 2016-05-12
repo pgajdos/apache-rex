@@ -3,30 +3,30 @@ exit_code=0
 echo 'content not relevant to the example' > $AREX_DOCUMENT_ROOT/spelling.html
 
 echo "[1] fix case"
-curl -s http://localhost:$AREX_RUN_PORT/SPELLING.HTML  | grep 301 || exit_code=1
+curl -s http://localhost:$AREX_PORT/SPELLING.HTML  | grep 301 || exit_code=1
 
 echo "[2] fix missing character"
-curl -s http://localhost:$AREX_RUN_PORT/speling.html   | grep 301 || exit_code=2
+curl -s http://localhost:$AREX_PORT/speling.html   | grep 301 || exit_code=2
 
 echo "[3] fix superfluous character"
-curl -s http://localhost:$AREX_RUN_PORT/spellling.html | grep 301 || exit_code=3
+curl -s http://localhost:$AREX_PORT/spellling.html | grep 301 || exit_code=3
 
 echo "[4] fix transposition, adjacent letters"
-curl -s http://localhost:$AREX_RUN_PORT/spelling.htlm  | grep 301 || exit_code=4
+curl -s http://localhost:$AREX_PORT/spelling.htlm  | grep 301 || exit_code=4
 
 echo "[5] fix transposition, non adjacent letters"
 # do not know why following returns 300, there just one doc there
 if [ $AREX_APACHE_VERSION -ge 20500 ]; then
-curl -s http://localhost:$AREX_RUN_PORT/spelling.ltmh  | grep 404 || exit_code=5
+curl -s http://localhost:$AREX_PORT/spelling.ltmh  | grep 404 || exit_code=5
 else
-curl -s http://localhost:$AREX_RUN_PORT/spelling.ltmh  | grep 300 || exit_code=5
+curl -s http://localhost:$AREX_PORT/spelling.ltmh  | grep 300 || exit_code=5
 fi
 
 echo "[6] combination case + onecharacter fix"
-curl -s http://localhost:$AREX_RUN_PORT/Pselling.html  | grep 301 || exit_code=6
+curl -s http://localhost:$AREX_PORT/Pselling.html  | grep 301 || exit_code=6
 
 echo "[7] trickier combination unfixable"
-curl -s http://localhost:$AREX_RUN_PORT/speling.lmth   | grep 404 || exit_code=7
+curl -s http://localhost:$AREX_PORT/speling.lmth   | grep 404 || exit_code=7
 
 exit $exit_code
 

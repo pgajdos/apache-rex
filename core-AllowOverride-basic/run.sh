@@ -9,8 +9,8 @@ echo "Options FollowSymlinks" > $AREX_DOCUMENT_ROOT/foo/.htaccess
 echo "Options FollowSymlinks" > $AREX_DOCUMENT_ROOT/bar/.htaccess
 
 echo "[1] AllowOverride none"
-curl -s http://localhost:$AREX_RUN_PORT/foo/a_link.txt | grep '403 Forbidden' || exit_code=1
+curl -s http://localhost:$AREX_PORT/foo/a_link.txt | grep '403 Forbidden' || exit_code=1
 echo "[2] AllowOverride all"
-curl -s http://localhost:$AREX_RUN_PORT/bar/b_link.txt | grep 'B.TXT' || exit_code=2
+curl -s http://localhost:$AREX_PORT/bar/b_link.txt | grep 'B.TXT' || exit_code=2
 
 exit $exit_code

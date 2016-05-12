@@ -62,7 +62,7 @@ utility. See the `CONFIGURATION` section of `run-rex` for defaults.
   Depending on example, one or several ports need to be reserved
   for http listening. The set starts with value of this variable and 
   continues by incrementing 1 to reach `n + 1` ports open. The `n` is
-  currently equal to `6`. See `AREX_RUN_PORTn` for details.
+  currently equal to `6`. See `AREX_PORTn` for details.
 * `FTP_PORT`  
   Port that can be opened by testing FTP daemon.
 * `FCGI_PORT`  
@@ -114,9 +114,9 @@ in `run.sh`.
   Writeable dir for the test, `$RUN_DIR_BASE/<test-dir-name>` in the fact.
   All example data, temporary outputs, even configuration and script should 
   be found there after example is run. No cleanup required.
-* `AREX_RUN_PORT`  
+* `AREX_PORT`  
   This port is automatically opened for the httpd.
-* `AREX_RUN_PORTn`  
+* `AREX_PORTn`  
   Additional ports for httpd, need to be `Listen`ed in `example.conf`. `n`
   can be one from `{1, 2, 3, 4, 5, 6}`.
 * `AREX_DOCUMENT_ROOT`  

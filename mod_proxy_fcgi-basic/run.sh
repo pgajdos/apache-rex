@@ -10,7 +10,7 @@ sleep 1
 
 echo
 echo "[1] request is proxied to fcgi application"
-curl -s http://127.0.0.1:$AREX_RUN_PORT/app/?a=true | grep 'QUERY_STRING = a=true' || exit_code=1
+curl -s http://127.0.0.1:$AREX_PORT/app/?a=true | grep 'QUERY_STRING = a=true' || exit_code=1
 
 kill -TERM $(cat $AREX_RUN_DIR/spawn-fcgi.pid)
 

@@ -1,8 +1,8 @@
 <IfVersion <= 2.3.11>
-NameVirtualHost *:@AREX_RUN_PORT@
+NameVirtualHost *:@AREX_PORT@
 </IfVersion>
 
-<VirtualHost *:@AREX_RUN_PORT@>
+<VirtualHost *:@AREX_PORT@>
   ServerName www.domain.tld
   DocumentRoot "@AREX_RUN_DIR@/htdocs-domain"
   <Directory "@AREX_RUN_DIR@/htdocs-domain">
@@ -10,7 +10,7 @@ NameVirtualHost *:@AREX_RUN_PORT@
   </Directory>
 </VirtualHost>
 
-<VirtualHost *:@AREX_RUN_PORT@>
+<VirtualHost *:@AREX_PORT@>
   ServerName www.otherdomain.tld
   DocumentRoot "@AREX_RUN_DIR@/htdocs-otherdomain"
   <Directory "@AREX_RUN_DIR@/htdocs-otherdomain">

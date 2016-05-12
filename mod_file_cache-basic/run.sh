@@ -10,9 +10,9 @@ echo 'changed content' > $AREX_DOCUMENT_ROOT/mmaped.html
 echo 'changed content' > $AREX_DOCUMENT_ROOT/not-cached.html
 
 # first two serve 'changed ', the third serves 'changed content'
-{ curl -s http://localhost:$AREX_RUN_PORT/cached.html; 
-  curl -s http://localhost:$AREX_RUN_PORT/mmaped.html;
-  curl -s http://localhost:$AREX_RUN_PORT/not-cached.html; } \
+{ curl -s http://localhost:$AREX_PORT/cached.html; 
+  curl -s http://localhost:$AREX_PORT/mmaped.html;
+  curl -s http://localhost:$AREX_PORT/not-cached.html; } \
  | grep 'changed changed changed content' || exit_code=1
 
 exit $exit_code

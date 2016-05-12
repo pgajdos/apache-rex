@@ -1,5 +1,5 @@
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   RewriteEngine on
   RewriteRule "^/$"  "/start/" [R]
   ErrorLog "@AREX_RUN_DIR@/error_log-internal1"
@@ -9,8 +9,8 @@ Listen @AREX_RUN_PORT1@
   </Directory>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
   RewriteEngine on
   RewriteRule "^/$" "/start/" [R]
   ErrorLog "@AREX_RUN_DIR@/error_log-internal2"
@@ -20,12 +20,12 @@ Listen @AREX_RUN_PORT2@
   </Directory>
 </VirtualHost>
 
-<VirtualHost *:@AREX_RUN_PORT@>
+<VirtualHost *:@AREX_PORT@>
   ServerName       www.fontend.com
-  ProxyPass        /app1/ http://localhost:@AREX_RUN_PORT1@/
+  ProxyPass        /app1/ http://localhost:@AREX_PORT1@/
   <Location /app2/>
-    ProxyPass          http://localhost:@AREX_RUN_PORT2@/
-    ProxyPassReverse   http://localhost:@AREX_RUN_PORT2@/
+    ProxyPass          http://localhost:@AREX_PORT2@/
+    ProxyPassReverse   http://localhost:@AREX_PORT2@/
   </Location>
 </VirtualHost>
 

@@ -3,8 +3,8 @@ exit_code=0
 cp hooks.lua $AREX_RUN_DIR
 echo 'site index' > $AREX_DOCUMENT_ROOT/index.html 
 
-curl -s http://localhost:$AREX_RUN_PORT/notexisting.html >/dev/null
-curl -s http://localhost:$AREX_RUN_PORT/ >/dev/null
+curl -s http://localhost:$AREX_PORT/notexisting.html >/dev/null
+curl -s http://localhost:$AREX_PORT/ >/dev/null
 
 echo "hook_log ---"
 cat $AREX_DOCUMENT_ROOT/hook_log

@@ -5,8 +5,8 @@
 AddType application/x-x509-ca-cert .crt
 AddType application/x-pkcs7-crl    .crl
 
-Listen @AREX_RUN_PORT1@
-<VirtualHost *:@AREX_RUN_PORT1@>
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
   ErrorLog "@AREX_RUN_DIR@/error_log-backend"
   DocumentRoot "@AREX_RUN_DIR@/htdocs-backend"
 
@@ -22,11 +22,11 @@ Listen @AREX_RUN_PORT1@
   CustomLog             @AREX_RUN_DIR@/test-server_log   ssl_combined
 </VirtualHost>
 
-Listen @AREX_RUN_PORT2@
-<VirtualHost *:@AREX_RUN_PORT2@>
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
   ErrorLog "@AREX_RUN_DIR@/error_log-proxy"
 
-  AllowCONNECT @AREX_RUN_PORT1@
+  AllowCONNECT @AREX_PORT1@
 
   ProxyRequests On
   <Proxy *>
@@ -34,8 +34,8 @@ Listen @AREX_RUN_PORT2@
   </Proxy>
 </VirtualHost>
 
-Listen @AREX_RUN_PORT3@
-<VirtualHost *:@AREX_RUN_PORT3@>
+Listen @AREX_PORT3@
+<VirtualHost *:@AREX_PORT3@>
   ErrorLog "@AREX_RUN_DIR@/error_log-proxy"
 
   ProxyRequests On

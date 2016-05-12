@@ -9,7 +9,7 @@ read -n \$CONTENT_LENGTH data; echo \$data
 EOF
 chmod 755 $AREX_DOCUMENT_ROOT/echo-post-data.cgi
 echo 'It does not work!' > $AREX_RUN_DIR/POST.data
-curl -s -X POST -d @$AREX_RUN_DIR/POST.data http://localhost:$AREX_RUN_PORT/echo-post-data.cgi | grep 'It works!' || exit_code=1
+curl -s -X POST -d @$AREX_RUN_DIR/POST.data http://localhost:$AREX_PORT/echo-post-data.cgi | grep 'It works!' || exit_code=1
 
 exit $exit_code
 

@@ -23,8 +23,8 @@ URI: welcome.html.cs
 EOF
 
 echo "[1] negotiate document language"
-curl -s -H 'Accept-Language: de' http://localhost:$AREX_RUN_PORT/welcome.html | grep 'willkommen' || exit_code=1
-curl -s -H 'Accept-Language: cs' http://localhost:$AREX_RUN_PORT/welcome.html | grep 'vítejte'    || exit_code=1
-curl -s                          http://localhost:$AREX_RUN_PORT/welcome.html | grep 'welcome'    || exit_code=1
+curl -s -H 'Accept-Language: de' http://localhost:$AREX_PORT/welcome.html | grep 'willkommen' || exit_code=1
+curl -s -H 'Accept-Language: cs' http://localhost:$AREX_PORT/welcome.html | grep 'vítejte'    || exit_code=1
+curl -s                          http://localhost:$AREX_PORT/welcome.html | grep 'welcome'    || exit_code=1
 
 exit $exit_code

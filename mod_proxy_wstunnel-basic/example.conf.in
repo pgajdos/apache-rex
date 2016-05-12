@@ -1,1 +1,1 @@
-ProxyPass / "ws://127.0.0.1:@AREX_RUN_PORT1@/reverse-echo/"
+ProxyPass / "ws://127.0.0.1:@AREX_PORT1@/reverse-echo/"
