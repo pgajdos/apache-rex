@@ -1,4 +1,6 @@
 apache-example-framework
+core-Warning-basic
+core-Error-basic
 core-VirtualHost-basic
 core-VirtualHost-name-based
 core-ServerRoot-basic
