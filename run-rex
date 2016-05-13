@@ -386,19 +386,25 @@ function prepare_run()
 
   # create default DocumentRoot
   mkdir -p $AREX_RUN_DIR/htdocs
+
+  # server flags
+  SERVER_FLAGS=""
+  if [ -e SERVERFLAGS ]; then
+    SERVER_FLAGS="$(cat SERVERFLAGS)"
+  fi
 }
 
 function syntax_check()
 {
   syntax_ok=1
-  httpd -f $AREX_RUN_DIR/httpd.conf -t 2>$AREX_RUN_DIR/syntax_check || syntax_ok=0
+  httpd -f $AREX_RUN_DIR/httpd.conf $SERVER_FLAGS -t 2>$AREX_RUN_DIR/syntax_check || syntax_ok=0
   echo $syntax_ok
 }
 
 function start_apache()
 {
   start_ok=1
-  httpd -f $AREX_RUN_DIR/httpd.conf -k start 2>$AREX_RUN_DIR/start_log || start_ok=0
+  httpd -f $AREX_RUN_DIR/httpd.conf $SERVER_FLAGS -k start 2>$AREX_RUN_DIR/start_log || start_ok=0
   if [ $start_ok -ne 1 ]; then
     echo '0'
     return

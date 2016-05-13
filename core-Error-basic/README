@@ -1,0 +1,14 @@
+This directive is available from 2.5 on. For 2.4 
+it syntax check fails with following way:
+
+SKIPPED
+AH00526: Syntax error on line 19 of /tmp/apache-rex/core-Error-basic/httpd.conf:
+SSL flag defined, but ssl module not loaded
+
+For 2.5 syntax check fails with:
+
+SKIPPED
+[Fri May 13 08:57:27.998872 2016] [core:error] [pid 17758] SSL flag defined, but ssl module not loaded on line 19 of /tmp/apache-rex/core-Error-basic/httpd.conf
+AH00526: Syntax error on line 19 of /tmp/apache-rex/core-Error-basic/httpd.conf:
+Configuration processing stopped by Error directive
+

@@ -101,6 +101,8 @@ Each example has its own directory, which contains:
   Determines an example flow. Script exits `0` in case whole example passed
   or number of failed subexample. If there are more subexamples failing, 
   the highest number should be returned.
+* SERVERFLAGS (optional)
+  The httpd commandline parameters.
 * `skip.sh` (optional)  
   when the example is not runnable (e. g. curl has not --resolve needed by 
   the example). Exits `0` if the example should be skipped.
