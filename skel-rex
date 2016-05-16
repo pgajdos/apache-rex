@@ -27,6 +27,6 @@ fi
 
 mkdir "$name"
 touch "$name/DESCRIPTION"
-printf  "exit_code=0\nexit $exit_code\n" > $name/run.sh
+printf  "exit_code=0\nexit \$exit_code\n" > $name/run.sh
 touch "$name/example.conf.in"
 touch "$name/MODULES"
