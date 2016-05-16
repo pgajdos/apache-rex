@@ -1,6 +1,0 @@
-Current dir content:
-nossi.html
-ssi-by-extension.shtml
-ssi-by-xbit.html
-ssi-cgi.shtml
-

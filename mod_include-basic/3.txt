@@ -1,3 +1,0 @@
-<!--#if expr="%{SERVER_SOFTWARE} =~ /linux/i" -->
-Have a lot of fun!
-<!--#endif -->
