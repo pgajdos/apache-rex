@@ -1,0 +1,32 @@
+#!/bin/bash
+
+function usage()
+{
+  echo "$0 <new_example_name>"
+  echo
+  echo "creates new example skeleton with all"
+  echo "mandatory files"
+}
+
+name="$1"
+if [ -z "$name" ]; then
+  echo "ERROR: an argument missing"
+  usage
+  exit 1
+fi
+
+if [ "$name" == "--help" -o "$name" == "-h" ]; then
+  usage
+  exit 0
+fi
+
+if [ -e "$name" ]; then
+  echo "ERROR: $name already exists"
+  exit 2
+fi
+
+mkdir "$name"
+touch "$name/DESCRIPTION"
+echo  "exit_code=0\nexit $exit_code" > $name/run.sh
+touch "$name/example.conf.in"
+touch "$name/MODULES"
