@@ -343,9 +343,9 @@ function prepare_run()
   echo "ServerName test"                                > $conf
   echo "User $AREX_USER"                               >> $conf
   echo "Group $AREX_GROUP"                             >> $conf
-  echo "Listen $AREX_PORT"                        >> $conf
-  echo "PidFile $AREX_RUN_DIR/pid"                    >> $conf
-  echo "ErrorLog $AREX_RUN_DIR/error_log"             >> $conf
+  echo "Listen $AREX_PORT"                             >> $conf
+  echo "PidFile $AREX_RUN_DIR/pid"                     >> $conf
+  echo "ErrorLog $AREX_RUN_DIR/error_log"              >> $conf
   load_modules $conf
   export AREX_DOCUMENT_ROOT=$AREX_RUN_DIR/htdocs
   echo "DocumentRoot $AREX_DOCUMENT_ROOT"              >> $conf
