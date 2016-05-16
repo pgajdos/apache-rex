@@ -1,0 +1,43 @@
+AddType application/x-x509-ca-cert .crt
+
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+  <IfDefine SSL_VH1>
+    <IfVersion >= 2.4.2>
+      DefaultRuntimeDir @AREX_RUN_DIR@/run
+    </IfVersion>
+
+
+    SSLEngine             on
+
+    SSLCertificateFile    @AREX_RUN_DIR@/test-server.crt
+    SSLCertificateKeyFile @AREX_RUN_DIR@/test-server.key
+
+    CustomLog             @AREX_RUN_DIR@/vh1_log   ssl_combined
+  </IfDefine>
+  
+  <Directory @AREX_DOCUMENT_ROOT@>
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
+  <IfDefine SSL_VH2>
+    <IfVersion >= 2.4.2>
+      DefaultRuntimeDir @AREX_RUN_DIR@/run
+    </IfVersion>
+
+
+    SSLEngine             on
+
+    SSLCertificateFile    @AREX_RUN_DIR@/test-server.crt
+    SSLCertificateKeyFile @AREX_RUN_DIR@/test-server.key
+
+    CustomLog             @AREX_RUN_DIR@/vh2_log   ssl_combined
+  </IfDefine>
+  
+  <Directory @AREX_DOCUMENT_ROOT@>
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
