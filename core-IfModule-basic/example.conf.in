@@ -1,0 +1,14 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  <IfModule mod_include.c>
+    RewriteEngine on
+    RewriteRule   "^(.*)\.html" "$1.shtml"
+
+    Options         +Includes
+    AddType         text/html .shtml
+    AddOutputFilter INCLUDES .shtml
+    XBitHack        on
+  </IfModule>
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
