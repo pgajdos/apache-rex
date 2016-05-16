@@ -22,6 +22,8 @@ core-Limit-basic
 core-LimitExcept-basic
 core-ErrorDocument-basic
 core-ServerAdmin-basic
+core-IfDefine-basic
+core-IfModule-basic
 mod_version-basic
 mod_log_config-basic
 mod_logio-basic
