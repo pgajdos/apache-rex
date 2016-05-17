@@ -2,7 +2,7 @@ require 'apache2'
 require 'string'
 
 function language_document(r)
-  uri = r.uri
+  local uri = r.uri
 
   language = r.headers_in['Accept-Language']
   if not language then
@@ -15,7 +15,7 @@ function language_document(r)
 end
 
 function translate_name_hook(r)
-  filename = language_document(r)
+  local filename = language_document(r)
 
   if r:stat(filename) then
     r.filename = filename
@@ -36,7 +36,7 @@ end
 
 -- ensure that filename is set as we intended 
 function fixups_hook(r)
-  filename = language_document(r)
+  local filename = language_document(r)
 
   r:info("in fixups " .. filename .. " " .. r.filename)
   if r:stat(filename) and filename ~= r.filename then

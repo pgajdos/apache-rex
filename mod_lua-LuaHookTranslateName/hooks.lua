@@ -13,7 +13,7 @@ function old_to_new(r)
       r:info("pointing /old-location/README to " .. r.filename);
       return apache2.OK
     else
-      new_uri = r.uri:gsub("^/old%-location", "/new")
+      local new_uri = r.uri:gsub("^/old%-location", "/new")
       r:info("rewriting " .. r.uri .. " to " .. new_uri);
       r.uri = new_uri 
       return apache2.DECLINED

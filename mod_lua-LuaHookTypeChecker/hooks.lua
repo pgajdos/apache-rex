@@ -4,10 +4,10 @@ require 'string'
 -- for given language (Accept-Language) and html document
 -- in the form name.ext, serve name.language.ext
 function language_document(r)
-  uri = r.uri
+  local uri = r.uri
   r:info("got " .. uri)
 
-  language = r.headers_in['Accept-Language']
+  local language = r.headers_in['Accept-Language']
   if language then
     r:info("requested language: " .. language)
   else
@@ -28,7 +28,7 @@ function language_document(r)
 end
 
 function set_language(r)
-  language = r.headers_in['Accept-Language']
+  local language = r.headers_in['Accept-Language']
 
   if language and r:stat(r.filename) then
     r.headers_out['Language'] = language
