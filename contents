@@ -118,6 +118,7 @@ mod_lua-LuaHookMapToStorage
 mod_lua-LuaHookAccessChecker
 mod_lua-LuaHookLog
 mod_lua-LuaHookTypeChecker
+mod_lua-LuaHookFixups
 mod_mime_magic-basic
 mod_policy-basic
 mod_negotiation-basic

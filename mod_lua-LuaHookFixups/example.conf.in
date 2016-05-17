@@ -1,0 +1,15 @@
+LogLevel warn lua:info
+
+LuaRoot "@AREX_RUN_DIR@"
+LuaHookTranslateName hooks.lua translate_name_hook
+# misuse type_checker phase for doing wrong things, it will
+# be called between language_document() and fixups_document()
+LuaHookTypeChecker   hooks.lua evil_hook
+# ensure no hook changed the language again
+# https://httpd.apache.org/docs/2.4/developer/request.html:
+# "Many modules are 'trounced' by some phase above. The 
+#  fixups phase is used by modules to 'reassert' their 
+#  ownership or force the request's fields to their 
+#  appropriate values. It isn't always the cleanest 
+#  mechanism, but occasionally it's the only option."
+LuaHookFixups        hooks.lua fixups_hook
