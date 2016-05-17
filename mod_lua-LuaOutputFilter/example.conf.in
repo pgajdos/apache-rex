@@ -1,0 +1,10 @@
+LogLevel warn lua:info
+
+LuaRoot "@AREX_RUN_DIR@"
+LuaHookTypeChecker                hooks.lua c_content_type
+LuaOutputFilter    my_text_filter hooks.lua c_to_html
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  SetOutputFilter my_text_filter
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
