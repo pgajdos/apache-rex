@@ -120,6 +120,7 @@ mod_lua-LuaHookLog
 mod_lua-LuaHookTypeChecker
 mod_lua-LuaHookFixups
 mod_lua-LuaOutputFilter
+mod_lua-LuaInputFilter
 mod_mime_magic-basic
 mod_policy-basic
 mod_negotiation-basic

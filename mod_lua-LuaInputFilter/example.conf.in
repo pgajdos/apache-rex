@@ -1,0 +1,14 @@
+# rephrases core-SetInputFilter using lua input filter
+
+LogLevel warn lua:info
+
+LuaRoot @AREX_RUN_DIR@
+LuaInputFilter my_output_filter hooks.lua fix_post_param
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  Options +ExecCGI
+  AddHandler cgi-script .cgi
+  @AREX_ALLOW_FROM_LOCALHOST@
+  SetInputFilter my_output_filter
+</Directory>
+
