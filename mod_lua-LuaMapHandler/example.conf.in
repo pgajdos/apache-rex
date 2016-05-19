@@ -1,0 +1,10 @@
+LogLevel warn lua:info
+
+LuaRoot @AREX_RUN_DIR@
+LuaMapHandler /pangram$      pangram.lua orig
+LuaMapHandler /pangram/(\w+) pangram.lua $1 
+
+<Directory @AREX_DOCUMENT_ROOT@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
