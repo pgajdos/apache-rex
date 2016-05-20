@@ -24,6 +24,7 @@ core-ErrorDocument-basic
 core-ServerAdmin-basic
 core-IfDefine-basic
 core-IfModule-basic
+core-ContentDigest-basic
 mod_version-basic
 mod_log_config-basic
 mod_logio-basic

@@ -1,0 +1,4 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  ContentDigest on
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
