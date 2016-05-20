@@ -3,7 +3,8 @@ apache-rex
 
 This package contains several runnable examples and utility to run them
 (or other examples in the structure the utility expects). Examples are 
-not required to be minimal or usable in practice, but are allowed to be.
+not required to be minimal or usable in practice, but are allowed to be
+such.
 
 Prerequisites
 -------------
