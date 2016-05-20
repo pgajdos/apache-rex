@@ -122,6 +122,7 @@ mod_lua-LuaHookFixups
 mod_lua-LuaOutputFilter
 mod_lua-LuaInputFilter
 mod_lua-LuaMapHandler
+mod_lua-LuaHookAuthChecker
 mod_mime_magic-basic
 mod_policy-basic
 mod_negotiation-basic

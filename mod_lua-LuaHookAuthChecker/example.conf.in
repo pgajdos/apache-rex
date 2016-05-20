@@ -1,0 +1,19 @@
+LogLevel warn lua:info
+
+LuaRoot "@AREX_RUN_DIR@"
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  AuthName "Community Site"
+  AuthType Basic
+  AuthBasicProvider file
+  AuthUserFile @AREX_RUN_DIR@/htpasswd
+
+  <RequireAll>
+    Require valid-user
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </RequireAll>
+
+  LuaHookAuthChecker hooks.lua user_activity
+
+</Directory>
+
