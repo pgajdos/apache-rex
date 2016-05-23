@@ -1,0 +1,29 @@
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+    ErrorLog "@AREX_RUN_DIR@/error_log-vh"
+    DocumentRoot "@AREX_RUN_DIR@/htdocs-vh"
+    <Directory "@AREX_RUN_DIR@/htdocs-vh">
+      @AREX_ALLOW_FROM_LOCALHOST@
+    </Directory>
+</VirtualHost>
+
+# https://bz.apache.org/bugzilla/show_bug.cgi?id=53218#c11
+
+# This directive must come before the following one in order
+# block access to arbitrary URIs on the origin server!
+# As an alternative one can also use "RewriteRule /UNUSED - [F]"
+ProxyPass /UNUSED !
+
+# Configure a connection pool for the origin server
+# http://localhost:@AREX_PORT1@
+ProxyPass /UNUSED http://localhost:@AREX_PORT1@
+
+RewriteEngine On
+
+# Proxy "/long" to a long URI on the origin server,
+# [P] flag at end of line is important
+RewriteRule /long http://localhost:@AREX_PORT1@/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/document.html [P]
+
+# Proxy "/verylong" to an even longer URI on the origin server,
+# again [P] flag at end of line is important
+RewriteRule /verylong http://localhost:@AREX_PORT1@/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/document.html [P]
