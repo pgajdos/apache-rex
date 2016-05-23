@@ -1,0 +1,15 @@
+LogLevel trace8
+
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+    ErrorLog "@AREX_RUN_DIR@/error_log-vh"
+    DocumentRoot "@AREX_RUN_DIR@/htdocs-vh"
+    <Directory "@AREX_RUN_DIR@/htdocs-vh">
+      @AREX_ALLOW_FROM_LOCALHOST@
+    </Directory>
+</VirtualHost>
+
+<Location "/vh">
+    ProxyPass "http://localhost:@AREX_PORT1@/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+</Location>
+
