@@ -4,7 +4,7 @@ mkdir -p $AREX_RUN_DIR/htdocs-vh/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 echo 'document' > $AREX_RUN_DIR/htdocs-vh/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/document.html
 
 echo "[1] get the document trough proxy on long url"
-curl -s http://localhost:$AREX_PORT/vh/document.html | grep document || exit_code=1
+curl -s http://localhost:$AREX_PORT/long/document.html | grep document || exit_code=1
 
 exit $exit_code
 

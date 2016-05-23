@@ -7,7 +7,7 @@ Listen @AREX_PORT1@
     </Directory>
 </VirtualHost>
 
-<Location "/vh">
+<Location "/long">
     ProxyPass "http://localhost:@AREX_PORT1@/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 </Location>
 
