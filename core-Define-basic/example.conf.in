@@ -1,0 +1,6 @@
+Define TEST
+
+<IfDefine TEST>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-test
+</IfDefine>
+
