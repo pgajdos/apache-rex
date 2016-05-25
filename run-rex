@@ -167,22 +167,22 @@ function check_system()
   echod -n "Checking the system "
   echod -n '.'
   HTTPD_COMMAND=$(httpd_command)
-  ln -sf $HTTPD_COMMAND     $RUN_DIR_BASE/bin/httpd
+  [ -n "$HTTPD_COMMAND" ]     && ln -sf $HTTPD_COMMAND     $RUN_DIR_BASE/bin/httpd
   echod -n '.'
   HTPASSWD_COMMAND=$(htpasswd_command)
-  ln -sf $HTPASSWD_COMMAND  $RUN_DIR_BASE/bin/htpasswd
+  [ -n "$HTPASSWD_COMMAND" ]  && ln -sf $HTPASSWD_COMMAND  $RUN_DIR_BASE/bin/htpasswd
   echod -n '.'
   HTDBM_COMMAND=$(htdbm_command)
-  ln -sf $HTDBM_COMMAND     $RUN_DIR_BASE/bin/htdbm
+  [ -n "$HTDBM_COMMAND" ]     && ln -sf $HTDBM_COMMAND     $RUN_DIR_BASE/bin/htdbm
   echod -n '.'
   HTTXT2DBM_COMMAND=$(httxt2dbm_command)
-  ln -sf $HTTXT2DBM_COMMAND $RUN_DIR_BASE/bin/httxt2dbm
+  [ -n "$HTTXT2DBM_COMMAND" ] && ln -sf $HTTXT2DBM_COMMAND $RUN_DIR_BASE/bin/httxt2dbm
   echod -n '.'
   CURL_COMMAND=$(curl_command)
-  ln -sf $CURL_COMMAND      $RUN_DIR_BASE/bin/curl
+  [ -n "$CURL_COMMAND" ]      && ln -sf $CURL_COMMAND      $RUN_DIR_BASE/bin/curl
   echod -n '.'
   SQLITE_COMMAND=$(sqlite_command)
-  ln -sf $SQLITE_COMMAND    $RUN_DIR_BASE/bin/sqlite
+  [ -n "$SQLITE_COMMAND" ]    && ln -sf $SQLITE_COMMAND    $RUN_DIR_BASE/bin/sqlite
   echod -n '.'
   # filter definitions need full path, otherwise
   # it is expected that sed is in the PATH
