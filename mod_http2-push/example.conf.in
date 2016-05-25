@@ -1,0 +1,19 @@
+SSLEngine             on
+
+SSLCertificateFile    @AREX_RUN_DIR@/test-server.crt
+SSLCertificateKeyFile @AREX_RUN_DIR@/test-server.key
+
+Protocols h2  http/1.1
+
+# on is the default, just stating explicitely
+H2Push on
+
+<Location /index.html>
+    Header add Link "</css/site.css>;rel=preload"
+    Header add Link "</images/logo.jpg>;rel=preload"
+</Location>
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
