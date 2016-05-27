@@ -430,7 +430,7 @@ function run()
 function stop_apache()
 {
   pid=$(cat $AREX_RUN_DIR/pid)
-  kill -TERM -$pid
+  kill -TERM $pid
   sleep 1
   if [ -e $AREX_RUN_DIR/pid ]; then
     kill -KILL -$pid || true
