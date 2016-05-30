@@ -22,9 +22,11 @@ core-Limit-basic
 core-LimitExcept-basic
 core-ErrorDocument-basic
 core-ServerAdmin-basic
+core-Define-basic
 core-IfDefine-basic
 core-IfModule-basic
 core-ContentDigest-basic
+debug-coredump
 mod_version-basic
 mod_log_config-basic
 mod_logio-basic
@@ -51,6 +53,8 @@ mod_rewrite-advanced
 mod_proxy-basic
 mod_proxy-ProxyErrorOverride
 mod_proxy-ProxyPassReverse
+mod_proxy-long-url-abz53218
+mod_proxy-long-url-abz53218-waround
 mod_proxy_balancer-basic
 mod_proxy_balancer-failonstatus
 mod_proxy_balancer-abz56925
@@ -90,6 +94,7 @@ mod_include-basic
 mod_filter-basic
 mod_asis-basic
 mod_http2-basic
+mod_http2-push
 mod_access_compat-basic
 mod_vhost_alias-basic
 mod_setenvif-basic
