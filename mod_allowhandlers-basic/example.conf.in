@@ -1,0 +1,27 @@
+<Directory @AREX_DOCUMENT_ROOT@>
+  <Files "*.lua">
+    SetHandler lua-script
+  </Files>
+
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+<Directory @AREX_DOCUMENT_ROOT@/data>
+  AllowHandlers not lua-script
+</Directory>
+
+<Directory @AREX_DOCUMENT_ROOT@/scripts>
+  AllowHandlers lua-script
+</Directory>
+
+<Location "/not-available/">
+  SetHandler forbidden
+</Location>
+
+<Location "/server-status/">
+  SetHandler server-status
+</Location>
+
+<Location "/server-status/archive/">
+  AllowHandlers not server-status
+</Location>
