@@ -3,8 +3,8 @@ exit_code=0
 echo 'site index' > $AREX_DOCUMENT_ROOT/index.html
 echo 'document' > $AREX_DOCUMENT_ROOT/document.html
 
-curl http://localhost:$AREX_PORT/
-curl http://localhost:$AREX_PORT/document.html
+curl -s http://localhost:$AREX_PORT/              > /dev/null
+curl -s http://localhost:$AREX_PORT/document.html > /dev/null
 
 mkdir -p $AREX_RUN_DIR/demultiplex
 firehose -f $AREX_RUN_DIR/requests.firehose --output-directory $AREX_RUN_DIR/demultiplex
