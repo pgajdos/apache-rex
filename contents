@@ -134,4 +134,4 @@ mod_policy-basic
 mod_negotiation-basic
 mod_ratelimit-basic
 mod_usertrack-basic
-mod_allowhandlers
+mod_allowhandlers-basic
