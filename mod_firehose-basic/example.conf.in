@@ -1,5 +1,5 @@
-FirehoseRequestInput  @AREX_RUN_DIR@/request-input.firehose
-FirehoseRequestOutput @AREX_RUN_DIR@/request-output.firehose
+FirehoseRequestInput  @AREX_RUN_DIR@/requests.firehose
+FirehoseRequestOutput @AREX_RUN_DIR@/responses.firehose
 
 <Directory @AREX_DOCUMENT_ROOT@>
   @AREX_ALLOW_FROM_LOCALHOST@
