@@ -1,0 +1,9 @@
+FirehoseRequestInput  @AREX_RUN_DIR@/pipe.firehose
+FirehoseRequestOutput @AREX_RUN_DIR@/pipe.firehose
+
+<Directory @AREX_DOCUMENT_ROOT@>
+  <Files *.png>
+    SetOutputFilter DATA
+  </Files>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
