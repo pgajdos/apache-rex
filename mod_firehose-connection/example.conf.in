@@ -1,0 +1,9 @@
+FirehoseConnectionInput  @AREX_RUN_DIR@/requests.firehose
+FirehoseConnectionOutput @AREX_RUN_DIR@/responses.firehose
+
+# just to ephasize, it is on by default
+KeepAlive on
+
+<Directory @AREX_DOCUMENT_ROOT@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
