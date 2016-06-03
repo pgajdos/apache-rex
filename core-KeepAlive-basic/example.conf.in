@@ -1,0 +1,19 @@
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh1
+  KeepAlive on
+  
+  <Directory "@AREX_RUN_DIR@/htdocs-vh1">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
+  DocumentRoot @AREX_RUN_DIR@/htdocs-vh2
+  KeepAlive off
+
+  <Directory "@AREX_RUN_DIR@/htdocs-vh2">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHOst>
