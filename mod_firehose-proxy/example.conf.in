@@ -1,0 +1,30 @@
+FirehoseProxyConnectionInput  @AREX_RUN_DIR@/requests.firehose
+FirehoseProxyConnectionOutput @AREX_RUN_DIR@/responses.firehose
+
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+    ErrorLog "@AREX_RUN_DIR@/error_log-vh1"
+    DocumentRoot "@AREX_RUN_DIR@/htdocs-vh1"
+    <Directory "@AREX_RUN_DIR@/htdocs-vh1">
+      @AREX_ALLOW_FROM_LOCALHOST@
+    </Directory>
+</VirtualHost>
+
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
+    ErrorLog "@AREX_RUN_DIR@/error_log-vh2"
+    DocumentRoot "@AREX_RUN_DIR@/htdocs-vh2"
+    <Directory "@AREX_RUN_DIR@/htdocs-vh2">
+      @AREX_ALLOW_FROM_LOCALHOST@
+    </Directory>
+</VirtualHost>
+
+<Location "/vh1/">
+    ProxyPass "http://localhost:@AREX_PORT1@/"
+</Location>
+
+<Location "/vh2/">
+    ProxyPass "http://localhost:@AREX_PORT2@/"
+</Location>
+
+
