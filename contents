@@ -139,3 +139,4 @@ mod_allowhandlers-basic
 mod_firehose-basic
 mod_firehose-demultiplex
 mod_firehose-connection
+mod_firehose-proxy
