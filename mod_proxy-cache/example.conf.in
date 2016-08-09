@@ -1,0 +1,53 @@
+LogLevel cache:debug proxy:debug
+
+LogFormat "%s %{cache-status}e" cache_format
+
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+  ErrorLog "@AREX_RUN_DIR@/error_log-backend"
+  DocumentRoot "@AREX_RUN_DIR@/htdocs-backend"
+  <Directory "@AREX_RUN_DIR@/htdocs-backend">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
+  ErrorLog "@AREX_RUN_DIR@/error_log-reverse-proxy"
+
+  <Location "/app/">
+    ProxyPass "http://localhost:@AREX_PORT1@/"
+  </Location>
+
+  CacheSocache shmcb
+  CacheSocacheMaxSize 102400
+  CacheEnable socache "/"
+
+  CacheHeader on
+
+  CustomLog "@AREX_RUN_DIR@/reverse-proxy-uncached.log" cache_format env=cache-miss
+  CustomLog "@AREX_RUN_DIR@/reverse-proxy-cached.log" cache_format env=cache-hit
+  CustomLog "@AREX_RUN_DIR@/reverse-proxy-revalidated.log" cache_format env=cache-revalidate
+</VirtualHost>
+
+Listen @AREX_PORT3@
+<VirtualHost *:@AREX_PORT3@>
+  ErrorLog "@AREX_RUN_DIR@/error_log-forward-proxy"
+
+  ProxyRequests On
+  <Proxy "*">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Proxy>
+
+  CacheSocache shmcb
+  CacheSocacheMaxSize 102400
+  # http://httpd.apache.org/docs/current/mod/mod_cache.html#cacheenable
+  CacheEnable socache http://localhost:@AREX_PORT1@/
+
+  CacheHeader on
+
+  CustomLog "@AREX_RUN_DIR@/forward-proxy-uncached.log" cache_format env=cache-miss
+  CustomLog "@AREX_RUN_DIR@/forward-proxy-cached.log" cache_format env=cache-hit
+  CustomLog "@AREX_RUN_DIR@/forward-proxy-revalidated.log" cache_format env=cache-revalidate
+</VirtualHost>
+
