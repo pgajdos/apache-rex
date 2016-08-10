@@ -1,5 +1,3 @@
-LogLevel cache:debug proxy:debug
-
 LogFormat "%s %{cache-status}e" cache_format
 
 Listen @AREX_PORT1@
