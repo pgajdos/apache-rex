@@ -269,12 +269,12 @@ function check_system()
   echod
 
   if [ -z "$HTTPD_COMMAND" ]; then
-    echo 'fatal: httpd binary not found' >2
+    echo 'fatal: httpd binary not found' >&2
     exit 2
   fi
 
   if [ -z "$CURL_COMMAND" ]; then
-    echo 'fatal: curl binary not found' >2
+    echo 'fatal: curl binary not found' >&2
     exit 2
   fi
 
