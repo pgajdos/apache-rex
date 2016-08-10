@@ -10,11 +10,11 @@ for i in $(seq 1 10); do
 done
 nuncached=$(wc -l $AREX_RUN_DIR/reverse-proxy-uncached.log | sed 's: .*::')
 ncached=$(wc -l $AREX_RUN_DIR/reverse-proxy-cached.log | sed 's: .*::')
-nrevalidated=$(wc -l $AREX_RUN_DIR/forward-proxy-revalidated.log | sed 's: .*::')
+nrevalidated=$(wc -l $AREX_RUN_DIR/reverse-proxy-revalidated.log | sed 's: .*::')
 echo "$nuncached misses, $nrevalidated revalidates and $ncached hits"
 [ $nuncached    -eq 1 ] || exit_code=1
-[ $ncached      -eq 9 ] || exit_code=1
-[ $nrevalidated -eq 0 ] || exit_code=1
+[ $ncached      -ge 8 ] || exit_code=1
+[ $nrevalidated -le 1 ] || exit_code=1
 
 
 echo "[2] forward proxy with cache"
@@ -27,8 +27,8 @@ ncached=$(wc -l $AREX_RUN_DIR/forward-proxy-cached.log | sed 's: .*::')
 nrevalidated=$(wc -l $AREX_RUN_DIR/forward-proxy-revalidated.log | sed 's: .*::')
 echo "$nuncached misses, $nrevalidated revalidates and $ncached hits"
 [ $nuncached    -eq 1 ] || exit_code=2
-[ $ncached      -eq 8 ] || exit_code=2
-[ $nrevalidated -eq 1 ] || exit_code=2
+[ $ncached      -ge 8 ] || exit_code=2
+[ $nrevalidated -le 1 ] || exit_code=2
 
 exit $exit_code
 
