@@ -52,6 +52,8 @@ mod_rewrite-proxying
 mod_rewrite-dynamic-vhosts
 mod_rewrite-advanced
 mod_proxy-basic
+mod_proxy-cache
+mod_proxy-cache-poisoning
 mod_proxy-ProxyErrorOverride
 mod_proxy-ProxyPassReverse
 mod_proxy-long-url-abz53218
