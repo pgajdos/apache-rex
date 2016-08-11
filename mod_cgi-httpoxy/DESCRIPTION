@@ -1,0 +1,5 @@
+Re-produces CVE-2016-5387 security issue.
+https://www.apache.org/security/asf-httpoxy-response.txt
+httpd should not export HTTP_PROXY with value from the Proxy:
+header as other libraries/applications could interpret it
+wrongly.
