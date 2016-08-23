@@ -150,6 +150,11 @@ function gdb_command()
   which gdb 2>/dev/null | head -n 1
 }
 
+function telnet_command()
+{
+  which telnet 2>/dev/null | head -n 1
+}
+
 function coredumpctl_command()
 {
   which coredumpctl 2>/dev/null | head -n 1
@@ -222,6 +227,9 @@ function check_system()
   echod -n '.'
   GDB_COMMAND=$(gdb_command)
   [ -n "$GDB_COMMAND" ]         && ln -sf $GDB_COMMAND        $RUN_DIR_BASE/bin/gdb
+  echod -n '.'
+  TELNET_COMMAND=$(telnet_command)
+  [ -n "$TELNET_COMMAND" ]      && ln -sf $TELNET_COMMAND     $RUN_DIR_BASE/bin/telnet
   echod -n '.'
   COREDUMPCTL_COMMAND=$(coredumpctl_command)
   [ -n "$COREDUMPCTL_COMMAND" ] && ln -sf $COREDUMPCTL_COMMAND $RUN_DIR_BASE/bin/coredumpctl
