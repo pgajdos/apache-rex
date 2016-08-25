@@ -83,7 +83,7 @@ function usage()
 function find_module()
 {
   name=$1
-  for mp in $(echo $MODULE_PATH | tr ':' ' '); do
+  for mp in $(echo $MODULE_PATH $AREX_RUN_DIR | tr ':' ' '); do
     if [ -e $mp ]; then
       find $mp -name "mod_$name.so"
     fi
@@ -98,6 +98,11 @@ function find_module()
 function httpd_command()
 {
   which httpd-$HTTPD_MPM httpd2-$HTTPD_MPM httpd httpd2 2>/dev/null | head -n 1
+}
+
+function apxs_command()
+{
+  which apxs-$HTTPD_MPM apxs2-$HTTPD_MPM apxs apxs2 2>/dev/null | head -n 1
 }
 
 function htpasswd_command()
@@ -204,6 +209,9 @@ function check_system()
   HTTPD_COMMAND=$(httpd_command)
   [ -n "$HTTPD_COMMAND" ]       && ln -sf $HTTPD_COMMAND       $RUN_DIR_BASE/bin/httpd
   echod -n '.'
+  APXS_COMMAND=$(apxs_command)
+  [ -n "$APXS_COMMAND" ]        && ln -sf $APXS_COMMAND        $RUN_DIR_BASE/bin/apxs
+  echod -n '.'
   HTPASSWD_COMMAND=$(htpasswd_command)
   [ -n "$HTPASSWD_COMMAND" ]    && ln -sf $HTPASSWD_COMMAND    $RUN_DIR_BASE/bin/htpasswd
   echod -n '.'
@@ -256,6 +264,7 @@ function check_system()
   echod ' done.'
   
   echod "httpd command ............................ $HTTPD_COMMAND"
+  echod "apxs command ............................. $APXS_COMMAND"
   echod "htpasswd command ......................... $HTPASSWD_COMMAND"
   echod "htdbm command ............................ $HTDBM_COMMAND"
   echod "httxt2dbm command ........................ $HTTXT2DBM_COMMAND"
@@ -275,6 +284,10 @@ function check_system()
   echod "system have systemd coredumps ............ $AREX_HAVE_SYSTEMD_COREDUMP"
   echod "system core pattern ...................... $AREX_CORE_PATTERN"
   echod
+
+  #
+  # following two are neccessary for running examples
+  #
 
   if [ -z "$HTTPD_COMMAND" ]; then
     echo 'fatal: httpd binary not found' >&2
@@ -346,18 +359,48 @@ function prepare_env()
 
 function check_open_ports()
 {
-  lsof -i | grep -q ":$AREX_PORT (LISTEN)"  && { echo "fatal: $AREX_PORT is already opened";  exit 2; }
-  lsof -i | grep -q ":$AREX_PORT1 (LISTEN)" && { echo "fatal: $AREX_PORT1 is already opened"; exit 2; }
-  lsof -i | grep -q ":$AREX_PORT2 (LISTEN)" && { echo "fatal: $AREX_PORT2 is already opened"; exit 2; }
-  lsof -i | grep -q ":$AREX_PORT3 (LISTEN)" && { echo "fatal: $AREX_PORT3 is already opened"; exit 2; }
-  lsof -i | grep -q ":$AREX_PORT4 (LISTEN)" && { echo "fatal: $AREX_PORT4 is already opened"; exit 2; }
-  lsof -i | grep -q ":$AREX_PORT5 (LISTEN)" && { echo "fatal: $AREX_PORT5 is already opened"; exit 2; }
-  lsof -i | grep -q ":$AREX_PORT6 (LISTEN)" && { echo "fatal: $AREX_PORT6 is already opened"; exit 2; }
+  mkdir -p $RUN_DIR_BASE
+  echod -n "checking that requested ports are not already opened .. " 
+  lsof -i > $RUN_DIR_BASE/.opened_ports
+
+  grep -q ":$AREX_PORT (LISTEN)"  $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT is already opened";  exit 2; }
+  grep -q ":$AREX_PORT1 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT1 is already opened"; exit 2; }
+  grep -q ":$AREX_PORT2 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT2 is already opened"; exit 2; }
+  grep -q ":$AREX_PORT3 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT3 is already opened"; exit 2; }
+  grep -q ":$AREX_PORT4 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT4 is already opened"; exit 2; }
+  grep -q ":$AREX_PORT5 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT5 is already opened"; exit 2; }
+  grep -q ":$AREX_PORT6 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT6 is already opened"; exit 2; }
+
+  echod "done"
+  echod
 }
 
 #
 # RUN LOOP (it is possible to run more examples)
 #
+
+function compile_modules()
+{
+  modules="$(cat MODULES | tr ':' ' ')"
+  module_dir=$AREX_RUN_DIR/my_modules
+
+  for m in $modules; do
+    if [ -e mod_$m.c ]; then
+      mkdir -p $module_dir
+      cp mod_$m.c $module_dir
+
+      echo -n "Compiling $m module .. "
+      apxs -i -c $module_dir/mod_$m.c >$module_dir/mod_$m.log 2>&1
+      if [ ! -e $module_dir/.libs/mod_$m.so ]; then
+        echo "FAILED:" 
+        cat $module_dir/mod_$m.log
+        echo
+      fi
+      echo "done."; echo 
+
+    fi
+  done
+}
 
 function load_modules()
 {
@@ -387,16 +430,6 @@ function load_modules()
 function prepare_run()
 {
   dir=$1
-
-  export AREX_RUN_DIR="$RUN_DIR_BASE/$dir"
-
-  # merge double slashes (// -> /), remove trailing /, 
-  # essential e. g. for core-DirectoryMatch example
-  AREX_RUN_DIR=$(echo $AREX_RUN_DIR | sed 's://:/:g' | sed 's:/$::')
-
-  # prepare dir to write
-  [ -e $AREX_RUN_DIR ] && rm -r $AREX_RUN_DIR
-  mkdir -p $AREX_RUN_DIR
 
   # prepare config
   conf=$AREX_RUN_DIR/httpd.conf
@@ -553,6 +586,19 @@ function run_example()
   cat DESCRIPTION
   echo "-----------------------------------------------------------"
   echo
+
+  AREX_RUN_DIR="$RUN_DIR_BASE/$dir"
+
+  # merge double slashes (// -> /), remove trailing /, 
+  # essential e. g. for core-DirectoryMatch example
+  AREX_RUN_DIR=$(echo $AREX_RUN_DIR | sed 's://:/:g' | sed 's:/$::')
+  export AREX_RUN_DIR
+
+  # prepare dir to write
+  [ -e $AREX_RUN_DIR ] && rm -r $AREX_RUN_DIR
+  mkdir -p $AREX_RUN_DIR
+
+  compile_modules
 
   mb=$(missing_binaries)
   mm=$(missing_modules)
