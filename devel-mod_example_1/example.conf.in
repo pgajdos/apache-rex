@@ -1,0 +1,7 @@
+<Directory @AREX_DOCUMENT_ROOT@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+<Location /hello>
+  SetHandler example-handler
+</Location>
