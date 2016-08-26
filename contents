@@ -29,6 +29,7 @@ core-ContentDigest-basic
 core-KeepAlive-basic
 debug-coredump
 devel-mod_example_1
+devel-mod_example_2
 mod_version-basic
 mod_log_config-basic
 mod_logio-basic
