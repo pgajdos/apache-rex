@@ -389,14 +389,14 @@ function compile_modules()
       mkdir -p $module_dir
       cp mod_$m.c $module_dir
 
-      echo -n "Compiling $m module .. "
+      echo -n "Building '$m' module .. "
       apxs -i -c $module_dir/mod_$m.c >$module_dir/mod_$m.log 2>&1
       if [ ! -e $module_dir/.libs/mod_$m.so ]; then
         echo "FAILED:" 
         cat $module_dir/mod_$m.log
         echo
       fi
-      echo "done."; echo 
+      echo "$module_dir/.libs/mod_$m.so."; echo 
 
     fi
   done
