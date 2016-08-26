@@ -1,0 +1,4 @@
+<Directory @AREX_DOCUMENT_ROOT@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+  AddHandler example-handler .sum
+</Directory>

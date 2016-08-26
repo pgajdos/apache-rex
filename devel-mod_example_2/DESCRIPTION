@@ -1,0 +1,4 @@
+Spits out the MD5 or SHA1 digest of files.
+https://httpd.apache.org/docs/2.4/developer/modguide.html#handling
+(slightly modified mod_example_2.c)
+(However, MD5 and SHA1 of the files are not calculated correctly, it seems (compared to sha1sum and md5sum).)
