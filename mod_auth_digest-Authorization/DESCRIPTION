@@ -1,0 +1,3 @@
+How to authenticate via request headers.
+https://en.wikipedia.org/wiki/Digest_access_authentication
+(I believe curl do the same in mod_auth_digest-basic.)

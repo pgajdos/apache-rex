@@ -1,0 +1,23 @@
+# make sure shm file is written into writeable dir 
+# (without that, I got Permission denied: AH01179: 
+# balancer slotmem_create failed for 2.4.6 @ 13.1)
+# 
+# see for details:
+# http://mail-archives.apache.org/mod_mbox/httpd-dev/201203.mbox/%3Cddf3855a-8ab3-45e1-9ad4-049d90ac8879@zimbra1%3E
+#
+# directive available from 2.4.2
+<IfVersion >= 2.4.2>
+  DefaultRuntimeDir @AREX_RUN_DIR@/run
+</IfVersion>
+
+LogLevel trace8
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  AuthType Digest
+  AuthDigestProvider file
+  AuthName "Restricted Area"
+  AuthUserFile @AREX_RUN_DIR@/htdigest
+  AuthDigestDomain "/"
+  Require valid-user
+</Directory>
+

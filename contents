@@ -78,6 +78,7 @@ mod_authz_user-basic
 mod_auth_basic-basic
 mod_authn_dbm-basic
 mod_auth_digest-basic
+mod_auth_digest-Authorization
 mod_authn_dbd-basic
 mod_authn_dbd-Digest
 mod_authz_groupfile-basic
