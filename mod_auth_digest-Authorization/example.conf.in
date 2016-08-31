@@ -10,8 +10,6 @@
   DefaultRuntimeDir @AREX_RUN_DIR@/run
 </IfVersion>
 
-LogLevel trace8
-
 <Directory "@AREX_DOCUMENT_ROOT@">
   AuthType Digest
   AuthDigestProvider file
