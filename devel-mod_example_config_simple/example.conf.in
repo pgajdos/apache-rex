@@ -1,0 +1,13 @@
+<Directory @AREX_DOCUMENT_ROOT@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+# note that directive has no meaning
+# (handler can not be disable via ExamleEnabled)
+ExampleEnabled Off
+ExamplePath "/different/from/default"
+ExampleAction file allow
+
+<Location /example>
+  SetHandler example-handler
+</Location>
