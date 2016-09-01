@@ -48,7 +48,7 @@ static void register_hooks(apr_pool_t *pool)
 
 static int example_handler(request_rec *r)
 {
-    int rc, exists;
+    int rc;
     apr_finfo_t finfo;
     apr_file_t* file;
     char *filename;
@@ -88,7 +88,7 @@ static int example_handler(request_rec *r)
     
     // Print a title and some general information
     ap_rprintf(r, "<h2>Information on %s:</h2>", filename);
-    ap_rprintf(r, "<b>Size:</b> %u bytes<br/>", finfo.size);
+    ap_rprintf(r, "<b>Size:</b> %ld bytes<br/>", finfo.size);
     
     // Get the digest type the client wants to see
     digestType = apr_table_get(GET, "digest");
@@ -99,23 +99,22 @@ static int example_handler(request_rec *r)
         
         // Are we trying to calculate the MD5 or the SHA1 digest?
         if (!strcasecmp(digestType, "md5")) {
+
             // Calculate the MD5 sum of the file
-            union {
-                char      chr[16];
-                uint32_t  num[4];
-            } digest;
+            unsigned char digest[APR_MD5_DIGESTSIZE];
             apr_md5_ctx_t md5;
             apr_md5_init(&md5);
             readBytes = 256;
             while ( apr_file_read(file, buffer, &readBytes) == APR_SUCCESS ) {
+                buffer[readBytes] = '\0';
                 apr_md5_update(&md5, buffer, readBytes);
             }
-            apr_md5_final(digest.chr, &md5);
-            
+            apr_md5_final(digest, &md5);
+           
             // Print out the MD5 digest
             ap_rputs("<b>MD5: </b><code>", r);
-            for (n = 0; n < APR_MD5_DIGESTSIZE/4; n++) {
-                ap_rprintf(r, "%08x", digest.num[n]);
+            for (n = 0; n < APR_MD5_DIGESTSIZE; n++) {
+                ap_rprintf(r, "%02x", digest[n]);
             }
             ap_rputs("</code>", r);
             // Print a link to the SHA1 version
@@ -123,22 +122,19 @@ static int example_handler(request_rec *r)
         }
         else {
             // Calculate the SHA1 sum of the file
-            union {
-                char      chr[20];
-                uint32_t  num[5];
-            } digest;
+            unsigned char digest[APR_SHA1_DIGESTSIZE];
             apr_sha1_ctx_t sha1;
             apr_sha1_init(&sha1);
             readBytes = 256;
             while ( apr_file_read(file, buffer, &readBytes) == APR_SUCCESS ) {
                 apr_sha1_update(&sha1, buffer, readBytes);
             }
-            apr_sha1_final(digest.chr, &sha1);
+            apr_sha1_final(digest, &sha1);
             
             // Print out the SHA1 digest
             ap_rputs("<b>SHA1: </b><code>", r);
-            for (n = 0; n < APR_SHA1_DIGESTSIZE/4; n++) {
-                ap_rprintf(r, "%08x", digest.num[n]);
+            for (n = 0; n < APR_SHA1_DIGESTSIZE; n++) {
+                ap_rprintf(r, "%02x", digest[n]);
             }
             ap_rputs("</code>", r);
             
