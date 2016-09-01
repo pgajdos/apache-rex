@@ -390,7 +390,7 @@ function compile_modules()
       cp mod_$m.c $module_dir
 
       echo -n "Building '$m' module .. "
-      apxs -i -c $module_dir/mod_$m.c >$module_dir/mod_$m.log 2>&1
+      apxs -c $module_dir/mod_$m.c >$module_dir/mod_$m.log 2>&1
       if [ ! -e $module_dir/.libs/mod_$m.so ]; then
         echo "FAILED:" 
         cat $module_dir/mod_$m.log
