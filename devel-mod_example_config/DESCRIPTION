@@ -1,0 +1,3 @@
+How to add context aware configuration options.
+https://httpd.apache.org/docs/trunk/developer/modguide.html#configuration
+(mod_example_config.c)
