@@ -32,6 +32,7 @@ devel-mod_example_1
 devel-mod_example_2
 devel-mod_example_config_basic
 devel-mod_example_config
+devel-print-headers
 mod_version-basic
 mod_log_config-basic
 mod_logio-basic

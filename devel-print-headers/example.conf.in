@@ -1,0 +1,5 @@
+<Directory @AREX_DOCUMENT_ROOT@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+  AddHandler print-headers .html
+</Directory>
+
