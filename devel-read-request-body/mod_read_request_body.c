@@ -60,7 +60,7 @@ static int util_read(request_rec *r, const char **rbuf, apr_off_t *size)
 
 static int handler(request_rec *r)
 {
-    //if (!r->handler || strcmp(r->handler, "read-request-body")) return (DECLINED);
+    if (!r->handler || strcmp(r->handler, "read-request-body")) return (DECLINED);
 
     /*~~~~~~~~~~~~~~~~*/
     apr_off_t   size;
