@@ -1,0 +1,7 @@
+LogLevel trace8
+
+<Location /body-echo>
+  @AREX_ALLOW_FROM_LOCALHOST@
+  SetHandler read-request-body
+</Location>
+
