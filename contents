@@ -34,6 +34,7 @@ devel-mod_example_config_basic
 devel-mod_example_config
 devel-print-headers
 devel-read-request-body
+devel-form-variables
 mod_version-basic
 mod_log_config-basic
 mod_logio-basic

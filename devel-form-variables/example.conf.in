@@ -1,0 +1,5 @@
+<Location /form-variables-echo>
+  @AREX_ALLOW_FROM_LOCALHOST@
+  SetHandler form-variables
+</Location>
+
