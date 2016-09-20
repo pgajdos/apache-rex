@@ -104,6 +104,7 @@ mod_charset_lite-basic
 mod_reflector-basic
 mod_include-basic
 mod_filter-basic
+mod_filter-AddOutputFilterByType
 mod_asis-basic
 mod_http2-basic
 mod_http2-push
