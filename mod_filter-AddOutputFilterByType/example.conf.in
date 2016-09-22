@@ -1,10 +1,14 @@
 <Directory "@AREX_DOCUMENT_ROOT@">
   @AREX_ALLOW_FROM_LOCALHOST@
 </Directory>
+<Directory "@AREX_DOCUMENT_ROOT@/text-xml">
+  AddOutputFilterByType CASEFILTER text/xml
+</Directory>
 <Directory "@AREX_DOCUMENT_ROOT@/application-xml">
   AddOutputFilterByType CASEFILTER application/xml
 </Directory>
-<Directory "@AREX_DOCUMENT_ROOT@/text-xml">
-  AddOutputFilterByType CASEFILTER text/xml
+<Directory "@AREX_DOCUMENT_ROOT@/application-xml-defined">
+  AddType application/xml xml
+  AddOutputFilterByType CASEFILTER application/xml
 </Directory>
 
