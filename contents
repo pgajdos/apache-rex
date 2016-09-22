@@ -94,6 +94,7 @@ mod_authnz_fcgi-basic
 mod_mime-basic
 mod_mime-filters
 mod_mime-filters-chain
+mod_mime-TypesConfig
 mod_actions-basic
 mod_userdir-basic
 mod_ssl-basic
