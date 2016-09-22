@@ -7,8 +7,8 @@
 <Directory "@AREX_DOCUMENT_ROOT@/application-xml">
   AddOutputFilterByType CASEFILTER application/xml
 </Directory>
-<Directory "@AREX_DOCUMENT_ROOT@/application-xml-defined">
-  AddType application/xml xml
-  AddOutputFilterByType CASEFILTER application/xml
+<Directory "@AREX_DOCUMENT_ROOT@/foo-xml">
+  AddType foo/xml .xml
+  AddOutputFilterByType CASEFILTER foo/xml
 </Directory>
 
