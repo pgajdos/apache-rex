@@ -2,5 +2,8 @@ TypesConfig @AREX_RUN_DIR@/mime.types
 <Directory "@AREX_DOCUMENT_ROOT@">
   @AREX_ALLOW_FROM_LOCALHOST@
   AddOutputFilterByType CASEFILTER bar/tst
+  AddOutputFilterByType CASEFILTER application/xml
+  AddType your-text/doc .txt
+  AddOutputFilterByType CASEFILTER my-text/txt
 </Directory>
 
