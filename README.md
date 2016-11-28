@@ -143,4 +143,6 @@ in `run.sh`.
   Port reserverd for test SCGI application.
 * `AREX_SED_COMMAND`  
   Full path to `sed` command (required for some Filter example definitions).
+* `AREX_ROTATELOGS_COMMAND`  
+  Full path to `rotatelogs` or `rotatelogs2` command (required e. g. in piped logs).
 
