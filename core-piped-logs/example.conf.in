@@ -1,0 +1,3 @@
+# rotate each 1 second
+LogFormat "%h %l %u %t \"%r\" %>s %b"			common
+CustomLog "|@AREX_ROTATELOGS_COMMAND@ @AREX_RUN_DIR@/mylogfile 1" common 

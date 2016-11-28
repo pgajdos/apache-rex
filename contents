@@ -1,5 +1,6 @@
 apache-example-framework
 core-chunked-data
+core-piped-logs
 core-Warning-basic
 core-Error-basic
 core-VirtualHost-basic
