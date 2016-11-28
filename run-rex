@@ -115,6 +115,11 @@ function htdbm_command()
   which htdbm htdbm2 2>/dev/null | head -n 1
 }
 
+function rotatelogs_command()
+{
+  which rotatelogs rotatelogs2 2>/dev/null | head -n 1
+}
+
 function httxt2dbm_command()
 {
   which httxt2dbm 2>/dev/null
@@ -217,6 +222,8 @@ function check_system()
   echod -n '.'
   HTDBM_COMMAND=$(htdbm_command)
   [ -n "$HTDBM_COMMAND" ]       && ln -sf $HTDBM_COMMAND       $RUN_DIR_BASE/bin/htdbm
+  ROTATELOGS_COMMAND=$(rotatelogs_command)
+  [ -n "$ROTATELOGS_COMMAND" ]  && ln -sf $ROTATELOGS_COMMAND  $RUN_DIR_BASE/bin/rotatelogs
   echod -n '.'
   HTTXT2DBM_COMMAND=$(httxt2dbm_command)
   [ -n "$HTTXT2DBM_COMMAND" ]   && ln -sf $HTTXT2DBM_COMMAND   $RUN_DIR_BASE/bin/httxt2dbm
@@ -267,6 +274,7 @@ function check_system()
   echod "apxs command ............................. $APXS_COMMAND"
   echod "htpasswd command ......................... $HTPASSWD_COMMAND"
   echod "htdbm command ............................ $HTDBM_COMMAND"
+  echod "rotatelogs command ....................... $ROTATELOGS_COMMAND"
   echod "httxt2dbm command ........................ $HTTXT2DBM_COMMAND"
   echod "curl command ............................. $CURL_COMMAND"
   echod "curl have --resolve switch ............... $AREX_CURL_HAVE_RESOLVE"
