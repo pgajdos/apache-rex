@@ -1,2 +1,2 @@
 # http://events.linuxfoundation.org/sites/events/files/slides/AC2014-FastCGI.pdf
-ProxyPass /app/ fcgi://localhost:@AREX_FCGI_PORT@/
+ProxyPass /app/ unix:@AREX_RUN_DIR@/fcgi.sock|fcgi://localhost/

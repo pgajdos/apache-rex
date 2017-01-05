@@ -5,7 +5,7 @@ exit_code=0
 # run fcgi application via spawn-fcgi
 cp showenv.pl $AREX_RUN_DIR
 chmod 755     $AREX_RUN_DIR/showenv.pl
-spawn-fcgi -P $AREX_RUN_DIR/spawn-fcgi.pid -a 127.0.0.1 -p $AREX_FCGI_PORT $AREX_RUN_DIR/showenv.pl 
+spawn-fcgi -P $AREX_RUN_DIR/spawn-fcgi.pid -s $AREX_RUN_DIR/fcgi.sock $AREX_RUN_DIR/showenv.pl 
 sleep 1
 
 echo
