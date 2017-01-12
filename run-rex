@@ -286,6 +286,7 @@ function check_system()
   echod "ps command ............................... $PS_COMMAND"
   echod "kill command ............................. $KILL_COMMAND"
   echod "gdb command .............................. $GDB_COMMAND"
+  echod "telnet command ........................... $TELNET_COMMAND"
   echod "coredumpctl command ...................... $COREDUMPCTL_COMMAND"
   echod "openssl engine ........................... $AREX_AN_OPENSSL_ENGINE"
   echod "openssl have alpn support ................ $AREX_OPENSSL_HAVE_ALPN"
