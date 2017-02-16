@@ -10,7 +10,7 @@ else
   HEADER_TIMEOUT_ERROR='400 Bad Request'
 fi
 
-if [ $AREX_APACHE_VERSION -ge 20500 ]; then
+if [ $AREX_APACHE_VERSION -ge 20425 ]; then
   BODY_TIMEOUT_ERROR='408 Request Timeout'
 else
   BODY_TIMEOUT_ERROR='400 Bad Request'
