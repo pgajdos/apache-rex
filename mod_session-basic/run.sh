@@ -8,7 +8,7 @@ echo 'Only for authorized stuff!'      > $AREX_DOCUMENT_ROOT/private/index.html
 
 echo "[1] authorized access"
 cookie=$(curl -s -i --data 'userid_field=john&password_field=StrongPassword' http://localhost:$AREX_PORT/dologin.html \
-           | grep 'Set-Cookie:' | sed 's:Set-::' | tr -d '\r')
+           | grep 'Set-Cookie:' | tail -n 1 | sed 's:Set-::' | tr -d '\r')
 # just informative output of the cookie
 echo $cookie
 curl -s -H "$cookie" http://localhost:$AREX_PORT/private/ \
