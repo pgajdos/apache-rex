@@ -19,7 +19,7 @@ echo "$nuncached misses, $nrevalidated revalidates and $ncached hits"
 
 echo "[2] forward proxy with cache"
 for i in $(seq 1 10); do
-  curl -s -v --proxy http://localhost:$AREX_PORT3/ http://localhost:$AREX_PORT1/ 2>&1 #| grep 'X-Cache'
+  curl -s -v --proxy http://localhost:$AREX_PORT3/ http://localhost:$AREX_PORT1/ 2>&1 | grep 'X-Cache'
   sleep 0.1
 done
 nuncached=$(wc -l $AREX_RUN_DIR/forward-proxy-uncached.log | sed 's: .*::')

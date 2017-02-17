@@ -1,5 +1,4 @@
 LogFormat "%s %{cache-status}e" cache_format
-HttpProtocolOptions Unsafe
 
 Listen @AREX_PORT1@
 <VirtualHost *:@AREX_PORT1@>
