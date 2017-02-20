@@ -165,6 +165,12 @@ function telnet_command()
   which telnet 2>/dev/null | head -n 1
 }
 
+function nc_command()
+{
+  which ncd 2>/dev/null
+}
+
+
 function coredumpctl_command()
 {
   which coredumpctl 2>/dev/null | head -n 1
@@ -246,6 +252,9 @@ function check_system()
   TELNET_COMMAND=$(telnet_command)
   [ -n "$TELNET_COMMAND" ]      && ln -sf $TELNET_COMMAND     $RUN_DIR_BASE/bin/telnet
   echod -n '.'
+  NC_COMMAND=$(nc_command)
+  [ -n "$NC_COMMAND" ]      && ln -sf $NC_COMMAND     $RUN_DIR_BASE/bin/nc
+  echod -n '.'
   COREDUMPCTL_COMMAND=$(coredumpctl_command)
   [ -n "$COREDUMPCTL_COMMAND" ] && ln -sf $COREDUMPCTL_COMMAND $RUN_DIR_BASE/bin/coredumpctl
   echod -n '.'
@@ -287,6 +296,7 @@ function check_system()
   echod "kill command ............................. $KILL_COMMAND"
   echod "gdb command .............................. $GDB_COMMAND"
   echod "telnet command ........................... $TELNET_COMMAND"
+  echod "nc command ............................... $NC_COMMAND"
   echod "coredumpctl command ...................... $COREDUMPCTL_COMMAND"
   echod "openssl engine ........................... $AREX_AN_OPENSSL_ENGINE"
   echod "openssl have alpn support ................ $AREX_OPENSSL_HAVE_ALPN"
