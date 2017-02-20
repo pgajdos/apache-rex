@@ -29,6 +29,7 @@ core-IfDefine-basic
 core-IfModule-basic
 core-ContentDigest-basic
 core-KeepAlive-basic
+core-HttpProtocolOptions-basic
 debug-coredump
 devel-mod_example_1
 devel-mod_example_2
