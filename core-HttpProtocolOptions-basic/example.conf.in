@@ -1,0 +1,19 @@
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+  DocumentRoot "@AREX_DOCUMENT_ROOT@"
+  <Directory "@AREX_DOCUMENT_ROOT@">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+
+  HttpProtocolOptions Strict
+</VirtualHost>
+
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
+  DocumentRoot "@AREX_DOCUMENT_ROOT@"
+  <Directory @AREX_DOCUMENT_ROOT@>
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+ 
+  HttpProtocolOptions Unsafe
+</VirtualHost>
