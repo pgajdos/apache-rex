@@ -1,0 +1,17 @@
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+    ErrorLog "@AREX_RUN_DIR@/error_log-backend"
+    DocumentRoot "@AREX_RUN_DIR@/htdocs-backend"
+    <Directory "@AREX_RUN_DIR@/htdocs-backend">
+      @AREX_ALLOW_FROM_LOCALHOST@
+    </Directory>
+</VirtualHost>
+
+LogLevel debug setenvif:trace8 proxy:trace8
+
+# https://httpd.apache.org/docs/2.4/mod/mod_proxy.html
+ProxyPass "/mirror/foo/index.html" "!"
+SetEnvIf Request_URI "^/mirror/foo/image.png$" no-proxy
+ProxyPass "/mirror/foo/" "http://localhost:@AREX_PORT1@/"
+
+
