@@ -1,0 +1,12 @@
+<Directory "@AREX_DOCUMENT_ROOT@">
+  Options +ExecCGI
+  AddHandler cgi-script .sh
+
+  Session On
+  SessionEnv On
+  SessionCookieName session path=/
+  SessionHeader X-Replace-Session
+  SessionCryptoPassphrase heslo
+</Directory>
+
+

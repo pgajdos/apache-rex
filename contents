@@ -126,7 +126,9 @@ mod_dav-basic
 mod_reqtimeout-basic
 mod_data-basic
 mod_session-basic
+mod_session-write-read
 mod_session_crypto-basic
+mod_session_crypto-write-read
 mod_cache-basic
 mod_cache-disk
 mod_cache-filter
