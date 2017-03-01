@@ -1,6 +1,4 @@
 #!/bin/bash
-#echo
-#echo "HTTP_USER_AGENT: $HTTP_USER_AGENT"
 
 echo "Content-type: text/plain"
 if [ -n "$HTTP_SESSION" ]; then
