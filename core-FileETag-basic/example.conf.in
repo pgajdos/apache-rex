@@ -1,0 +1,20 @@
+# see httpd-framework/t/apache/etags.t for more examples
+<Directory @AREX_DOCUMENT_ROOT@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+<Directory @AREX_DOCUMENT_ROOT@/all>
+  FileETag All
+</Directory>
+<Directory @AREX_DOCUMENT_ROOT@/all/-inode>
+  FileETag -INode
+</Directory>
+<Directory @AREX_DOCUMENT_ROOT@/inode>
+  FileETag INode
+</Directory>
+<Directory @AREX_DOCUMENT_ROOT@/mtime>
+  FileETag MTime
+</Directory>
+<Directory @AREX_DOCUMENT_ROOT@/size>
+  FileETag Size
+</Directory>
+
