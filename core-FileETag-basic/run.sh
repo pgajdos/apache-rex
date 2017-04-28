@@ -51,5 +51,6 @@ echo $etag
 echo "[6] Size only"
 etag=$(get_etag size)
 [ "$etag" == "$size" ] || exit_code=6
+echo $etag
 
 exit $exit_code
