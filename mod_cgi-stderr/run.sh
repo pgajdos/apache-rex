@@ -13,7 +13,7 @@ echo 'I am an ERROR' 1>&2
 EOF
 chmod 755 $cgi_dir/stderr.cgi
 curl -s http://localhost:$AREX_PORT/cgi-bin/stderr.cgi
-grep 'I am an ERROR' $AREX_RUN_DIR/error_log || exit_code=1
+grep '\[cgi:error\] \[pid.*I am an ERROR' $AREX_RUN_DIR/error_log || exit_code=1
 
 exit $exit_code
 
