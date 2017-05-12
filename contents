@@ -84,6 +84,7 @@ mod_proxy_scgi-basic
 mod_proxy_wstunnel-basic
 mod_cgi-basic
 mod_cgi-stderr
+mod_cgi-ScriptLog
 mod_cgi-httpoxy
 mod_xml2enc-basic
 mod_authz_user-basic

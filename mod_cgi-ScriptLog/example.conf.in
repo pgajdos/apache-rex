@@ -1,0 +1,6 @@
+ScriptAlias /cgi-bin/ "@AREX_RUN_DIR@/cgi-bin/"
+ScriptLog   @AREX_RUN_DIR@/script_log
+<Directory "@AREX_RUN_DIR@/cgi-bin/">
+  Options +ExecCGI
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
