@@ -1,0 +1,52 @@
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+    ErrorLog @AREX_RUN_DIR@/error_log-backend1
+    DocumentRoot @AREX_RUN_DIR@/htdocs-backend1
+    <Directory @AREX_RUN_DIR@/htdocs-backend1>
+      @AREX_ALLOW_FROM_LOCALHOST@
+    </Directory>
+</VirtualHost>
+
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
+    ErrorLog @AREX_RUN_DIR@/error_log-backend2
+    DocumentRoot @AREX_RUN_DIR@/htdocs-backend2
+    <Directory @AREX_RUN_DIR@/htdocs-backend2>
+      @AREX_ALLOW_FROM_LOCALHOST@
+    </Directory>
+</VirtualHost>
+
+Listen @AREX_PORT3@
+<VirtualHost *:@AREX_PORT3@>
+    ErrorLog @AREX_RUN_DIR@/error_log-backend3
+    DocumentRoot @AREX_RUN_DIR@/htdocs-backend3
+    <Directory @AREX_RUN_DIR@/htdocs-backend3>
+      @AREX_ALLOW_FROM_LOCALHOST@
+    </Directory>
+</VirtualHost>
+
+Listen @AREX_PORT4@
+<VirtualHost *:@AREX_PORT4@>
+    ErrorLog @AREX_RUN_DIR@/error_log
+    DocumentRoot @AREX_DOCUMENT_ROOT@
+
+    <Location /app/1/>
+      ProxyPass        http://localhost:@AREX_PORT1@/
+      ProxyPassReverse http://localhost:@AREX_PORT1@/
+    </Location>
+
+    <Location /app/>
+      ProxyPass        http://localhost:@AREX_PORT2@/
+      ProxyPassReverse http://localhost:@AREX_PORT2@/
+    </Location>
+
+    <Location /app/2/>
+      ProxyPass        http://localhost:@AREX_PORT3@/
+      ProxyPassReverse http://localhost:@AREX_PORT3@/
+    </Location>
+
+    <Directory @AREX_DOCUMENT_ROOT@>
+      @AREX_ALLOW_FROM_LOCALHOST@
+    </Directory>
+</VirtualHost>
+
