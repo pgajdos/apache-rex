@@ -6,6 +6,8 @@ echo 'main index' > $AREX_DOCUMENT_ROOT/index.html
 
 if [ $AREX_APACHE_VERSION -ge 20400 ]; then
   HEADER_TIMEOUT_ERROR='408 Request Timeout'
+elif [ $AREX_APACHE_VERSION -ge 20232 ]; then
+  HEADER_TIMEOUT_ERROR='408 Request Time-out'
 else
   HEADER_TIMEOUT_ERROR='400 Bad Request'
 fi
