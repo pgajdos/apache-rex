@@ -610,11 +610,11 @@ function run_example()
   echo "-----------------------------------------------------------"
   echo
 
-  AREX_RUN_DIR="$RUN_DIR_BASE/$dir"
+  AREX_RUN_DIR="$RUN_DIR_BASE/$(basename $dir)"
 
-  # merge double slashes (// -> /), remove trailing /, 
-  # essential e. g. for core-DirectoryMatch example
-  AREX_RUN_DIR=$(echo $AREX_RUN_DIR | sed 's://:/:g' | sed 's:/$::')
+  # merge double slashes (// -> /), 
+  # essential e. g. for core-DirectoryMatch-* examples
+  AREX_RUN_DIR=$(echo $AREX_RUN_DIR | sed 's://:/:g')
   export AREX_RUN_DIR
 
   # prepare dir to write
