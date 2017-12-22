@@ -1,1 +1,2 @@
-Demonstrate basic functionality of ssl module.
+Verify client trough his certificate. Server and client
+use the same CA.
