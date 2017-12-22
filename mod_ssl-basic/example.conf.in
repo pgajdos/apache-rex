@@ -7,8 +7,8 @@ AddType application/x-pkcs7-crl    .crl
 
 SSLEngine             on
 
-SSLCertificateFile    @AREX_RUN_DIR@/test-server.crt
-SSLCertificateKeyFile @AREX_RUN_DIR@/test-server.key
+SSLCertificateFile    @AREX_RUN_DIR@/cert/test-server.crt
+SSLCertificateKeyFile @AREX_RUN_DIR@/cert/test-server.key
 
 SSLSessionCache         shmcb:@AREX_RUN_DIR/ssl_scache(512000)
 SSLSessionCacheTimeout  300

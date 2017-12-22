@@ -1,0 +1,163 @@
+#!/bin/bash
+
+function openssl_key()
+{
+  key_file=$1
+  openssl genrsa -rand /dev/urandom -out $key_file 2048
+}
+
+function openssl_ca_cert()
+{
+  ca_key_file=$1
+  ca_cert_file=$2
+  dir=$(dirname $ca_cert_file)
+  ca_name=$3
+
+  cat >$dir/ca-cert.cfg <<EOT
+[ req ]
+distinguished_name     = req_distinguished_name
+attributes             = req_attributes
+prompt                 = no
+output_password        = mypass
+
+[ req_distinguished_name ]
+C                      = "CZ"
+ST                     = "Czech Republic"
+L                      = "Prague"
+O                      = "SUSE Linux CA"
+OU                     = "R&D"
+CN                     = "$ca_name"
+emailAddress           = "webmaster@$ca_name"
+
+[ req_attributes ]
+challengePassword      = $RANDOM
+EOT
+  openssl req -config $dir/ca-cert.cfg -new -x509 -days 365 -key $1 -out $ca_cert_file
+}
+
+function openssl_server_csr()
+{
+  server_key_file=$1
+  server_csr_file=$2
+  dir=$(dirname $server_csr_file)
+  server_name=$3
+
+  cat >$dir/server-csr.cfg <<EOT
+[ req ]
+distinguished_name     = req_distinguished_name
+attributes             = req_attributes
+prompt                 = no
+output_password        = mypass
+req_extensions         = x509v3
+
+[ req_distinguished_name ]
+C                      = "CZ"
+ST                     = "Czech Republic"
+L                      = "Prague"
+O                      = "SUSE Linux SERVER"
+OU                     = "R&D"
+CN                     = "$server_name"
+emailAddress           = "webmaster@$server_name"
+
+[ x509v3 ]
+subjectAltName         = DNS:$server_name
+nsComment              = "test server certificate"
+nsCertType             = server
+
+[ req_attributes ]
+challengePassword      = $RANDOM
+EOT
+
+  openssl req -config $dir/server-csr.cfg -new -key $server_key_file -out $server_csr_file
+}
+
+function openssl_server_cert()
+{
+  ca_cert_file=$1
+  ca_key_file=$2
+  server_csr_file=$3
+  server_cert_file=$4
+  dir=$(dirname $server_cert_file)
+  server_name=$5
+
+  cat >$dir/server-cert.cfg <<EOT
+extensions = x509v3
+[ x509v3 ]
+subjectAltName         = DNS:$server_name
+nsComment              = "test server certificate"
+nsCertType             = server
+EOT
+test -f $dir/cert.serial || echo 01 >$dir/cert.serial
+openssl x509                                    \
+        -extfile $dir/server-cert.cfg           \
+        -days $((365*3))                        \
+        -CAserial $dir/cert.serial              \
+        -CA $ca_cert_file                       \
+        -CAkey $ca_key_file                     \
+        -in $server_csr_file -req               \
+        -out $server_cert_file
+}
+
+function openssl_client_csr()
+{
+  client_key_file=$1
+  client_csr_file=$2
+  dir=$(dirname $client_csr_file)
+  client_name=$3
+
+  cat >$dir/client-csr.cfg <<EOT
+[ req ]
+distinguished_name     = req_distinguished_name
+attributes             = req_attributes
+prompt                 = no
+output_password        = mypass
+req_extensions         = x509v3
+
+[ req_distinguished_name ]
+C                      = "DE"
+ST                     = "Berlin"
+L                      = "Berlin"
+O                      = "SUSE Customer"
+OU                     = "IS&T"
+CN                     = "$client_name"
+emailAddress           = "webmaster@$client_name"
+
+[ x509v3 ]
+subjectAltName         = DNS:$client_name
+nsComment              = "test client certificate"
+nsCertType             = client
+
+[ req_attributes ]
+challengePassword      = $RANDOM
+EOT
+
+  openssl req -config $dir/client-csr.cfg -new -key $client_key_file -out $client_csr_file
+}
+
+function openssl_client_cert()
+{
+  ca_cert_file=$1
+  ca_key_file=$2
+  client_csr_file=$3
+  client_cert_file=$4
+  dir=$(dirname $client_cert_file)
+  client_name=$5
+
+  cat >$dir/client-cert.cfg <<EOT
+extensions = x509v3
+[ x509v3 ]
+subjectAltName         = DNS:$client_name
+nsComment              = "test client certificate"
+nsCertType             = client
+EOT
+test -f $dir/cert.serial || echo 01 >$dir/cert.serial
+openssl x509                                    \
+        -extfile $dir/client-cert.cfg           \
+        -days $((365*3))                        \
+        -CAserial $dir/cert.serial              \
+        -CA $ca_cert_file                       \
+        -CAkey $ca_key_file                     \
+        -in $client_csr_file -req               \
+        -out $client_cert_file
+}
+
