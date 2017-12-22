@@ -25,6 +25,6 @@ openssl_server_cert $AREX_RUN_DIR/cert/test-ca.crt \
                     $server_name
 
 #
-# create runtime dir
+# create runtime dir, see DefaultRuntimeDir directive
 #
 mkdir -p $AREX_RUN_DIR/run
