@@ -109,6 +109,7 @@ mod_mime-TypesConfig
 mod_actions-basic
 mod_userdir-basic
 mod_ssl-basic
+mod_ssl-verify-client
 mod_ssl-SSLCryptoDevice
 mod_sed-basic
 mod_deflate-basic
