@@ -5,7 +5,7 @@
 . ../lib/openssl
 mkdir -p $AREX_RUN_DIR/cert
 server_name='test'
-client_name='homo'
+client_name='joe'
 echo Generating CA certificate
 echo ~~~~~~~~~~~~~~~~~~~~~~~~~
 # create CA key

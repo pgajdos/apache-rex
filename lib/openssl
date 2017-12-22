@@ -1,11 +1,21 @@
 #!/bin/bash
 
+#
+# KEY
+#
+
+# create a key
 function openssl_key()
 {
   key_file=$1
   openssl genrsa -rand /dev/urandom -out $key_file 2048
 }
 
+#
+# CERTIFICATE
+#
+
+# create a certificate, given a key and CA name
 function openssl_ca_cert()
 {
   ca_key_file=$1
@@ -33,8 +43,11 @@ emailAddress           = "webmaster@$ca_name"
 challengePassword      = $RANDOM
 EOT
   openssl req -config $dir/ca-cert.cfg -new -x509 -days 365 -key $1 -out $ca_cert_file
+  echo 01 >$dir/ca-cert.serial
 }
 
+# create server signing request, given server
+# key and server name
 function openssl_server_csr()
 {
   server_key_file=$1
@@ -71,15 +84,19 @@ EOT
   openssl req -config $dir/server-csr.cfg -new -key $server_key_file -out $server_csr_file
 }
 
+# create server certificate, given CA certificate 
+# and key and server CSR and name
 function openssl_server_cert()
 {
   ca_cert_file=$1
+  ca_dir=$(dirname $ca_cert_file)
   ca_key_file=$2
   server_csr_file=$3
   server_cert_file=$4
   dir=$(dirname $server_cert_file)
   server_name=$5
 
+  [ -f $ca_dir/ca-cert.serial ] || echo 01 >$ca_dir/ca-cert.serial
   cat >$dir/server-cert.cfg <<EOT
 extensions = x509v3
 [ x509v3 ]
@@ -87,17 +104,17 @@ subjectAltName         = DNS:$server_name
 nsComment              = "test server certificate"
 nsCertType             = server
 EOT
-test -f $dir/cert.serial || echo 01 >$dir/cert.serial
-openssl x509                                    \
+  openssl x509                                    \
         -extfile $dir/server-cert.cfg           \
         -days $((365*3))                        \
-        -CAserial $dir/cert.serial              \
+        -CAserial $ca_dir/ca-cert.serial        \
         -CA $ca_cert_file                       \
         -CAkey $ca_key_file                     \
         -in $server_csr_file -req               \
         -out $server_cert_file
 }
 
+# create client signing request, given client key
 function openssl_client_csr()
 {
   client_key_file=$1
@@ -134,15 +151,19 @@ EOT
   openssl req -config $dir/client-csr.cfg -new -key $client_key_file -out $client_csr_file
 }
 
+# create client certificate, given CA key and certificate
+# client CSR and name
 function openssl_client_cert()
 {
   ca_cert_file=$1
+  ca_dir=$(dirname $ca_cert_file)
   ca_key_file=$2
   client_csr_file=$3
   client_cert_file=$4
   dir=$(dirname $client_cert_file)
   client_name=$5
 
+  [ -f $ca_dir/ca-cert.serial ] || echo 01 >$ca_dir/ca-cert.serial
   cat >$dir/client-cert.cfg <<EOT
 extensions = x509v3
 [ x509v3 ]
@@ -150,14 +171,77 @@ subjectAltName         = DNS:$client_name
 nsComment              = "test client certificate"
 nsCertType             = client
 EOT
-test -f $dir/cert.serial || echo 01 >$dir/cert.serial
 openssl x509                                    \
         -extfile $dir/client-cert.cfg           \
         -days $((365*3))                        \
-        -CAserial $dir/cert.serial              \
+        -CAserial $ca_dir/ca-cert.serial           \
         -CA $ca_cert_file                       \
         -CAkey $ca_key_file                     \
         -in $client_csr_file -req               \
         -out $client_cert_file
+}
+
+#
+# CRL
+#
+
+# It seems there is not simple command for creating CRL;
+# configuration of CA needs to be created and database
+# of certificates afterwards, if I understand correctly.
+# https://blog.didierstevens.com/2013/05/08/howto-make-your-own-cert-and-revocation-list-with-openssl/
+
+function openssl_ca_create_conf()
+{
+  ca_cert_file=$1
+  ca_dir=$(dirname $ca_cert_file)
+  ca_key_file=$2
+  ca_crl_file=$3
+  dir=$(dirname $ca_crl_file)
+
+  mkdir -p $dir/ca
+
+  [ -f $ca_dir/ca-cert.serial ] || echo 01 >$ca_dir/ca-cert.serial
+  cat >$dir/ca/ca.conf <<EOT
+[ ca ]
+default_ca      = CA_default            # The default ca section
+
+[ CA_default ]
+
+dir            = $dir/ca               # top dir
+database       = $dir/ca/certindex     # index file.
+new_certs_dir  = $dir/ca/newcerts      # new certs dir
+ 
+certificate    = $ca_cert_file         # The CA cert
+serial         = $ca_dir/ca-cert.serial# serial no file
+private_key    = $ca_key_file          # CA private key
+crlnumber      = $dir/ca/crlnumber     # CRL serial number
+ 
+default_days   = 365                   # how long to certify for
+default_crl_days= 30                   # how long before next CRL
+default_md     = sha1                  # md to use
+
+policy         = policy_any            # default policy
+
+[ policy_any ]
+countryName            = supplied
+stateOrProvinceName    = optional
+organizationName       = optional
+organizationalUnitName = optional
+commonName             = supplied
+emailAddress           = optional
+EOT
+
+  touch $dir/ca/certindex
+  touch $dir/ca/certindex.attr
+  echo 01 > $dir/ca/crlnumber  
+}
+
+# add a certificate to CRL
+function openssl_ca_revoke_cert()
+{
+  ca_crl_file=$1
+  revoke_cert_file=$2
+  openssl ca -config $dir/ca/ca.conf -revoke $revoke_cert_file
+  openssl ca -config $dir/ca/ca.conf -gencrl -out $ca_crl_file
 }
 
