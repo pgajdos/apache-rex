@@ -34,7 +34,7 @@ Listen @AREX_PORT4@
     BalancerMember http://localhost:@AREX_PORT1@/ loadfactor=20
     BalancerMember http://localhost:@AREX_PORT2@/ loadfactor=20
     BalancerMember http://localhost:@AREX_PORT3@/ loadfactor=1
-    # just try another lbmethod
+    # just to try another lbmethod
     ProxySet lbmethod=bytraffic
   </Proxy>
 </VirtualHost>
