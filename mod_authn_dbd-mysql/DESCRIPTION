@@ -1,3 +1,2 @@
-Demonstrate how connect authn_dbd authz_dbd module to mysql, AuthType Basic.
-Inspired by
-https://www.howtoforge.com/tutorial/password-protect-directories-with-mod_authn_dbd-mysql-on-apache-debian-jessie/
+Demonstrate how connect authn_dbd authz_dbd module to mysql, 
+AuthType Basic.
