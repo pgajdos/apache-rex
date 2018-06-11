@@ -1,0 +1,3 @@
+Demonstrate how to use authn_dbd and authz_dbd modules
+to connect to postgresql database.
+

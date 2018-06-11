@@ -1,0 +1,63 @@
+#LogLevel trace8
+
+DBDriver pgsql
+DBDParams "dbname=httpd_auth user=@AREX_USER@"
+
+DBDMin 4
+DBDKeep 8
+DBDMax 20
+DBDExptime 300
+
+<Directory  "@AREX_DOCUMENT_ROOT@/private">
+ # mod_authn_core and mod_auth_basic configuration
+ # for mod_authn_dbd
+ AuthType Basic
+ AuthName "Private Area"
+
+ <IfVersion >= 2.4>
+   # To cache credentials, put socache ahead of dbd here
+   AuthBasicProvider socache dbd
+
+   # Also required for caching: tell the cache to cache dbd lookups
+   AuthnCacheProvideFor dbd
+   AuthnCacheContext private-area
+ </IfVersion>
+ <IfVersion < 2.4>
+    AuthBasicProvider dbd
+ </IfVersion>
+
+ # mod_authz_core configuration
+ Require valid-user
+
+ # mod_authn_dbd SQL query to authenticate a user
+ AuthDBDUserPWQuery "SELECT passwd FROM password_table WHERE username=%s"
+</Directory>
+
+<Directory  "@AREX_DOCUMENT_ROOT@/company">
+ # mod_authn_core and mod_auth_basic configuration
+ # for mod_authn_dbd
+ AuthType Basic
+ AuthName "Company Private Area"
+
+
+ <IfVersion >= 2.4>
+   # To cache credentials, put socache ahead of dbd here
+   AuthBasicProvider socache dbd
+
+   # Also required for caching: tell the cache to cache dbd lookups
+   AuthnCacheProvideFor dbd
+   AuthnCacheContext company-area
+ </IfVersion>
+ <IfVersion < 2.4>
+    AuthBasicProvider dbd
+ </IfVersion>
+
+ # mod_authz_core configuration
+ Require dbd-group employees
+
+ # mod_authn_dbd SQL queries to authenticate a user
+ AuthDBDUserPWQuery "SELECT passwd FROM password_table WHERE username=%s"
+ AuthzDBDQuery "SELECT groups FROM password_table WHERE username=%s"
+
+</Directory>
+
