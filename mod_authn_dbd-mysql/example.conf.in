@@ -1,7 +1,7 @@
 #LogLevel trace8
 
 DBDriver mysql
-DBDParams "host=localhost dbname=httpd_auth user=auth_admin pass=auth_admin_secret sock=@AREX_RUN_DIR@/mysql/mysql.sock"
+DBDParams "dbname=httpd_auth user=auth_admin pass=auth_admin_secret sock=@AREX_RUN_DIR@/mysql/mysql.sock"
 
 DBDMin 4
 DBDKeep 8
