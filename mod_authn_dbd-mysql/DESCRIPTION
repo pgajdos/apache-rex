@@ -1,2 +1,2 @@
-Demonstrate how connect authn_dbd authz_dbd module to mysql, 
-AuthType Basic.
+Demonstrate how to use authn_dbd and authz_dbd modules 
+to connect to mysql database.
