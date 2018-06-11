@@ -472,14 +472,15 @@ function prepare_run()
   if [ -e example.conf.in ]; then
     cat example.conf.in >> $AREX_RUN_DIR/httpd.conf
 
-    sed -i "s:@AREX_RUN_DIR@:$AREX_RUN_DIR:"                         $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_PORT@:$AREX_PORT:"                       $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_PORT1@:$AREX_PORT1:"                     $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_PORT2@:$AREX_PORT2:"                     $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_PORT3@:$AREX_PORT3:"                     $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_PORT4@:$AREX_PORT4:"                     $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_PORT5@:$AREX_PORT5:"                     $AREX_RUN_DIR/httpd.conf
-    sed -i "s:@AREX_PORT6@:$AREX_PORT6:"                     $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_RUN_DIR@:$AREX_RUN_DIR:"                           $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_USER@:$AREX_USER:"                                 $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT@:$AREX_PORT:"                                 $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT1@:$AREX_PORT1:"                               $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT2@:$AREX_PORT2:"                               $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT3@:$AREX_PORT3:"                               $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT4@:$AREX_PORT4:"                               $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT5@:$AREX_PORT5:"                               $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PORT6@:$AREX_PORT6:"                               $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_DOCUMENT_ROOT@:$AREX_DOCUMENT_ROOT:"               $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_ALLOW_FROM_LOCALHOST@:$AREX_ALLOW_FROM_LOCALHOST:" $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_DENY_FROM_ALL@:$AREX_DENY_FROM_ALL:"               $AREX_RUN_DIR/httpd.conf
