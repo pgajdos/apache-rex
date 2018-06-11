@@ -97,6 +97,7 @@ mod_auth_digest-basic
 mod_auth_digest-Authorization
 mod_authn_dbd-basic
 mod_authn_dbd-mysql
+mod_authn_dbd-pgsql
 mod_authn_dbd-Digest
 mod_authz_groupfile-basic
 mod_authz_owner-basic
