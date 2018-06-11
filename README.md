@@ -117,6 +117,8 @@ in `run.sh`.
   Writeable dir for the test, `$RUN_DIR_BASE/<test-dir-name>` in the fact.
   All example data, temporary outputs, even configuration and script should 
   be found there after example is run. No cleanup required.
+* `AREX_USER`
+  User under which all daemons, including httpd, are run.
 * `AREX_PORT`  
   This port is automatically opened for the httpd.
 * `AREX_PORTn`  
