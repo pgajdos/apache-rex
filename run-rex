@@ -510,6 +510,15 @@ function prepare_run()
   fi
 }
 
+function finish_run()
+{
+  # run cleanup script of the example
+  if [ -e post-run.sh ]; then
+    cp post-run.sh $AREX_RUN_DIR
+    sh $AREX_RUN_DIR/post-run.sh
+  fi
+}
+
 function syntax_check()
 {
   syntax_ok=1
@@ -714,6 +723,8 @@ function run_example()
         echo FAILURE.
       fi
     fi
+
+    finish_run
  
     echo
     echo "See for details: $AREX_RUN_DIR"
