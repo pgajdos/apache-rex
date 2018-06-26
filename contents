@@ -89,6 +89,7 @@ mod_cgi-basic
 mod_cgi-stderr
 mod_cgi-ScriptLog
 mod_cgi-httpoxy
+mod_perl-basic
 mod_xml2enc-basic
 mod_authz_user-basic
 mod_auth_basic-basic
