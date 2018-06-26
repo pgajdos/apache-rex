@@ -1,0 +1,29 @@
+<Location /perl-status>
+  SetHandler perl-script
+  PerlHandler Apache2::Status
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Location>
+
+PerlSwitches -I@AREX_RUN_DIR@/perl-lib
+
+<Location /print-env>
+  SetHandler perl-script
+  PerlResponseHandler MyApache2::PrintEnv
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Location>
+
+ScriptAlias /cgi-bin/ "@AREX_RUN_DIR@/cgi-bin/"
+<Location /cgi-bin>
+  Options +ExecCGI
+  Require local
+</Location>
+
+ScriptAlias /perl-cgi-bin/ "@AREX_RUN_DIR@/cgi-bin/"
+<Location /perl-cgi-bin>
+  SetHandler perl-script
+  PerlHandler ModPerl::Registry
+  PerlSendHeader On
+  Options +ExecCGI
+  Require local
+</Location>
+
