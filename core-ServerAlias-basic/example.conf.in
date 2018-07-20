@@ -1,4 +1,8 @@
-<VirtualHost *>
+<IfVersion < 2.3.11>
+NameVirtualHost *:@AREX_PORT@
+</IfVersion>
+
+<VirtualHost *:@AREX_PORT@>
   ServerName domain.com
   ServerAlias www.domain.com
 
@@ -8,7 +12,7 @@
   </Directory>
 </VirtualHost>
 
-<VirtualHost *>
+<VirtualHost *:@AREX_PORT@>
   ServerName otherdomain.com
   ServerAlias *.otherdomain.com
 
