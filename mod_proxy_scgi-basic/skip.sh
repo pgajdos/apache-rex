@@ -1,3 +1,3 @@
-# REASON: need python-scgi
-exit $([ $AREX_HAVE_PYTHON_SCGI != "1" ])
+# REASON: need Perl SCGI module
+exit $([ $AREX_HAVE_PERL_SCGI != "1" ])
 

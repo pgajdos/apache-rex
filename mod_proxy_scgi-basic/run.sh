@@ -1,8 +1,8 @@
 exit_code=0
 
 echo -n 'Starting the scgi server ... '
-cp dummy-scgi-server.py $AREX_RUN_DIR
-python $AREX_RUN_DIR/dummy-scgi-server.py $AREX_SCGI_PORT&
+cp dummy-scgi-server.pl $AREX_RUN_DIR
+perl $AREX_RUN_DIR/dummy-scgi-server.pl $AREX_SCGI_PORT&
 sleep 1
 scgi_server_pid=$(lsof -i | grep ":$AREX_SCGI_PORT (LISTEN)" | sed 's:[^ ]\+[ ]\+\([0-9]\+\).*:\1:')
 if [ -z "$scgi_server_pid" ]; then

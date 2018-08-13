@@ -191,9 +191,9 @@ function have_python_tornado()
   python -c "help('modules');" | grep tornado > /dev/null && echo -n '1' || echo -n '0'
 }
 
-function have_python_scgi()
+function have_perl_scgi()
 {
-  python -c "help('modules');" | grep scgi > /dev/null && echo -n '1' || echo -n '0'
+  perldoc -l "SCGI" > /dev/null && echo -n '1' || echo -n '0'
 }
 
 function have_python_websocket_client()
@@ -273,7 +273,7 @@ function check_system()
   echod -n '.'
   export AREX_HAVE_PYTHON_TORNADO=$(have_python_tornado)
   echod -n '.'
-  export AREX_HAVE_PYTHON_SCGI=$(have_python_scgi)
+  export AREX_HAVE_PERL_SCGI=$(have_perl_scgi)
   echod -n '.'
   export AREX_HAVE_PYTHON_WEBSOCKET_CLIENT=$(have_python_websocket_client)
   echod -n '.'
@@ -301,7 +301,7 @@ function check_system()
   echod "openssl engine ........................... $AREX_AN_OPENSSL_ENGINE"
   echod "openssl have alpn support ................ $AREX_OPENSSL_HAVE_ALPN"
   echod "system have python-tornado ............... $AREX_HAVE_PYTHON_TORNADO"
-  echod "systemd have python-scgi ................. $AREX_HAVE_PYTHON_SCGI"
+  echod "system have perl-scgi .................... $AREX_HAVE_PERL_SCGI"
   echod "system have python-websocket-client ...... $AREX_HAVE_PYTHON_WEBSOCKET_CLIENT"
   echod "system have systemd coredumps ............ $AREX_HAVE_SYSTEMD_COREDUMP"
   echod "system core pattern ...................... $AREX_CORE_PATTERN"

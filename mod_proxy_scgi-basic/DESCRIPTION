@@ -1,1 +1,1 @@
-Test basic functionality of proxy_scgi module.
+Test basic functionality of proxy_scgi module via Perl SCGI server.
