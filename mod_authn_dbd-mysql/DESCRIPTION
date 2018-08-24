@@ -1,2 +1,5 @@
 Demonstrate how to use authn_dbd and authz_dbd modules 
 to connect to mysql database.
+
+WILL NOT WORK WITH MariaDB 10.2 and WITHOUT bsc#1094754 fix
+
