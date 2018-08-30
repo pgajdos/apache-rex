@@ -193,7 +193,7 @@ function have_python_tornado()
 
 function have_perl_scgi()
 {
-  perldoc -l "SCGI" > /dev/null && echo -n '1' || echo -n '0'
+  perldoc -l "SCGI" 2>&1 > /dev/null && echo -n '1' || echo -n '0'
 }
 
 function have_python_websocket_client()
