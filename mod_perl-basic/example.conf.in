@@ -15,7 +15,7 @@ PerlSwitches -I@AREX_RUN_DIR@/perl-lib
 ScriptAlias /cgi-bin/ "@AREX_RUN_DIR@/cgi-bin/"
 <Location /cgi-bin>
   Options +ExecCGI
-  Require local
+  @AREX_ALLOW_FROM_LOCALHOST@
 </Location>
 
 Alias /perl-cgi-bin/ "@AREX_RUN_DIR@/cgi-bin/"
@@ -24,6 +24,6 @@ Alias /perl-cgi-bin/ "@AREX_RUN_DIR@/cgi-bin/"
   PerlHandler ModPerl::Registry
   PerlSendHeader On
   Options +ExecCGI
-  Require local
+  @AREX_ALLOW_FROM_LOCALHOST@
 </Location>
 
