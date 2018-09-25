@@ -167,7 +167,7 @@ function telnet_command()
 
 function nc_command()
 {
-  which ncd 2>/dev/null
+  which nc 2>/dev/null
 }
 
 
