@@ -1,4 +1,4 @@
-MaxRequestWorkers 2
+MaxRequestWorkers 10
 
 ScriptAlias /cgi-bin/ "@AREX_RUN_DIR@/cgi-bin/"
 <Directory "@AREX_RUN_DIR@/cgi-bin/">

@@ -24,5 +24,8 @@ echo "Elapsed time (in seconds): $time "
 time="$(echo $time | tr -d '.')"
 [ 400 -lt $time ] || exit_code=1
 
+echo "[2] there is a note in error log about reaching MaxRequestWorkers setting"
+grep 'server reached MaxRequestWorkers' $AREX_RUN_DIR/error_log || exit_code=2
+
 exit $exit_code
 
