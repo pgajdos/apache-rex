@@ -424,6 +424,18 @@ function compile_modules()
   done
 }
 
+function fix_module_name()
+{
+  name=$1;
+  if   [ $HTTPD_MPM == 'prefork' -a $name == 'cgid' ]; then 
+    echo -n 'cgi'
+  elif [ $HTTPD_MPM != 'prefork' -a $name == 'cgi' ]; then
+    echo -n 'cgid'
+  else
+    echo -n $name
+  fi
+}
+
 function load_modules()
 {
   conf=$1
@@ -435,12 +447,14 @@ function load_modules()
   fi
 
   for m in $modules; do
+    m=$(fix_module_name $m)
     module_path=$(find_module $m)
     echov "Will load module $m ($module_path)"
     echo "LoadModule ${m}_module $module_path"    >> $conf
   done
 
   for m in $modules_opt; do
+    m=$(fix_module_name $m)
     module_path=$(find_module $m)
     if [ -n "$module_path" ]; then
       echov "Will load module $m ($module_path)"
@@ -462,6 +476,10 @@ function prepare_run()
   echo "PidFile $AREX_RUN_DIR/pid"                     >> $conf
   echo "ErrorLog $AREX_RUN_DIR/error_log"              >> $conf
   load_modules $conf
+  echo "<IfModule mod_cgid.c>"                         >> $conf
+  echo "  ScriptSock $AREX_RUN_DIR/cgid.sock"          >> $conf
+  echo "  CGIDScriptTimeout 5s"                        >> $conf
+  echo "</IfModule>"                                   >> $conf
   export AREX_DOCUMENT_ROOT=$AREX_RUN_DIR/htdocs
   echo "DocumentRoot $AREX_DOCUMENT_ROOT"              >> $conf
   echo "DirectoryIndex index.html"                     >> $conf
@@ -594,6 +612,7 @@ function missing_modules()
   result=""
 
   for m in $req_modules; do
+    m=$(fix_module_name $m)
     if [ -z "$(find_module $m)" ]; then
       result="$result$m "
     fi
