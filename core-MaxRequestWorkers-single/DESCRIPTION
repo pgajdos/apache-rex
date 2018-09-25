@@ -1,1 +1,2 @@
 Issue more requests than MaxRequestWorkers number.
+Dual to core-MaxRequestWorkers-single.
