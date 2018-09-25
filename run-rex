@@ -476,10 +476,11 @@ function prepare_run()
   echo "PidFile $AREX_RUN_DIR/pid"                     >> $conf
   echo "ErrorLog $AREX_RUN_DIR/error_log"              >> $conf
   load_modules $conf
-  echo "<IfModule mod_cgid.c>"                         >> $conf
-  echo "  ScriptSock $AREX_RUN_DIR/cgid.sock"          >> $conf
-  echo "  CGIDScriptTimeout 5s"                        >> $conf
-  echo "</IfModule>"                                   >> $conf
+  if [ $AREX_MPM != 'prefork' ]; then
+    echo "<IfModule mod_cgid.c>"                         >> $conf
+    echo "  ScriptSock $AREX_RUN_DIR/cgid.sock"          >> $conf
+    echo "</IfModule>"                                   >> $conf
+  fi
   export AREX_DOCUMENT_ROOT=$AREX_RUN_DIR/htdocs
   echo "DocumentRoot $AREX_DOCUMENT_ROOT"              >> $conf
   echo "DirectoryIndex index.html"                     >> $conf
