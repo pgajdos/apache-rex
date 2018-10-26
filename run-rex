@@ -406,6 +406,9 @@ function compile_modules()
   modules="$(cat MODULES | tr ':' ' ')"
   module_dir=$AREX_RUN_DIR/my_modules
 
+  # there is a rule: when for $m mod_$m.c
+  # exist, then we will compile it
+  # and load to httpd
   for m in $modules; do
     if [ -e mod_$m.c ]; then
       mkdir -p $module_dir
@@ -590,14 +593,22 @@ function stop_apache()
 
 function missing_binaries()
 {
-  if [ ! -e BINARIES ]; then
-    echo ""
-    return
-  fi
+  req_binaries="$(cat BINARIES 2>/dev/null)"
 
-  req_binaries=$(cat BINARIES)
+  # check if apxs is needed, too
+  modules="$(cat MODULES | tr ':' ' ')"
+  for m in $modules; do
+    # there is a rule: when for $m mod_$m.c
+    # exist, then we will compile it
+    # (see compile_modules() function)
+    # and load to httpd
+    if [ -e mod_$m.c ]; then
+      req_binaries="$req_binaries apxs"
+      break
+    fi
+  done
+
   result=""
-
   for b in $req_binaries; do
     if [ -z "$(which $b 2>/dev/null)" ]; then
       result="$result$b "
