@@ -651,9 +651,10 @@ function run_example()
   [ -e $AREX_RUN_DIR ] && rm -r $AREX_RUN_DIR
   mkdir -p $AREX_RUN_DIR
 
-  compile_modules
-
   mb=$(missing_binaries)
+  if ! [[ $mb =~ 'apxs' ]]; then
+    compile_modules
+  fi
   mm=$(missing_modules)
 
   if [ -e skip.sh ] && sh skip.sh; then
