@@ -2,7 +2,7 @@ exit_code=0
 
 echo 'Test SSL, restricted area' > $AREX_DOCUMENT_ROOT/index.html
 
-echo "[1] client's certificat was revoked, connection refused"
+echo "[1] client's certificate was revoked, connection refused"
 curl --cacert $AREX_RUN_DIR/cert/test-ca.crt \
       --cert   $AREX_RUN_DIR/cert/test-clientA.crt \
       --key    $AREX_RUN_DIR/cert/test-clientA.key  \
