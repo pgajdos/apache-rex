@@ -143,6 +143,8 @@ in `run.sh`.
   Port reserverd for test FCGI application.
 * `AREX_SCGI_PORT`  
   Port reserverd for test SCGI application.
+* `AREX_OCSP_PORT`  
+  Port reserverd for test OCSP responder daemon.
 * `AREX_SED_COMMAND`  
   Full path to `sed` command (required for some Filter example definitions).
 * `AREX_ROTATELOGS_COMMAND`  
