@@ -17,4 +17,12 @@ function kill_pid_port()
   lsof -i | grep ":$port (LISTEN)" && return 1 || return 0
 }
 
-function 
+function httpd_restart
+{
+  ps -A | grep httpd
+  kill -HUP $(cat $AREX_RUN_DIR/pid)
+  # wait for httpd to settle down
+  sleep 2
+  ps -A | grep httpd
+}
+
