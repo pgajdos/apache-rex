@@ -42,6 +42,9 @@ if [ -z "$SCGI_PORT" ]; then
   SCGI_PORT=60004
 fi
 
+if [ -z "$OCSP_PORT"]; then
+  OCSP_PORT=60888
+fi
 
 # verbosity of the output: normal=0, verbose=1, debug=2
 if [ -z "$VERBOSITY" ]; then
@@ -358,6 +361,9 @@ function prepare_env()
 
   export AREX_SCGI_PORT=$SCGI_PORT
   echod "scgi daemon will listen on ............... $AREX_SCGI_PORT"
+
+  export AREX_OCSP_PORT=$OCSP_PORT
+  echod "ocsp responedr daemon will listen on ..... $AREX_OCSP_PORT"
   
   echod -n "authz_core module present ................ "
   if [ -n "$(find_module authz_core)" ]; then
@@ -511,6 +517,7 @@ function prepare_run()
     sed -i "s:@AREX_FTP_PORT@:$AREX_FTP_PORT:"                         $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_FCGI_PORT@:$AREX_FCGI_PORT:"                       $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_SCGI_PORT@:$AREX_SCGI_PORT:"                       $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_OCSP_PORT@:$AREX_OCSP_PORT:"                       $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_SED_COMMAND@:$AREX_SED_COMMAND:"                   $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_ROTATELOGS_COMMAND@:$AREX_ROTATELOGS_COMMAND:"     $AREX_RUN_DIR/httpd.conf
   else
