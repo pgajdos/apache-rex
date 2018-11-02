@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source $(dirname ${BASH_SOURCE[0]})/processman
+
 #
 # KEY
 #
@@ -129,6 +131,7 @@ emailAddress           = "webmaster@$entity_name"
 [ x509v3 ]
 subjectAltName         = DNS:$entity_name
 extendedKeyUsage       = OCSPSigning
+authorityInfoAccess    = OCSP;URI:http://127.0.0.1:$AREX_OCSP_PORT
 
 [ req_attributes ]
 challengePassword      = $RANDOM
@@ -155,11 +158,6 @@ EOT
 # CRL
 #
 
-# It seems there is not simple command for creating CRL;
-# configuration of CA needs to be created and database
-# of certificates afterwards, if I understand correctly.
-# https://blog.didierstevens.com/2013/05/08/howto-make-your-own-cert-and-revocation-list-with-openssl/
-
 
 # add a certificate to CRL
 function openssl_ca_revoke_cert()
@@ -170,4 +168,42 @@ function openssl_ca_revoke_cert()
   openssl ca -config $dir/ca/openssl.conf -gencrl -out $dir/ca/my.crl
 }
 
+#
+# OCSP
+#
+
+# start OCSP responder daemon for our CA
+function openssl_ocsp_responder_start()
+{
+  dir=$1
+  openssl ocsp -index $dir/ca/cert.index \
+               -port $AREX_OCSP_PORT \
+               -rsigner $dir/ca/my.crt \
+               -rkey $dir/ca/private.key \
+               -CA $dir/ca/my.crt \
+               -text &> $dir/ocsp-responder.log &
+  sleep 1
+  echo $(get_pid $AREX_OCSP_PORT) > $dir/ocsp-responder.pid
+}
+
+# stop OCSP responder
+function openssl_ocsp_responder_stop()
+{
+  pid=$(cat $dir/ocsp-responder.pid)
+  return $(kill_pid $pid $AREX_OCSP_PORT)
+}
+
+# get a status of the certificate of an entity
+function openssl_ocsp_cert_status()
+{
+  dir=$1
+  entity_name=$2
+
+  openssl ocsp -CAfile $dir/ca/my.crt \
+               -issuer $dir/ca/my.crt \
+               -cert $dir/$entity_name/my.crt \
+               -url http://127.0.0.1:$AREX_OCSP_PORT \
+               -text 2>/dev/null \
+               | grep 'Cert Status' | sed 's/.*Cert Status:[^a-z]*\([a-z]*\)[^a-z]*/\1/'
+}
 
