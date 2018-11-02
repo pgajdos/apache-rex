@@ -12,19 +12,52 @@ function openssl_key()
 }
 
 #
-# CERTIFICATE
+# CA certificate
 #
 
-# create a certificate, given a key and CA name
-function openssl_ca_cert()
+function openssl_setup_ca()
 {
-  ca_key_file=$1
-  ca_cert_file=$2
-  dir=$(dirname $ca_cert_file)
-  ca_name=$3
+  dir="$1"
+  name="trustworthy-ca.suse.cz"
 
-  cat >$dir/ca-cert.cfg <<EOT
+  mkdir -p $dir/ca
+  
+  echo Generating CA configuration
+  echo ---------------------------
+  cat >$dir/ca/openssl.conf <<EOT
+[ ca ]
+default_ca      = CA_default            # The default ca section
+
+[ CA_default ]
+
+dir            = $dir/ca               # Where everything is kept
+certs          = $dir/ca/certs/        # Where the issued certs are kept
+crl_dir        = $dir/crl/             # Where the issued crl are kept
+database       = $dir/ca/cert.index    # Database index file
+new_certs_dir  = $dir/ca/newcerts/     # Default place for new certs
+certificate    = $dir/ca/my.crt        # The CA certificate
+serial         = $dir/ca/cert.serial   # The current serial number
+crlnumber      = $dir/ca/crl.number    # CRL serial number
+crl            = $dir/ca/my.crl        # The current CRL  
+private_key    = $dir/ca/private.key   # CA private key
+RANDFILE       = $dir/ca/.rand         # Private random number file
+
+default_days     = 365                 # how long to certify for
+default_crl_days = 30                  # how long before next CRL
+default_md       = sha1                # md to use
+
+policy           = policy_any          # default policy
+
+[ policy_any ]
+countryName            = supplied
+stateOrProvinceName    = optional
+organizationName       = optional
+organizationalUnitName = optional
+commonName             = supplied
+emailAddress           = optional
+
 [ req ]
+default_bits           = 2048
 distinguished_name     = req_distinguished_name
 attributes             = req_attributes
 prompt                 = no
@@ -34,28 +67,49 @@ output_password        = mypass
 C                      = "CZ"
 ST                     = "Czech Republic"
 L                      = "Prague"
-O                      = "SUSE Linux CA"
+O                      = "SUSE Linux SERVER"
 OU                     = "R&D"
-CN                     = "$ca_name"
-emailAddress           = "webmaster@$ca_name"
+CN                     = "$name"
+emailAddress           = "webmaster@$name"
 
 [ req_attributes ]
 challengePassword      = $RANDOM
+
 EOT
-  openssl req -config $dir/ca-cert.cfg -new -x509 -days 365 -key $1 -out $ca_cert_file
-  echo 01 >$dir/ca-cert.serial
+
+  echo 01 > $dir/ca/cert.serial
+  mkdir -p $dir/ca/certs/
+  mkdir -p $dir/ca/newcerts/
+  touch $dir/ca/cert.index
+  touch $dir/ca/cert.index.attr
+  echo 01 > $dir/ca/crl.number  
+  echo --- Done.
+
+  echo Generating CA key
+  echo -----------------
+  openssl_key $dir/ca/private.key
+  echo --- Done.
+
+  echo Generating CA certificate
+  echo -------------------------
+  openssl req -config $dir/ca/openssl.conf -new -x509 -days 365 -key $dir/ca/private.key -out $dir/ca/my.crt
+  echo --- Done.
 }
 
-# create server signing request, given server
-# key and server name
-function openssl_server_csr()
-{
-  server_key_file=$1
-  server_csr_file=$2
-  dir=$(dirname $server_csr_file)
-  server_name=$3
+#
+# entity cert
+#
 
-  cat >$dir/server-csr.cfg <<EOT
+function openssl_setup_entity()
+{
+  dir="$1"
+  entity_name="$2"
+
+  mkdir -p $dir/$entity_name
+
+  echo Generating entity configuration
+  echo -------------------------------
+  cat > $dir/$entity_name/openssl.conf <<EOT
 [ req ]
 distinguished_name     = req_distinguished_name
 attributes             = req_attributes
@@ -69,116 +123,32 @@ ST                     = "Czech Republic"
 L                      = "Prague"
 O                      = "SUSE Linux SERVER"
 OU                     = "R&D"
-CN                     = "$server_name"
-emailAddress           = "webmaster@$server_name"
+CN                     = "$entity_name"
+emailAddress           = "webmaster@$entity_name"
 
 [ x509v3 ]
-subjectAltName         = DNS:$server_name
-nsComment              = "test server certificate"
-nsCertType             = server
+subjectAltName         = DNS:$entity_name
+extendedKeyUsage       = OCSPSigning
 
 [ req_attributes ]
 challengePassword      = $RANDOM
 EOT
+  echo Done.
+ 
+  echo Generating entity key
+  echo ---------------------
+  openssl_key $dir/$entity_name/private.key
+  echo Done.
 
-  openssl req -config $dir/server-csr.cfg -new -key $server_key_file -out $server_csr_file
-}
+  echo Generating entity CSR
+  echo ---------------------
+  openssl req -config $dir/$entity_name/openssl.conf -new -key $dir/$entity_name/private.key -out $dir/$entity_name/my.csr
+  echo --- Done.
 
-# create server certificate, given CA certificate 
-# and key and server CSR and name
-function openssl_server_cert()
-{
-  ca_cert_file=$1
-  ca_dir=$(dirname $ca_cert_file)
-  ca_key_file=$2
-  server_csr_file=$3
-  server_cert_file=$4
-  dir=$(dirname $server_cert_file)
-  server_name=$5
-
-  [ -f $ca_dir/ca-cert.serial ] || echo 01 >$ca_dir/ca-cert.serial
-  cat >$dir/server-cert.cfg <<EOT
-extensions = x509v3
-[ x509v3 ]
-subjectAltName         = DNS:$server_name
-nsComment              = "test server certificate"
-nsCertType             = server
-EOT
-  openssl x509                                    \
-        -extfile $dir/server-cert.cfg           \
-        -days $((365*3))                        \
-        -CAserial $ca_dir/ca-cert.serial        \
-        -CA $ca_cert_file                       \
-        -CAkey $ca_key_file                     \
-        -in $server_csr_file -req               \
-        -out $server_cert_file
-}
-
-# create client signing request, given client key
-function openssl_client_csr()
-{
-  client_key_file=$1
-  client_csr_file=$2
-  dir=$(dirname $client_csr_file)
-  client_name=$3
-
-  cat >$dir/client-csr.cfg <<EOT
-[ req ]
-distinguished_name     = req_distinguished_name
-attributes             = req_attributes
-prompt                 = no
-output_password        = mypass
-req_extensions         = x509v3
-
-[ req_distinguished_name ]
-C                      = "DE"
-ST                     = "Berlin"
-L                      = "Berlin"
-O                      = "SUSE Customer"
-OU                     = "IS&T"
-CN                     = "$client_name"
-emailAddress           = "webmaster@$client_name"
-
-[ x509v3 ]
-subjectAltName         = DNS:$client_name
-nsComment              = "test client certificate"
-nsCertType             = client
-
-[ req_attributes ]
-challengePassword      = $RANDOM
-EOT
-
-  openssl req -config $dir/client-csr.cfg -new -key $client_key_file -out $client_csr_file
-}
-
-# create client certificate, given CA key and certificate
-# client CSR and name
-function openssl_client_cert()
-{
-  ca_cert_file=$1
-  ca_dir=$(dirname $ca_cert_file)
-  ca_key_file=$2
-  client_csr_file=$3
-  client_cert_file=$4
-  dir=$(dirname $client_cert_file)
-  client_name=$5
-
-  [ -f $ca_dir/ca-cert.serial ] || echo 01 >$ca_dir/ca-cert.serial
-  cat >$dir/client-cert.cfg <<EOT
-extensions = x509v3
-[ x509v3 ]
-subjectAltName         = DNS:$client_name
-nsComment              = "test client certificate"
-nsCertType             = client
-EOT
-openssl x509                                    \
-        -extfile $dir/client-cert.cfg           \
-        -days $((365*3))                        \
-        -CAserial $ca_dir/ca-cert.serial           \
-        -CA $ca_cert_file                       \
-        -CAkey $ca_key_file                     \
-        -in $client_csr_file -req               \
-        -out $client_cert_file
+  echo Generating entity certificate
+  echo -----------------------------
+  openssl ca -batch -config $dir/ca/openssl.conf -in $dir/$entity_name/my.csr -out $dir/$entity_name/my.crt
+  echo --- Done.
 }
 
 #
@@ -190,58 +160,14 @@ openssl x509                                    \
 # of certificates afterwards, if I understand correctly.
 # https://blog.didierstevens.com/2013/05/08/howto-make-your-own-cert-and-revocation-list-with-openssl/
 
-function openssl_ca_create_conf()
-{
-  ca_cert_file=$1
-  ca_dir=$(dirname $ca_cert_file)
-  ca_key_file=$2
-  ca_crl_file=$3
-  dir=$(dirname $ca_crl_file)
-
-  mkdir -p $dir/ca
-
-  [ -f $ca_dir/ca-cert.serial ] || echo 01 >$ca_dir/ca-cert.serial
-  cat >$dir/ca/ca.conf <<EOT
-[ ca ]
-default_ca      = CA_default            # The default ca section
-
-[ CA_default ]
-
-dir            = $dir/ca               # top dir
-database       = $dir/ca/certindex     # index file.
-new_certs_dir  = $dir/ca/newcerts      # new certs dir
- 
-certificate    = $ca_cert_file         # The CA cert
-serial         = $ca_dir/ca-cert.serial# serial no file
-private_key    = $ca_key_file          # CA private key
-crlnumber      = $dir/ca/crlnumber     # CRL serial number
- 
-default_days   = 365                   # how long to certify for
-default_crl_days= 30                   # how long before next CRL
-default_md     = sha1                  # md to use
-
-policy         = policy_any            # default policy
-
-[ policy_any ]
-countryName            = supplied
-stateOrProvinceName    = optional
-organizationName       = optional
-organizationalUnitName = optional
-commonName             = supplied
-emailAddress           = optional
-EOT
-
-  touch $dir/ca/certindex
-  touch $dir/ca/certindex.attr
-  echo 01 > $dir/ca/crlnumber  
-}
 
 # add a certificate to CRL
 function openssl_ca_revoke_cert()
 {
-  ca_crl_file=$1
-  revoke_cert_file=$2
-  openssl ca -config $dir/ca/ca.conf -revoke $revoke_cert_file
-  openssl ca -config $dir/ca/ca.conf -gencrl -out $ca_crl_file
+  dir=$1
+  entity_name=$2
+  openssl ca -config $dir/ca/openssl.conf -revoke $dir/$entity_name/my.crt
+  openssl ca -config $dir/ca/openssl.conf -gencrl -out $dir/ca/my.crl
 }
+
 
