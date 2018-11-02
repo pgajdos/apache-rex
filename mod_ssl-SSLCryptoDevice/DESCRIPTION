@@ -1,1 +1,1 @@
-Demonstrate SSLCryptoDevice directive of ssl module.
+A clone of mod_ssl-basic, but with defining SSLCryptoDevice.

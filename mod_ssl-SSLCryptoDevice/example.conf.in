@@ -1,3 +1,5 @@
+ServerName aserver.suse.cz
+
 <IfVersion >= 2.4.2>
   DefaultRuntimeDir @AREX_RUN_DIR@/run
 </IfVersion>
@@ -9,8 +11,8 @@ SSLEngine             on
 
 SSLCryptoDevice       @AREX_AN_OPENSSL_ENGINE@
 
-SSLCertificateFile    @AREX_RUN_DIR@/test-server.crt
-SSLCertificateKeyFile @AREX_RUN_DIR@/test-server.key
+SSLCertificateFile    @AREX_RUN_DIR@/aserver.suse.cz/my.crt
+SSLCertificateKeyFile @AREX_RUN_DIR@/aserver.suse.cz/private.key
 
 SSLSessionCache         shmcb:@AREX_RUN_DIR/ssl_scache(512000)
 SSLSessionCacheTimeout  300

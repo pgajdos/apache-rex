@@ -1,3 +1,16 @@
-# this need to be done before apache start
-cp test-server.key test-server.crt $AREX_RUN_DIR
+#
+# create CA certificate and SERVER certificate
+#
+. ../lib/openssl
+echo Setup CA
+echo ~~~~~~~~
+openssl_setup_ca $AREX_RUN_DIR
+echo
+echo Setup SERVER 
+echo ~~~~~~~~~~~~
+openssl_setup_entity $AREX_RUN_DIR aserver.suse.cz
+echo
+#
+# create runtime dir, see DefaultRuntimeDir directive
+#
 mkdir -p $AREX_RUN_DIR/run
