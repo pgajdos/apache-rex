@@ -31,8 +31,8 @@ echo Revoking certificate for aserver.suse.cz
 echo ----------------------------------------
 openssl_ca_revoke_cert $AREX_RUN_DIR aserver.suse.cz
 echo
-echo Restarting OCSP responder restart
-echo ---------------------------------
+echo Restarting OCSP responder
+echo -------------------------
 echo -n 'Stopping OCSP responder ... '
 openssl_ocsp_responder_stop && echo 'done.' || echo 'FAILED.'
 echo -n 'Starting OCSP responder daemon .. '
