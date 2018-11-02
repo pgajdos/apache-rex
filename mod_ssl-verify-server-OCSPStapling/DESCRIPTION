@@ -1,0 +1,2 @@
+Check the server has a valid certificate via OCSP
+Stampling cache provided by HTTPD.
