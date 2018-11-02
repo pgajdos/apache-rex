@@ -6,7 +6,7 @@ echo 'Test SSL, restricted area' > $AREX_DOCUMENT_ROOT/index.html
 
 echo -n 'Starting OCSP responder daemon .. '
 openssl_ocsp_responder_start $AREX_RUN_DIR
-ocspr_pid=$(get_pid $AREX_OCSP_PORT)
+ocspr_pid=$(get_pid_port $AREX_OCSP_PORT)
 if [ -z "$ocspr_pid" ]; then
   echo FAILED.
   exit 1

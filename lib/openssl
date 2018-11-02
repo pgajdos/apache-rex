@@ -183,14 +183,14 @@ function openssl_ocsp_responder_start()
                -CA $dir/ca/my.crt \
                -text &> $dir/ocsp-responder.log &
   sleep 1
-  echo $(get_pid $AREX_OCSP_PORT) > $dir/ocsp-responder.pid
+  echo $(get_pid_port $AREX_OCSP_PORT) > $dir/ocsp-responder.pid
 }
 
 # stop OCSP responder
 function openssl_ocsp_responder_stop()
 {
   pid=$(cat $dir/ocsp-responder.pid)
-  return $(kill_pid $pid $AREX_OCSP_PORT)
+  return $(kill_pid_port $pid $AREX_OCSP_PORT)
 }
 
 # get a status of the certificate of an entity

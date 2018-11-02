@@ -20,6 +20,6 @@ diff result-with-proxy result-without-proxy || exit_code=1
 
 # stop the websocket server
 echo -n 'Stopping spawn-fcgi ... '
-kill_pid $(cat $AREX_RUN_DIR/ws-server-pid) $AREX_PORT1 && echo 'done.' || echo 'FAILED.'
+kill_pid_port $(cat $AREX_RUN_DIR/ws-server-pid) $AREX_PORT1 && echo 'done.' || echo 'FAILED.'
 
 exit $exit_code

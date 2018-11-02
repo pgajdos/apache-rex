@@ -32,6 +32,6 @@ curl -s http://localhost:$AREX_PORT/welcome.php | grep 'HELLO FROM PHP' || exit_
 # stop php-fpm server
 echo
 echo -n 'Stopping php-fpm ... '
-kill_pid $(cat $AREX_RUN_DIR/php-fpm.pid) $AREX_FCGI_PORT && echo 'done.' || echo 'FAILED.'
+kill_pid_port $(cat $AREX_RUN_DIR/php-fpm.pid) $AREX_FCGI_PORT && echo 'done.' || echo 'FAILED.'
 
 exit $exit_code

@@ -25,6 +25,6 @@ grep 'authenticating puskvorec' $AREX_RUN_DIR/error_log || exit_code=2
 grep 'user puskvorec: authentication failure.*Password Mismatch' $AREX_RUN_DIR/error_log || exit_code=2
 
 echo -n 'Stopping spawn-fcgi ... '
-kill_pid $(cat $AREX_RUN_DIR/spawn-fcgi.pid) $AREX_FCGI_PORT && echo 'done.' || echo 'FAILED.'
+kill_pid_port $(cat $AREX_RUN_DIR/spawn-fcgi.pid) $AREX_FCGI_PORT && echo 'done.' || echo 'FAILED.'
 
 exit $exit_code
