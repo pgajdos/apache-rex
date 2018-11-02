@@ -1,5 +1,7 @@
 exit_code=0
 
+. ../lib/processman
+
 # http://events.linuxfoundation.org/sites/events/files/slides/AC2014-FastCGI.pdf
 
 # run fcgi application via spawn-fcgi
@@ -12,6 +14,7 @@ echo
 echo "[1] request is proxied to fcgi application"
 curl -s http://localhost:$AREX_PORT/app/?a=true | grep 'QUERY_STRING = a=true' || exit_code=1
 
-kill -TERM $(cat $AREX_RUN_DIR/spawn-fcgi.pid)
+echo -n 'Stopping spawn-fcgi ... '
+kill_pid $(cat $AREX_RUN_DIR/spawn-fcgi.pid) $AREX_FCGI_PORT && echo 'done.' || echo 'FAILED.'
 
 exit $exit_code

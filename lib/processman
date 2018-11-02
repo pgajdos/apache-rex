@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# get pid that listen on a port
+function get_pid()
+{
+  port=$1
+  lsof -i | grep ":$port (LISTEN)" | sed 's:[^ ]\+[ ]\+\([0-9]\+\).*:\1:'
+}
+
+# kill the pid that listens on port
+function kill_pid()
+{
+  pid=$1
+  port=$2
+  kill -TERM $pid 
+  sleep 1
+  lsof -i | grep ":$port (LISTEN)" && return 1 || return 0
+}
