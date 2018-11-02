@@ -16,7 +16,7 @@ echo -n 'Checking the OCSP responder is working:'
 echo " $(openssl_ocsp_cert_status $AREX_RUN_DIR aserver.suse.cz)"
 echo
 
-echo "[1] server has valid certificate"
+echo "[1] server has a valid certificate"
 status=$(openssl_ocsp_cert_status $AREX_RUN_DIR aserver.suse.cz)
 echo "Certificate is $status, let us do curl!"
 curl -s --cacert $AREX_RUN_DIR/ca/my.crt \
@@ -45,7 +45,7 @@ fi
 echo $ocspr_pid
 echo
 
-echo "[2] server has revoked certificate"
+echo "[2] server has a revoked certificate"
 status=$(openssl_ocsp_cert_status $AREX_RUN_DIR aserver.suse.cz)
 echo "Do not trust this server, certificate is $status!"
 [ $status == 'revoked' ] || exit_code=2
