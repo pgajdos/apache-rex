@@ -115,6 +115,7 @@ mod_ssl-basic
 mod_ssl-verify-client
 mod_ssl-CRL
 mod_ssl-SSLCryptoDevice
+mod_ssl-verify-client-OCSP
 mod_sed-basic
 mod_deflate-basic
 mod_charset_lite-basic
