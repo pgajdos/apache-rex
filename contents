@@ -114,6 +114,7 @@ mod_userdir-basic
 mod_ssl-basic
 mod_ssl-SSLCryptoDevice
 mod_ssl-verify-server-CRL
+mod_ssl-verify-server-OCSP
 mod_ssl-verify-client
 mod_ssl-verify-client-CRL
 mod_ssl-verify-client-OCSP
