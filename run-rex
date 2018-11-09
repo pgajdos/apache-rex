@@ -138,6 +138,11 @@ function curl_have_resolve()
   curl -h | grep -q '\--resolve' && echo -n 1 || echo -n 0
 }
 
+function curl_have_cert_status()
+{
+  curl -h | grep -q '\--cert-status' && echo -n 1 || echo -n 0
+}
+
 function sed_command()
 {
   which sed 2>/dev/null
@@ -270,6 +275,8 @@ function check_system()
   echod -n '.'
   export AREX_CURL_HAVE_RESOLVE=$(curl_have_resolve)
   echod -n '.'
+  export AREX_CURL_HAVE_CERT_STATUS=$(curl_have_cert_status)
+  echod -n '.'
   export AREX_AN_OPENSSL_ENGINE=$(openssl_an_engine)
   echod -n '.'
   export AREX_OPENSSL_HAVE_ALPN=$(openssl_have_alpn)
@@ -293,6 +300,7 @@ function check_system()
   echod "httxt2dbm command ........................ $HTTXT2DBM_COMMAND"
   echod "curl command ............................. $CURL_COMMAND"
   echod "curl have --resolve switch ............... $AREX_CURL_HAVE_RESOLVE"
+  echod "curl have --cert-status switch ........... $AREX_CURL_HAVE_CERT_STATUS"
   echod "sed command .............................. $AREX_SED_COMMAND"
   echod "sqlite command ........................... $SQLITE_COMMAND"
   echod "ps command ............................... $PS_COMMAND"
