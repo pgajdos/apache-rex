@@ -4,7 +4,7 @@ exit_code=0
 
 # https://wiki.apache.org/httpd/PHP-FPM
 
-echo '<?php print strtoupper("hello from php"); ?>' > $AREX_DOCUMENT_ROOT/welcome.php
+echo '<?php print strtoupper("hello from php fcgi"); ?>' > $AREX_DOCUMENT_ROOT/welcome.php
 
 # start php-fpm server
 echo -n 'Starting php-fpm .. '
@@ -27,7 +27,7 @@ echo $(cat $AREX_RUN_DIR/php-fpm.pid)
 echo
 
 echo "[1] *.php files are proxied to php-fpm daemon"
-curl -s http://localhost:$AREX_PORT/welcome.php | grep 'HELLO FROM PHP' || exit_code=1
+curl -s http://localhost:$AREX_PORT/welcome.php | grep 'HELLO FROM PHP FCGI' || exit_code=1
 
 # stop php-fpm server
 echo
