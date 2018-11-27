@@ -99,7 +99,7 @@ function find_module_symbol()
   # name can be a regular expression, e. g. php[5,7]
   path=$1
   name=$2
-  objdump -T $path | grep "${name}_module" | sed "s:.*\(${name}_module\).*:\1:"
+  objdump -T $path | grep "\s${name}_module$" | sed "s:.*\(${name}_module\).*:\1:"
 }
 
 #
