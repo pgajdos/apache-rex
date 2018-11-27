@@ -85,6 +85,7 @@ function usage()
 
 function find_module()
 {
+  # name can be a regular expression, e. g. php[5,7]
   name=$1
   for mp in $(echo $MODULE_PATH $AREX_RUN_DIR | tr ':' ' '); do
     if [ -e $mp ]; then
@@ -93,6 +94,13 @@ function find_module()
   done | tail -n 1
 }
 
+function find_module_symbol()
+{
+  # name can be a regular expression, e. g. php[5,7]
+  path=$1
+  name=$2
+  objdump -T $path | grep "${name}_module" | sed "s:.*\(${name}_module\).*:\1:"
+}
 
 #
 # SYSTEM CHECK
@@ -106,6 +114,11 @@ function httpd_command()
 function apxs_command()
 {
   which apxs-$HTTPD_MPM apxs2-$HTTPD_MPM apxs apxs2 2>/dev/null | head -n 1
+}
+
+function objdump_command()
+{
+  which objdump 2>/dev/null | head -n 1
 }
 
 function htpasswd_command()
@@ -231,6 +244,9 @@ function check_system()
   APXS_COMMAND=$(apxs_command)
   [ -n "$APXS_COMMAND" ]        && ln -sf $APXS_COMMAND        $RUN_DIR_BASE/bin/apxs
   echod -n '.'
+  OBJDUMP_COMMAND=$(objdump_command)
+  [ -n "$OBJDUMP_COMMAND" ]     && ln -sf $OBJDUMP_COMMAND     $RUN_DIR_BASE/bin/objdump
+  echod -n '.'
   HTPASSWD_COMMAND=$(htpasswd_command)
   [ -n "$HTPASSWD_COMMAND" ]    && ln -sf $HTPASSWD_COMMAND    $RUN_DIR_BASE/bin/htpasswd
   echod -n '.'
@@ -327,13 +343,18 @@ function check_system()
     exit 2
   fi
 
+  if [ -z "$OBJDUMP_COMMAND" ]; then
+    echo 'fatal: objdump binary not found' >&2
+    exit 2
+  fi
+
   if [ -z "$CURL_COMMAND" ]; then
     echo 'fatal: curl binary not found' >&2
     exit 2
   fi
 
-  # take symlinks created in the account
-  export PATH="$PATH:$RUN_DIR_BASE/bin"
+  # take symlinks created into account
+  export PATH="$RUN_DIR_BASE/bin:$PATH"
 }
 
 #
@@ -467,7 +488,12 @@ function load_modules()
     m=$(fix_module_name $m)
     module_path=$(find_module $m)
     echov "Will load module $m ($module_path)"
-    echo "LoadModule ${m}_module $module_path"    >> $conf
+    module_symbol=$(find_module_symbol $module_path $m)
+    if [ -z "$module_symbol" ]; then
+      echo "fatal: ${m}_module symbol not found in $module_path"
+      exit 2
+    fi
+    echo "LoadModule ${module_symbol} $module_path"    >> $conf
   done
 
   for m in $modules_opt; do

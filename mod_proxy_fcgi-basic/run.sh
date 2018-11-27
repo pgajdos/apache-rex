@@ -14,6 +14,7 @@ echo
 echo "[1] request is proxied to fcgi application"
 curl -s http://localhost:$AREX_PORT/app/?a=true | grep 'QUERY_STRING = a=true' || exit_code=1
 
+echo
 echo -n 'Stopping spawn-fcgi ... '
 kill_pid_port $(cat $AREX_RUN_DIR/spawn-fcgi.pid) $AREX_FCGI_PORT && echo 'done.' || echo 'FAILED.'
 
