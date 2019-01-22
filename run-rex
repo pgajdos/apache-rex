@@ -199,7 +199,7 @@ function coredumpctl_command()
 
 function openssl_an_engine()
 {
-  openssl engine | head -n 1 | sed 's:^(\([^()]*\)).*:\1:'
+  openssl engine | grep -v dynamic | head -n 1 | sed 's:^(\([^()]*\)).*:\1:'
 }
 
 function openssl_have_alpn()
