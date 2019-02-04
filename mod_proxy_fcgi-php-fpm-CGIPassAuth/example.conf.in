@@ -1,11 +1,12 @@
-# https://wiki.apache.org/httpd/PHP-FPM
 <Location />
   AuthType Basic
   AuthBasicProvider file
   AuthName "Restricted Area"
   AuthUserFile @AREX_RUN_DIR@/htpasswd
   Require valid-user
+  # https://stackoverflow.com/questions/17018586/apache-2-4-php-fpm-and-authorization-headers
   CGIPassAuth on
 </Location>
+# https://wiki.apache.org/httpd/PHP-FPM
 ProxyPassMatch ^/(.*\.php)$ fcgi://127.0.0.1:@AREX_FCGI_PORT@/@AREX_DOCUMENT_ROOT@/$1
 
