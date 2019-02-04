@@ -2,7 +2,8 @@
 exit_code=0
 
 htpasswd -bc $AREX_RUN_DIR/htpasswd john StrongPassword
-echo '<?php print "Hello $_SERVER['REMOTE_USER']! Your password has leaked: $_SERVER['PHP_AUTH_PW']\n";  ?>' > $AREX_DOCUMENT_ROOT/welcome.php
+echo '<?php print "Hello $_SERVER['REMOTE_USER']! Your password has leaked: $_SERVER['PHP_AUTH_PW']\n";  ?>' \
+  > $AREX_DOCUMENT_ROOT/welcome.php
 
 start_fpm
 
