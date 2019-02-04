@@ -84,6 +84,7 @@ mod_proxy_fcgi-basic
 mod_proxy_fcgi-sock
 mod_php-basic
 mod_proxy_fcgi-php-fpm
+mod_proxy_fcgi-php-fpm-CGIPassAuth
 mod_proxy_scgi-basic
 mod_proxy_wstunnel-basic
 mod_cgi-basic
