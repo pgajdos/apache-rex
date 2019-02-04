@@ -95,9 +95,12 @@ Each example has its own directory, which contains:
   Contains example apache configuration; in example.conf.in will 
   `@VARIABLE_NAME@` be expanded for enumerated variables first to create 
   example.conf.
+* `post-run.sh` (optional)  
+  Shows what has to be done after apache stop. It is dual to `pre-run.sh`. 
+  Return value of `post-run.sh` is not checked.
 * `pre-run.sh` (optional)  
   Shows what has to be done before apache start (e. g. place test ssl 
-  certificate on correct place). `pre-run.sh` exits `0` in any case.
+  certificate on correct place). `pre-run.sh` return value is not checked.
 * `run.sh` (required)  
   Determines an example flow. Script exits `0` in case whole example passed
   or number of failed subexample. If there are more subexamples failing, 
