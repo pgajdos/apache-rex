@@ -7,8 +7,13 @@ echo '<?php print "Hey $_SERVER['REMOTE_USER']! Your password has leaked: $_SERV
 
 start_fpm
 
-echo "[1] REMOTE_USER is passed to php script"
-curl -s -u john:StrongPassword http://localhost:$AREX_PORT/welcome.php | grep 'Hey john' || exit_code=1
+echo "[1] credentials are passed to php script"
+curl -s -u john:StrongPassword http://localhost:$AREX_PORT1/welcome.php \
+  | grep 'Hey john! Your password has leaked: StrongPassword' || exit_code=1
+
+echo "[2] credentials are not passed to php script"
+curl -s -u john:StrongPassword http://localhost:$AREX_PORT2/welcome.php \
+  | grep 'Hey john! Your password has leaked: $' || exit_code=2
 
 echo
 stop_fpm
