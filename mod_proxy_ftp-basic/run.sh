@@ -21,7 +21,7 @@ EOF
 ######
 echo -n 'Starting vsftpd ... '
 vsftpd $AREX_RUN_DIR/vsftpd.conf&
-sleep 1
+sleep 3
 vsftpd_pid=$(get_pid_port $AREX_FTP_PORT)
 if [ -z "$vsftpd_pid" ]; then
   echo "FAILED."
