@@ -1,1 +1,3 @@
-Demonstrate how to pass authorization headers to php-fpm.
+Demonstrate how to pass authorization headers to php-fpm, via
+CGIPassAuth. See mod_proxy_fcgi-php-fpm-auth-RewriteRule how
+to do via mod_rewrite.
