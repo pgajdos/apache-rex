@@ -1,0 +1,42 @@
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+  DocumentRoot "@AREX_DOCUMENT_ROOT@"
+  ErrorLog "@AREX_RUN_DIR@/error_log-vh1"
+
+  <Location />
+    AuthType Basic
+    AuthBasicProvider file
+    AuthName "Restricted Area"
+    AuthUserFile @AREX_RUN_DIR@/htpasswd
+    Require valid-user
+    # https://stackoverflow.com/questions/17018586/apache-2-4-php-fpm-and-authorization-headers
+    # https://gitlab.ow2.org/lemonldap-ng/lemonldap-ng/issues/1244
+    # CGIPassAuth on
+    RewriteEngine on
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+  </Location>
+
+  ProxyPassMatch ^/(.*\.php)$ fcgi://127.0.0.1:@AREX_FCGI_PORT@/@AREX_DOCUMENT_ROOT@/$1
+</VirtualHost>
+
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
+  DocumentRoot "@AREX_DOCUMENT_ROOT@"
+  ErrorLog "@AREX_RUN_DIR@/error_log-vh2"
+
+  <Location />
+    AuthType Basic
+    AuthBasicProvider file
+    AuthName "Restricted Area"
+    AuthUserFile @AREX_RUN_DIR@/htpasswd
+    Require valid-user
+    # https://stackoverflow.com/questions/17018586/apache-2-4-php-fpm-and-authorization-headers
+    # https://gitlab.ow2.org/lemonldap-ng/lemonldap-ng/issues/1244
+    # CGIPassAuth off
+  </Location>
+
+  ProxyPassMatch ^/(.*\.php)$ fcgi://127.0.0.1:@AREX_FCGI_PORT@/@AREX_DOCUMENT_ROOT@/$1
+</VirtualHost>
+
+

@@ -1,0 +1,2 @@
+Demonstrate how to pass authorization headers to php-fpm, using
+RewriteRule (mimicking CGIPassAuth).
