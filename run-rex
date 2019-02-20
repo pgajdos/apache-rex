@@ -209,7 +209,7 @@ function openssl_have_alpn()
 
 function have_python_tornado()
 {
-  python -c "help('modules');" | grep tornado > /dev/null && echo -n '1' || echo -n '0'
+  python -c "help('modules');" 2>/dev/null | grep tornado > /dev/null && echo -n '1' || echo -n '0'
 }
 
 function have_perl_scgi()
@@ -219,7 +219,7 @@ function have_perl_scgi()
 
 function have_python_websocket_client()
 {
-  python -c "help('modules');" | grep websocket > /dev/null && echo -n '1' || echo -n '0'
+  python -c "help('modules');" 2>/dev/null | grep websocket > /dev/null && echo -n '1' || echo -n '0'
 }
 
 function core_pattern()
