@@ -156,6 +156,11 @@ function curl_have_cert_status()
   curl -h | grep -q '\--cert-status' && echo -n 1 || echo -n 0
 }
 
+function curl_have_http2()
+{
+  ldd $(curl_command) | grep -q 'libnghttp2' && echo -n 1 || echo -n 0
+}
+
 function sed_command()
 {
   which sed 2>/dev/null
@@ -209,7 +214,7 @@ function openssl_have_alpn()
 
 function have_python_tornado()
 {
-  python -c "help('modules');" 2>/dev/null | grep tornado > /dev/null && echo -n '1' || echo -n '0'
+  python -c "help('modules');" | grep tornado > /dev/null && echo -n '1' || echo -n '0'
 }
 
 function have_perl_scgi()
@@ -219,7 +224,7 @@ function have_perl_scgi()
 
 function have_python_websocket_client()
 {
-  python -c "help('modules');" 2>/dev/null | grep websocket > /dev/null && echo -n '1' || echo -n '0'
+  python -c "help('modules');" | grep websocket > /dev/null && echo -n '1' || echo -n '0'
 }
 
 function core_pattern()
@@ -293,6 +298,8 @@ function check_system()
   echod -n '.'
   export AREX_CURL_HAVE_CERT_STATUS=$(curl_have_cert_status)
   echod -n '.'
+  export AREX_CURL_HAVE_HTTP2=$(curl_have_http2)
+  echod -n '.'
   export AREX_AN_OPENSSL_ENGINE=$(openssl_an_engine)
   echod -n '.'
   export AREX_OPENSSL_HAVE_ALPN=$(openssl_have_alpn)
@@ -317,6 +324,7 @@ function check_system()
   echod "curl command ............................. $CURL_COMMAND"
   echod "curl have --resolve switch ............... $AREX_CURL_HAVE_RESOLVE"
   echod "curl have --cert-status switch ........... $AREX_CURL_HAVE_CERT_STATUS"
+  echod "curl have HTTP2 protocol ................. $AREX_CURL_HAVE_HTTP2"
   echod "sed command .............................. $AREX_SED_COMMAND"
   echod "sqlite command ........................... $SQLITE_COMMAND"
   echod "ps command ............................... $PS_COMMAND"
