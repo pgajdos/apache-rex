@@ -1,0 +1,20 @@
+<IfVersion >= 2.4.2>
+  DefaultRuntimeDir @AREX_RUN_DIR@/run
+</IfVersion>
+
+SSLEngine             on
+
+SSLCertificateFile    @AREX_RUN_DIR@/test-server.crt
+SSLCertificateKeyFile @AREX_RUN_DIR@/test-server.key
+
+Protocols h2  http/1.1
+
+# on is the default, just stating explicitely
+H2Push on
+
+ScriptAlias /cgi-bin/ "@AREX_RUN_DIR@/cgi-bin/"
+<Directory "@AREX_RUN_DIR@/cgi-bin/">
+  Options +ExecCGI
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
