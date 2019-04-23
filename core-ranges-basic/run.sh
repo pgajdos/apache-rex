@@ -36,9 +36,11 @@ curl -s -r '50-100' http://localhost:$AREX_PORT/no-ranges/note.txt | grep "$erro
 echo "[6] use 'continue' feature of curl"
 curl -s -o $AREX_RUN_DIR/weather-data.txt http://localhost:$AREX_PORT/weather-data.bufr
 cat $AREX_RUN_DIR/weather-data.txt
-echo 'Hurray!' >> $AREX_DOCUMENT_ROOT/weather-data.bufr
+echo 'Today, there will be snowing whole day.' >> $AREX_DOCUMENT_ROOT/weather-data.bufr
 curl -s -C -  -o $AREX_RUN_DIR/weather-data.txt http://localhost:$AREX_PORT/weather-data.bufr
-cat $AREX_RUN_DIR/weather-data.txt | grep 'Hurray!' || exit_code=6
+cat $AREX_RUN_DIR/weather-data.txt | grep 'snowing' || exit_code=6
+# request repeated on unchanged file
+curl -v -C -  -o $AREX_RUN_DIR/weather-data.txt http://localhost:$AREX_PORT/weather-data.bufr 2>&1 | grep "$error"
 
 exit $exit_code
 
