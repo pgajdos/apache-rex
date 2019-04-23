@@ -191,6 +191,11 @@ function telnet_command()
   which telnet 2>/dev/null | head -n 1
 }
 
+function wget_command()
+{
+  which wget 2>/dev/null | head -n 1
+}
+
 function nc_command()
 {
   which nc 2>/dev/null
@@ -281,6 +286,9 @@ function check_system()
   TELNET_COMMAND=$(telnet_command)
   [ -n "$TELNET_COMMAND" ]      && ln -sf $TELNET_COMMAND     $RUN_DIR_BASE/bin/telnet
   echod -n '.'
+  WGET_COMMAND=$(wget_command)
+  [ -n "$WGET_COMMAND" ]        && ln -sf $WGET_COMMAND       $RUN_DIR_BASE/bin/wget
+  echod -n '.'
   NC_COMMAND=$(nc_command)
   [ -n "$NC_COMMAND" ]      && ln -sf $NC_COMMAND     $RUN_DIR_BASE/bin/nc
   echod -n '.'
@@ -331,6 +339,7 @@ function check_system()
   echod "kill command ............................. $KILL_COMMAND"
   echod "gdb command .............................. $GDB_COMMAND"
   echod "telnet command ........................... $TELNET_COMMAND"
+  echod "wget command ............................. $WGET_COMMAND"
   echod "nc command ............................... $NC_COMMAND"
   echod "coredumpctl command ...................... $COREDUMPCTL_COMMAND"
   echod "openssl engine ........................... $AREX_AN_OPENSSL_ENGINE"

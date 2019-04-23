@@ -37,10 +37,18 @@ echo "[6] use 'continue' feature of curl"
 curl -s -o $AREX_RUN_DIR/weather-data.txt http://localhost:$AREX_PORT/weather-data.bufr
 cat $AREX_RUN_DIR/weather-data.txt
 echo 'Today, there will be snowing whole day.' >> $AREX_DOCUMENT_ROOT/weather-data.bufr
-curl -s -C -  -o $AREX_RUN_DIR/weather-data.txt http://localhost:$AREX_PORT/weather-data.bufr
+curl -v -C -  -o $AREX_RUN_DIR/weather-data.txt http://localhost:$AREX_PORT/weather-data.bufr 2>&1 | grep '^> Range:'
 cat $AREX_RUN_DIR/weather-data.txt | grep 'snowing' || exit_code=6
 # request repeated on unchanged file
 curl -v -C -  -o $AREX_RUN_DIR/weather-data.txt http://localhost:$AREX_PORT/weather-data.bufr 2>&1 | grep "$error"
+
+echo "[7] use 'continue' feature of wget"
+cd $AREX_RUN_DIR
+wget -q -c http://localhost:$AREX_PORT/weather-data.bufr
+echo 'Today, there will be windy whole day.' >> $AREX_DOCUMENT_ROOT/weather-data.bufr
+wget --debug -c http://localhost:$AREX_PORT/weather-data.bufr 2>&1 | grep '^Range:' || exit_code=7
+cat weather-data.bufr
+wget --debug -c http://localhost:$AREX_PORT/weather-data.bufr 2>&1 | grep "$error"  || exit_code=7
 
 exit $exit_code
 
