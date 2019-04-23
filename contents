@@ -1,5 +1,6 @@
 apache-example-framework
 core-chunked-data
+core-ranges-basic
 core-piped-logs
 core-Warning-basic
 core-Error-basic
