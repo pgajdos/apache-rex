@@ -44,6 +44,8 @@ curl -v -C -  -o $AREX_RUN_DIR/weather-data.txt http://localhost:$AREX_PORT/weat
 
 echo "[7] use 'continue' feature of wget"
 cd $AREX_RUN_DIR
+# ensure weather-data.bufr does not exist (essential for the test)
+rm -f weather-data.bufr
 wget -q http://localhost:$AREX_PORT/weather-data.bufr
 cat weather-data.bufr
 echo 'Today, there will be windy whole day.' >> $AREX_DOCUMENT_ROOT/weather-data.bufr
