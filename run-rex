@@ -1,11 +1,44 @@
 #!/bin/bash
 
 #
+# OUTPUT FUNCTIONS
+#
+
+function echov()
+{
+  if [ $VERBOSITY -ge 1 ]; then
+    echo "$@"
+  fi
+}
+
+function echod()
+{
+  if [ $VERBOSITY -ge 2 ]; then
+    echo "$@"
+  fi
+}
+
+#
 # CONFIGURATION
 #
 
 # PATH environment variable for running tests
-PATH="$PATH:/bin/:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
+if [ -n "$BINARY_PATH" ]; then
+   BP=''
+   for bp in $(echo $BINARY_PATH | sed 's@:@ @'); do
+     if [ -e "$bp" ]; then
+       BP="$BP:$(readlink -f $bp)"
+     else
+       echo "WARNING: $PWD/$bp" does not exist
+     fi
+   done
+   BINARY_PATH="$BP"
+fi
+echod "BINARY PATH: $BINARY_PATH"
+
+PATH="$BINARY_PATH:/bin/:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
+
+echod "OVERALL BINARY PATH: $PATH"
 
 # used MPM
 if [ -z "$HTTPD_MPM" ]; then
@@ -13,14 +46,29 @@ if [ -z "$HTTPD_MPM" ]; then
 fi
 
 # module PATH
-if [ -z "$MODULE_PATH" ]; then
-  MODULE_PATH="/usr/lib64/apache2:/usr/lib64/apache2-$HTTPD_MPM:/usr/lib/apache2:/usr/lib/apache2-$HTTPD_MPM"
+if [ -n "$MODULE_PATH" ]; then
+   MP=''
+   for mp in $(echo $MODULE_PATH | sed 's@:@ @'); do
+     if [ -e "$mp" ]; then
+       MP="$MP:$(readlink -f $mp)"
+     else
+       echo "WARNING: $PWD/$mp" does not exist
+     fi
+   done
+   MODULE_PATH="$MP"
 fi
+MODULE_PATH="$MODULE_PATH:/usr/lib64/apache2:/usr/lib64/apache2-$HTTPD_MPM:/usr/lib/apache2:/usr/lib/apache2-$HTTPD_MPM"
+echod "MODULES PATH: $MODULE_PATH"
 
 # writeable dir for running the example
 if [ -z "$RUN_DIR_BASE" ]; then
   RUN_DIR_BASE=/tmp/apache-rex/
 fi
+# we will pushd to example dir, thus we need
+# absolute path
+RUN_DIR_BASE=$(readlink -f $RUN_DIR_BASE)
+
+echod "BASE RUN DIR: $RUN_DIR_BASE"
 
 # ports where httpd can listen from (start + 6)
 if [ -z "$HTTP_PORT_START" ]; then
@@ -51,24 +99,11 @@ if [ -z "$VERBOSITY" ]; then
   VERBOSITY=0
 fi
 
+echod
+
 #
 # HELPER FUNCTIONS
 #
-
-function echov()
-{
-  if [ $VERBOSITY -ge 1 ]; then
-    echo "$@"
-  fi
-}
-
-function echod()
-{
-  if [ $VERBOSITY -ge 2 ]; then
-    echo "$@"
-  fi
-}
-
 
 function usage()
 {
@@ -201,6 +236,10 @@ function nc_command()
   which nc 2>/dev/null
 }
 
+function python_command()
+{
+  which python3 python 2>/dev/null | head -n 1
+}
 
 function coredumpctl_command()
 {
@@ -245,6 +284,8 @@ function have_systemd_coredump()
 function check_system()
 {
   mkdir -p $RUN_DIR_BASE/bin
+  # take symlinks created into account
+  export PATH="$RUN_DIR_BASE/bin:$PATH"
 
   echod -n "Checking the system "
   echod -n '.'
@@ -290,7 +331,10 @@ function check_system()
   [ -n "$WGET_COMMAND" ]        && ln -sf $WGET_COMMAND       $RUN_DIR_BASE/bin/wget
   echod -n '.'
   NC_COMMAND=$(nc_command)
-  [ -n "$NC_COMMAND" ]      && ln -sf $NC_COMMAND     $RUN_DIR_BASE/bin/nc
+  [ -n "$NC_COMMAND" ]          && ln -sf $NC_COMMAND         $RUN_DIR_BASE/bin/nc
+  echod -n '.'
+  PYTHON_COMMAND=$(python_command)
+  [ -n "$PYTHON_COMMAND" ]      && ln -sf $PYTHON_COMMAND     $RUN_DIR_BASE/bin/python
   echod -n '.'
   COREDUMPCTL_COMMAND=$(coredumpctl_command)
   [ -n "$COREDUMPCTL_COMMAND" ] && ln -sf $COREDUMPCTL_COMMAND $RUN_DIR_BASE/bin/coredumpctl
@@ -312,12 +356,16 @@ function check_system()
   echod -n '.'
   export AREX_OPENSSL_HAVE_ALPN=$(openssl_have_alpn)
   echod -n '.'
-  export AREX_HAVE_PYTHON_TORNADO=$(have_python_tornado)
-  echod -n '.'
+  if [ -n "$PYTHON_COMMAND" ]; then
+    export AREX_HAVE_PYTHON_TORNADO=$(have_python_tornado)
+    echod -n '.'
+  fi
   export AREX_HAVE_PERL_SCGI=$(have_perl_scgi)
   echod -n '.'
-  export AREX_HAVE_PYTHON_WEBSOCKET_CLIENT=$(have_python_websocket_client)
-  echod -n '.'
+  if [ -n "$PYTHON_COMMAND" ]; then
+    export AREX_HAVE_PYTHON_WEBSOCKET_CLIENT=$(have_python_websocket_client)
+    echod -n '.'
+  fi
   export AREX_CORE_PATTERN=$(core_pattern)
   echod -n '.'
   export AREX_HAVE_SYSTEMD_COREDUMP=$(have_systemd_coredump)
@@ -357,21 +405,18 @@ function check_system()
 
   if [ -z "$HTTPD_COMMAND" ]; then
     echo 'fatal: httpd binary not found' >&2
-    exit 2
+    exit 10
   fi
 
   if [ -z "$OBJDUMP_COMMAND" ]; then
     echo 'fatal: objdump binary not found' >&2
-    exit 2
+    exit 10
   fi
 
   if [ -z "$CURL_COMMAND" ]; then
     echo 'fatal: curl binary not found' >&2
-    exit 2
+    exit 10
   fi
-
-  # take symlinks created into account
-  export PATH="$RUN_DIR_BASE/bin:$PATH"
 }
 
 #
@@ -437,13 +482,13 @@ function check_open_ports()
   echod -n "checking that requested ports are not already opened .. " 
   lsof -i > $RUN_DIR_BASE/.opened_ports
 
-  grep -q ":$AREX_PORT (LISTEN)"  $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT is already opened";  exit 2; }
-  grep -q ":$AREX_PORT1 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT1 is already opened"; exit 2; }
-  grep -q ":$AREX_PORT2 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT2 is already opened"; exit 2; }
-  grep -q ":$AREX_PORT3 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT3 is already opened"; exit 2; }
-  grep -q ":$AREX_PORT4 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT4 is already opened"; exit 2; }
-  grep -q ":$AREX_PORT5 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT5 is already opened"; exit 2; }
-  grep -q ":$AREX_PORT6 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT6 is already opened"; exit 2; }
+  grep -q ":$AREX_PORT (LISTEN)"  $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT is already opened";  exit 9; }
+  grep -q ":$AREX_PORT1 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT1 is already opened"; exit 9; }
+  grep -q ":$AREX_PORT2 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT2 is already opened"; exit 9; }
+  grep -q ":$AREX_PORT3 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT3 is already opened"; exit 9; }
+  grep -q ":$AREX_PORT4 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT4 is already opened"; exit 9; }
+  grep -q ":$AREX_PORT5 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT5 is already opened"; exit 9; }
+  grep -q ":$AREX_PORT6 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT6 is already opened"; exit 9; }
 
   echod "done"
   echod
@@ -503,12 +548,13 @@ function load_modules()
 
   for m in $modules; do
     m=$(fix_module_name $m)
-    module_path=$(find_module $m)
+    # ensure we have an absolute path
+    module_path=$(readlink -f $(find_module $m))
     echov "Will load module $m ($module_path)"
     module_symbol=$(find_module_symbol $module_path $m)
     if [ -z "$module_symbol" ]; then
       echo "fatal: ${m}_module symbol not found in $module_path"
-      exit 2
+      exit 8
     fi
     echo "LoadModule ${module_symbol} $module_path"    >> $conf
   done
@@ -700,7 +746,7 @@ function run_example()
   run=$(echo $dir | sed 's:^[0-9]*-::')
 
   # run started
-  cd $dir
+  pushd $dir > /dev/null
 
   echo "==========================================================="
   echo "EXAMPLE $(basename $dir) ($n/$count)"
@@ -823,7 +869,7 @@ function run_example()
 
   echo "==========================================================="
 
-  cd ..
+  popd > /dev/null
 }
 
 function run_examples()
@@ -836,6 +882,8 @@ function run_examples()
 
   count=$(echo $dirs | wc -w)
   n=0
+
+  overall_exit_code=0
 
   # iterate over examples
   for dir in $dirs; do
@@ -855,10 +903,14 @@ function run_examples()
     run_example $dir $n $count
     case $run_result in
       0) passed="$passed$dir " ;;
-      1) skipped="$skipped$dir "   ;;
-      2) failed="$failed$dir "     ;;
+      1) skipped="$skipped$dir "
+         [ $overall_exit_code -lt 1 ] && overall_exit_code=1
+         ;;
+      2) failed="$failed$dir "
+         [ $overall_exit_code -lt 2 ] && overall_exit_code=2
+         ;;
       # should not happen
-      *) echo 'wrong return code from run_example()'; exit 1;;
+      *) echo 'wrong return code from run_example()'; exit 10;;
     esac
   done
 
@@ -877,6 +929,12 @@ function run_examples()
   if [ -n "$skipped" ]; then
     echov "SKIPPED RUNS: $skipped"
   fi
+  echo -n "OVERALL RESULT: "
+  case $overall_exit_code in 
+    0) echo "PASS ($(echo $passed | wc -w) OK)" ;;
+    1) echo "PASS ($(echo $passed | wc -w) OK, $(echo $skipped | wc -w) SKIPPED)" ;;
+    2) echo "FAIL ($(echo $failed | wc -w) KO, $(echo $skipped | wc -w) SKIPPED)" ;;
+  esac
 }
 
 if [ "$1" == "-h" -o "$1" == "--help" -o "$1" == "" ]; then
@@ -893,5 +951,5 @@ prepare_env
 check_open_ports
 run_examples "$dirs"
 
-exit 0
+exit $overall_exit_code
 
