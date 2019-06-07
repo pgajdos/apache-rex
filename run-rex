@@ -6,14 +6,14 @@
 
 function echov()
 {
-  if [ $VERBOSITY -ge 1 ]; then
+  if [ 0$VERBOSITY -ge 1 ]; then
     echo "$@"
   fi
 }
 
 function echod()
 {
-  if [ $VERBOSITY -ge 2 ]; then
+  if [ 0$VERBOSITY -ge 2 ]; then
     echo "$@"
   fi
 }
@@ -66,6 +66,7 @@ if [ -z "$RUN_DIR_BASE" ]; then
 fi
 # we will pushd to example dir, thus we need
 # absolute path
+mkdir -p $RUN_DIR_BASE
 RUN_DIR_BASE=$(readlink -f $RUN_DIR_BASE)
 
 echod "BASE RUN DIR: $RUN_DIR_BASE"
@@ -134,9 +135,23 @@ function find_module_symbol()
   # name can be a regular expression, e. g. php[5,7]
   path=$1
   name=$2
-  objdump -T $path | grep "\s${name}_module$" | sed "s:.*\(${name}_module\).*:\1:"
+  objdump -T $path | grep "[[:space:]]${name}_module$" | sed "s:.*\(${name}_module\).*:\1:"
 }
 
+function command_exists()
+{
+  if [ -x $RUN_DIR_BASE/bin/$1 ]; then
+    return 0
+  fi
+  return 1
+}
+
+function register_command()
+{
+  command_path=$1
+  command=$2
+  [ -n "$command_path" ] && ln -sf $command_path $RUN_DIR_BASE/bin/$command
+}
 #
 # SYSTEM CHECK
 #
@@ -246,6 +261,16 @@ function coredumpctl_command()
   which coredumpctl 2>/dev/null | head -n 1
 }
 
+function openssl_command()
+{
+  which openssl 2>/dev/null
+}
+
+function lsof_command()
+{
+  which lsof 2>/dev/null
+}
+
 function openssl_an_engine()
 {
   openssl engine | grep -v dynamic | head -n 1 | sed 's:^(\([^()]*\)).*:\1:'
@@ -263,7 +288,7 @@ function have_python_tornado()
 
 function have_perl_scgi()
 {
-  perldoc -l "SCGI" 2>&1 > /dev/null && echo -n '1' || echo -n '0'
+  perldoc -l "SCGI" > /dev/null 2>&1 && echo -n '1' || echo -n '0'
 }
 
 function have_python_websocket_client()
@@ -283,61 +308,71 @@ function have_systemd_coredump()
 
 function check_system()
 {
-  mkdir -p $RUN_DIR_BASE/bin
+  if [ -d $RUN_DIR_BASE/bin ]; then
+    rm $RUN_DIR_BASE/bin/*
+  else
+    mkdir $RUN_DIR_BASE/bin
+  fi
   # take symlinks created into account
   export PATH="$RUN_DIR_BASE/bin:$PATH"
 
   echod -n "Checking the system "
   echod -n '.'
   HTTPD_COMMAND=$(httpd_command)
-  [ -n "$HTTPD_COMMAND" ]       && ln -sf $HTTPD_COMMAND       $RUN_DIR_BASE/bin/httpd
+  register_command "$HTTPD_COMMAND"       httpd
   echod -n '.'
   APXS_COMMAND=$(apxs_command)
-  [ -n "$APXS_COMMAND" ]        && ln -sf $APXS_COMMAND        $RUN_DIR_BASE/bin/apxs
+  register_command "$APXS_COMMAND"        apxs
   echod -n '.'
   OBJDUMP_COMMAND=$(objdump_command)
-  [ -n "$OBJDUMP_COMMAND" ]     && ln -sf $OBJDUMP_COMMAND     $RUN_DIR_BASE/bin/objdump
+  register_command "$OBJDUMP_COMMAND"     objdump
   echod -n '.'
   HTPASSWD_COMMAND=$(htpasswd_command)
-  [ -n "$HTPASSWD_COMMAND" ]    && ln -sf $HTPASSWD_COMMAND    $RUN_DIR_BASE/bin/htpasswd
+  register_command "$HTPASSWD_COMMAND"    htpasswd
   echod -n '.'
   HTDBM_COMMAND=$(htdbm_command)
-  [ -n "$HTDBM_COMMAND" ]       && ln -sf $HTDBM_COMMAND       $RUN_DIR_BASE/bin/htdbm
+  register_command "$HTDBM_COMMAND"       htdbm
   ROTATELOGS_COMMAND=$(rotatelogs_command)
-  [ -n "$ROTATELOGS_COMMAND" ]  && ln -sf $ROTATELOGS_COMMAND  $RUN_DIR_BASE/bin/rotatelogs
+  register_command "$ROTATELOGS_COMMAND"  rotatelogs
   echod -n '.'
   HTTXT2DBM_COMMAND=$(httxt2dbm_command)
-  [ -n "$HTTXT2DBM_COMMAND" ]   && ln -sf $HTTXT2DBM_COMMAND   $RUN_DIR_BASE/bin/httxt2dbm
+  register_command "$HTTXT2DBM_COMMAND"   httxt2dbm
   echod -n '.'
   CURL_COMMAND=$(curl_command)
-  [ -n "$CURL_COMMAND" ]        && ln -sf $CURL_COMMAND        $RUN_DIR_BASE/bin/curl
+  register_command "$CURL_COMMAND"        curl
   echod -n '.'
   SQLITE_COMMAND=$(sqlite_command)
-  [ -n "$SQLITE_COMMAND" ]      && ln -sf $SQLITE_COMMAND      $RUN_DIR_BASE/bin/sqlite
+  register_command "$SQLITE_COMMAND"      sqlite
   echod -n '.'
   PS_COMMAND=$(ps_command)
-  [ -n "$PS_COMMAND" ]          && ln -sf $PS_COMMAND          $RUN_DIR_BASE/bin/ps
+  register_command "$PS_COMMAND"          ps
   echod -n '.'
   KILL_COMMAND=$(kill_command)
-  [ -n "$KILL_COMMAND" ]        && ln -sf $KILL_COMMAND       $RUN_DIR_BASE/bin/kill
+  register_command "$KILL_COMMAND"        kill
   echod -n '.'
   GDB_COMMAND=$(gdb_command)
-  [ -n "$GDB_COMMAND" ]         && ln -sf $GDB_COMMAND        $RUN_DIR_BASE/bin/gdb
+  register_command "$GDB_COMMAND"         gdb
   echod -n '.'
   TELNET_COMMAND=$(telnet_command)
-  [ -n "$TELNET_COMMAND" ]      && ln -sf $TELNET_COMMAND     $RUN_DIR_BASE/bin/telnet
+  register_command  "$TELNET_COMMAND"     telnet
   echod -n '.'
   WGET_COMMAND=$(wget_command)
-  [ -n "$WGET_COMMAND" ]        && ln -sf $WGET_COMMAND       $RUN_DIR_BASE/bin/wget
+  register_command "$WGET_COMMAND"        wget
   echod -n '.'
   NC_COMMAND=$(nc_command)
-  [ -n "$NC_COMMAND" ]          && ln -sf $NC_COMMAND         $RUN_DIR_BASE/bin/nc
+  register_command "$NC_COMMAND"          nc
   echod -n '.'
   PYTHON_COMMAND=$(python_command)
-  [ -n "$PYTHON_COMMAND" ]      && ln -sf $PYTHON_COMMAND     $RUN_DIR_BASE/bin/python
+  register_command "$PYTHON_COMMAND"      python
   echod -n '.'
   COREDUMPCTL_COMMAND=$(coredumpctl_command)
-  [ -n "$COREDUMPCTL_COMMAND" ] && ln -sf $COREDUMPCTL_COMMAND $RUN_DIR_BASE/bin/coredumpctl
+  register_command "$COREDUMPCTL_COMMAND" coredumpctl
+  echod -n '.'
+  OPENSSL_COMMAND=$(openssl_command)
+  register_command "$OPENSSL_COMMAND"     openssl
+  echod -n '.'
+  LSOF_COMMAND=$(lsof_command)
+  register_command "$LSOF_COMMAND"        lsof
   echod -n '.'
   # filter definitions need full path, otherwise
   # it is expected that sed is in the PATH
@@ -352,17 +387,21 @@ function check_system()
   echod -n '.'
   export AREX_CURL_HAVE_HTTP2=$(curl_have_http2)
   echod -n '.'
-  export AREX_AN_OPENSSL_ENGINE=$(openssl_an_engine)
-  echod -n '.'
-  export AREX_OPENSSL_HAVE_ALPN=$(openssl_have_alpn)
-  echod -n '.'
-  if [ -n "$PYTHON_COMMAND" ]; then
+  if command_exists openssl; then
+    export AREX_AN_OPENSSL_ENGINE=$(openssl_an_engine)
+    echod -n '.'
+  fi
+  if command_exists openssl; then
+    export AREX_OPENSSL_HAVE_ALPN=$(openssl_have_alpn)
+    echod -n '.'
+  fi
+  if command_exists python; then
     export AREX_HAVE_PYTHON_TORNADO=$(have_python_tornado)
     echod -n '.'
   fi
   export AREX_HAVE_PERL_SCGI=$(have_perl_scgi)
   echod -n '.'
-  if [ -n "$PYTHON_COMMAND" ]; then
+  if command_exists python; then
     export AREX_HAVE_PYTHON_WEBSOCKET_CLIENT=$(have_python_websocket_client)
     echod -n '.'
   fi
@@ -389,7 +428,10 @@ function check_system()
   echod "telnet command ........................... $TELNET_COMMAND"
   echod "wget command ............................. $WGET_COMMAND"
   echod "nc command ............................... $NC_COMMAND"
+  echod "python command ........................... $PYTHON_COMMAND"
   echod "coredumpctl command ...................... $COREDUMPCTL_COMMAND"
+  echod "openssl command .......................... $OPENSSL_COMMAND"
+  echod "lsof command ............................. $LSOF_COMMAND"
   echod "openssl engine ........................... $AREX_AN_OPENSSL_ENGINE"
   echod "openssl have alpn support ................ $AREX_OPENSSL_HAVE_ALPN"
   echod "system have python-tornado ............... $AREX_HAVE_PYTHON_TORNADO"
@@ -478,19 +520,22 @@ function prepare_env()
 
 function check_open_ports()
 {
-  mkdir -p $RUN_DIR_BASE
   echod -n "checking that requested ports are not already opened .. " 
-  lsof -i > $RUN_DIR_BASE/.opened_ports
+  if ! command_exists lsof; then
+    echod "lsof does not exist, could not check"
+  else
+    lsof -i > $RUN_DIR_BASE/.opened_ports
 
-  grep -q ":$AREX_PORT (LISTEN)"  $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT is already opened";  exit 9; }
-  grep -q ":$AREX_PORT1 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT1 is already opened"; exit 9; }
-  grep -q ":$AREX_PORT2 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT2 is already opened"; exit 9; }
-  grep -q ":$AREX_PORT3 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT3 is already opened"; exit 9; }
-  grep -q ":$AREX_PORT4 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT4 is already opened"; exit 9; }
-  grep -q ":$AREX_PORT5 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT5 is already opened"; exit 9; }
-  grep -q ":$AREX_PORT6 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT6 is already opened"; exit 9; }
-
-  echod "done"
+    grep -q ":$AREX_PORT (LISTEN)"  $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT is already opened";  exit 9; }
+    grep -q ":$AREX_PORT1 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT1 is already opened"; exit 9; }
+    grep -q ":$AREX_PORT2 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT2 is already opened"; exit 9; }
+    grep -q ":$AREX_PORT3 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT3 is already opened"; exit 9; }
+    grep -q ":$AREX_PORT4 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT4 is already opened"; exit 9; }
+    grep -q ":$AREX_PORT5 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT5 is already opened"; exit 9; }
+    grep -q ":$AREX_PORT6 (LISTEN)" $RUN_DIR_BASE/.opened_ports && { echo "fatal: $AREX_PORT6 is already opened"; exit 9; }
+ 
+    echod "done"
+  fi
   echod
 }
 
