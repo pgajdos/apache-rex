@@ -50,6 +50,7 @@ mod_dir-basic
 mod_dir-FallbackResource
 mod_autoindex-basic
 mod_auth_core-basic
+mod_auth_core-env
 mod_alias-basic
 mod_status-basic
 mod_status-ExtendedStatus-basic

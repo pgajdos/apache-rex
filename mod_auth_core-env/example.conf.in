@@ -1,0 +1,15 @@
+SetEnvIf User-Agent "^Wget.*" no_way
+<Directory "@AREX_DOCUMENT_ROOT@">
+  <IfVersion < 2.3.0>
+     Order Allow,Deny
+     Allow from all
+     Deny from env=no_way
+  </IfVersion>
+  <IfVersion >= 2.3.0>
+     <RequireAll>
+       Require all granted
+       Require not env no_way
+     </RequireAll>
+  </IfVersion>
+</Directory>
+
