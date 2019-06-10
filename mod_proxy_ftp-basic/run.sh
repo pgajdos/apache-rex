@@ -16,6 +16,8 @@ listen_port=$AREX_FTP_PORT
 run_as_launching_user=YES
 xferlog_enable=YES
 vsftpd_log_file=$AREX_RUN_DIR/vsftpd.log
+# https://wiki.archlinux.org/index.php/Very_Secure_FTP_Daemon#vsftpd:_Error_421_Service_not_available,_remote_server_has_closed_connection
+seccomp_sandbox=NO
 EOF
 
 ######
