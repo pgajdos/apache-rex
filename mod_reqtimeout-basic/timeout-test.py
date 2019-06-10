@@ -41,21 +41,21 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((host, port))
 
 try:
-    s.send("POST {0} HTTP/1.1\r\n".format(uri))
-    s.send("Host: {0}:{1}\r\n".format(host, port))
-    s.send("User-Agent: curl/7.47.0\r\n")
-    s.send("Accept: */*\r\n")
-    s.send("Content-Length: {0}\r\n".format(len(body)+1))
+    s.send("POST {0} HTTP/1.1\r\n".format(uri).encode())
+    s.send("Host: {0}:{1}\r\n".format(host, port).encode())
+    s.send("User-Agent: curl/7.47.0\r\n".encode())
+    s.send("Accept: */*\r\n".encode())
+    s.send("Content-Length: {0}\r\n".format(len(body)+1).encode())
     if dtype == 'header':
         time.sleep(delay)
-    s.send("\r\n")
+    s.send("\r\n".encode())
     if dtype == 'body':
         time.sleep(delay)
-    s.send(body + "\r\n")
-except socket.error, e:
-    print "(INTENDED) Socket Error: ", e
+    s.send((body + "\r\n").encode())
+except socket.error as e:
+    print("(INTENDED) Socket Error: ", e)
 
 data = s.recv(1024)
-print data
+print(data)
 s.close()
 
