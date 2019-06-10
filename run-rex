@@ -271,6 +271,16 @@ function lsof_command()
   which lsof 2>/dev/null
 }
 
+function vsftpd_command()
+{
+  which vsftpd 2>/dev/null
+}
+
+function vsftpd_version()
+{
+  vsftpd -v 0>&1 | sed 's:.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*:\1:' | tr -d '.'
+}
+
 function openssl_an_engine()
 {
   openssl engine | grep -v dynamic | head -n 1 | sed 's:^(\([^()]*\)).*:\1:'
@@ -374,6 +384,9 @@ function check_system()
   LSOF_COMMAND=$(lsof_command)
   register_command "$LSOF_COMMAND"        lsof
   echod -n '.'
+  VSFTPD_COMMAND=$(vsftpd_command)
+  register_command "$VSFTPD_COMMAND"      vsftpd
+  echod -n '.'
   # filter definitions need full path, otherwise
   # it is expected that sed is in the PATH
   export AREX_SED_COMMAND=$(sed_command)
@@ -408,6 +421,10 @@ function check_system()
   export AREX_CORE_PATTERN=$(core_pattern)
   echod -n '.'
   export AREX_HAVE_SYSTEMD_COREDUMP=$(have_systemd_coredump)
+  if command_exists vsftpd; then
+    echod -n '.'
+    export AREX_VSFTPD_VERSION=$(vsftpd_version)
+  fi
   echod ' done.'
   
   echod "httpd command ............................ $HTTPD_COMMAND"
@@ -431,9 +448,11 @@ function check_system()
   echod "python command ........................... $PYTHON_COMMAND"
   echod "coredumpctl command ...................... $COREDUMPCTL_COMMAND"
   echod "openssl command .......................... $OPENSSL_COMMAND"
-  echod "lsof command ............................. $LSOF_COMMAND"
   echod "openssl engine ........................... $AREX_AN_OPENSSL_ENGINE"
   echod "openssl have alpn support ................ $AREX_OPENSSL_HAVE_ALPN"
+  echod "lsof command ............................. $LSOF_COMMAND"
+  echod "vsftpd command ........................... $VSFTPD_COMMAND"
+  echod "vsftpd version ........................... $AREX_VSFTPD_VERSION"
   echod "system have python-tornado ............... $AREX_HAVE_PYTHON_TORNADO"
   echod "system have perl-scgi .................... $AREX_HAVE_PERL_SCGI"
   echod "system have python-websocket-client ...... $AREX_HAVE_PYTHON_WEBSOCKET_CLIENT"
