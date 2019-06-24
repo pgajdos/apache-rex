@@ -1,6 +1,6 @@
 exit_code=0
 
-echo "Testing only the server start with the config."
+echo "Testing the server start with the config only."
 
 exit $exit_code
 
