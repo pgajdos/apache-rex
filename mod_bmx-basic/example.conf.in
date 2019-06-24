@@ -1,0 +1,17 @@
+BMXVHostDBMFilename @AREX_RUN_DIR@/bmx.dbm
+
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+  ServerName   avirtualhost
+  DocumentRoot "@AREX_DOCUMENT_ROOT@-virtualhost"
+  ErrorLog "@AREX_RUN_DIR@/error_log-virtualhost"
+  <Directory "@AREX_DOCUMENT_ROOT@-virtualhost">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+<Location /bmx>
+  SetHandler bmx-handler
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Location>
+
