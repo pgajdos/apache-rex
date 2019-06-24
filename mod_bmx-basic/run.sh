@@ -11,7 +11,6 @@ curl -s http://localhost:$AREX_PORT/no.html > $AREX_RUN_DIR/404-response.txt
 curl -s http://localhost:$AREX_PORT1/no.html > /dev/null
 
 curl -s http://localhost:$AREX_PORT/bmx > $AREX_RUN_DIR/bmx.out
-cat $AREX_RUN_DIR/bmx.out
 
 echo "[1] show basic information"
 grep 'ServerName'    $AREX_RUN_DIR/bmx.out || exit_code=1
