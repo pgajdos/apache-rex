@@ -1,0 +1,9 @@
+LogLevel debug
+FcgidIPCDir           @AREX_RUN_DIR@/ipc
+FcgidProcessTableFile @AREX_RUN_DIR@/ipc/shm
+<Directory @AREX_DOCUMENT_ROOT@/fcgi-bin/>
+  SetHandler fcgid-script
+  Options +ExecCGI
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
