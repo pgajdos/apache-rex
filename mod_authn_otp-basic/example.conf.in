@@ -1,0 +1,9 @@
+<Directory @AREX_DOCUMENT_ROOT@/protected>
+  AuthType          basic
+  AuthName          "Very Secret Area"
+  AuthBasicProvider OTP
+  Require           valid-user
+  OTPAuthUsersFile  @AREX_RUN_DIR@/users-file
+  OTPAuthMaxLinger  2
+</Directory>
+
