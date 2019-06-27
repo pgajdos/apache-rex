@@ -1,0 +1,9 @@
+<Location /protected/>
+  AuthTokenSecret   "secret"
+  AuthTokenPrefix   /protected/
+  AuthTokenTimeout  60
+</Location>
+<Directory @AREX_DOCUMENT_ROOT@/protected>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
