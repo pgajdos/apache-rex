@@ -1,0 +1,11 @@
+ServerName gnutls.server.org
+
+LogLevel gnutls:debug
+GnuTLSEnable on
+GnuTLSPriorities      NORMAL
+GnuTLSKeyFile         @AREX_RUN_DIR@/gnutls.server.org/private.key
+GnuTLSCertificateFile @AREX_RUN_DIR@/gnutls.server.org/my.crt
+<Directory @AREX_DOCUMENT_ROOT@>
+  Require local
+</Directory>
+
