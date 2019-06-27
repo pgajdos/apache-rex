@@ -1,0 +1,9 @@
+LogLevel debug
+<Directory @AREX_DOCUMENT_ROOT@>
+  BandWidthModule on
+  ForceBandWidthModule on
+  BandWidth       all 100
+  MinBandWidth    all -1
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
