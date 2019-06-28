@@ -1,0 +1,11 @@
+NSSEngine on
+NSSNickname Server-Cert
+NSSCertificateDatabase @AREX_RUN_DIR@/mod_nss.d
+NSSPassPhraseDialog file:@AREX_RUN_DIR@/password.conf
+NSSPassPhraseHelper /tmp/apache-rex/bin/nss_pcache
+NSSCipherSuite +ecdhe_ecdsa_aes_128_gcm_sha,+ecdh_ecdsa_aes_128_gcm_sha,+ecdhe_rsa_aes_256_sha,+ecdh_rsa_aes_256_sha,+ecdhe_rsa_aes_128_gcm_sha,+ecdh_rsa_aes_128_gcm_sha,+ecdhe_rsa_aes_128_sha,+ecdh_rsa_aes_128_sha,+rsa_aes_128_gcm_sha,+rsa_aes_256_sha,+rsa_aes_128_sha,+rsa_aes_128_sha256,+rsa_aes_256_sha256
+NSSProtocol TLSv1.0,TLSv1.1,TLSv1.2
+<Directory @AREX_DOCUMENT_ROOT@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+

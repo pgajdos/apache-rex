@@ -1,0 +1,6 @@
+Created by gencert as is in 1.0.18, just with following change:
+
+# bend gencert to use ServerName of apache test instance
+cp %{buildroot}%{_sbindir}/gencert .
+sed -i 's:FQDN=`getFQDN`:FQDN=test:' gencert
+
