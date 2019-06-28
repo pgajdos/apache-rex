@@ -266,6 +266,11 @@ function openssl_command()
   which openssl 2>/dev/null
 }
 
+function nss_pcache_command()
+{
+  which nss_pcache 2>/dev/null
+}
+
 function lsof_command()
 {
   which lsof 2>/dev/null
@@ -381,6 +386,9 @@ function check_system()
   OPENSSL_COMMAND=$(openssl_command)
   register_command "$OPENSSL_COMMAND"     openssl
   echod -n '.'
+  NSS_PCACHE_COMMAND=$(nss_pcache_command)
+  register_command "$NSS_PCACHE_COMMAND"  nss_pcache
+  echod -n '.'
   LSOF_COMMAND=$(lsof_command)
   register_command "$LSOF_COMMAND"        lsof
   echod -n '.'
@@ -450,6 +458,7 @@ function check_system()
   echod "openssl command .......................... $OPENSSL_COMMAND"
   echod "openssl engine ........................... $AREX_AN_OPENSSL_ENGINE"
   echod "openssl have alpn support ................ $AREX_OPENSSL_HAVE_ALPN"
+  echod "nss_pcache command ....................... $NSS_PCACHE_COMMAND"
   echod "lsof command ............................. $LSOF_COMMAND"
   echod "vsftpd command ........................... $VSFTPD_COMMAND"
   echod "vsftpd version ........................... $AREX_VSFTPD_VERSION"
