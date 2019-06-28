@@ -1,0 +1,9 @@
+DefineExternalAuth dummy_auth pipe @AREX_RUN_DIR@/dummy-auth
+<Directory @AREX_DOCUMENT_ROOT@/protected>
+  AuthType Basic
+  AuthName "Restricted Area"
+  AuthBasicProvider external
+  AuthExternal dummy_auth
+  Require valid-user
+</Directory>
+
