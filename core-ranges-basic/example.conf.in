@@ -6,3 +6,19 @@
   MaxRanges none
 </Directory>
 
+MaxRanges 1
+SetEnvIf Range "-$" unlimited_ranges
+<Directory "@AREX_DOCUMENT_ROOT@/no-unlimited-ranges/">
+  <IfVersion < 2.3.0>
+     Order Allow,Deny
+     Allow from all
+     Deny from env=unlimited_ranges
+  </IfVersion>
+  <IfVersion >= 2.3.0>
+     <RequireAll>
+       Require all granted
+       Require not env unlimited_ranges
+     </RequireAll>
+  </IfVersion>
+</Directory>
+

@@ -6,6 +6,8 @@ error='416 Requested Range Not Satisfiable'
 echo $msg > $AREX_DOCUMENT_ROOT/weather-data.bufr
 mkdir -p $AREX_DOCUMENT_ROOT/no-ranges/
 echo "$note" > $AREX_DOCUMENT_ROOT/no-ranges/note.txt
+mkdir -p $AREX_DOCUMENT_ROOT/no-unlimited-ranges/
+echo "$msg $note" > $AREX_DOCUMENT_ROOT/no-unlimited-ranges/data.txt
 
 echo "[1] get document in 10-byte chunks"
 lbound=0
@@ -52,6 +54,12 @@ echo 'Today, there will be windy whole day.' >> $AREX_DOCUMENT_ROOT/weather-data
 wget --debug -c http://localhost:$AREX_PORT/weather-data.bufr 2>&1 | grep '^Range:' || exit_code=7
 cat weather-data.bufr | grep 'windy' || exit_code=7
 wget --debug -c http://localhost:$AREX_PORT/weather-data.bufr 2>&1 | grep "$error"  || exit_code=7
+
+echo "[8] forbid unlimited ranges"
+# last ten chars
+curl -s -r '-10' http://localhost:$AREX_PORT/no-unlimited-ranges/data.txt | grep 'ifferent.'     || exit_code=8
+# unlimited forbidden
+curl -s -r '10-'  http://localhost:$AREX_PORT/no-unlimited-ranges/data.txt | grep '403 Forbidden' || exit_code=8
 
 exit $exit_code
 
