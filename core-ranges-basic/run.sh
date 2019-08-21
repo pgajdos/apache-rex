@@ -59,7 +59,7 @@ echo "[8] forbid unlimited ranges"
 # last ten chars
 curl -s -r '-10' http://localhost:$AREX_PORT/no-unlimited-ranges/data.txt | grep 'ifferent.'     || exit_code=8
 # unlimited forbidden
-curl -s -r '10-'  http://localhost:$AREX_PORT/no-unlimited-ranges/data.txt | grep '403 Forbidden' || exit_code=8
+curl -s -r '10-' http://localhost:$AREX_PORT/no-unlimited-ranges/data.txt | grep '403 Forbidden' || exit_code=8
 
 exit $exit_code
 
