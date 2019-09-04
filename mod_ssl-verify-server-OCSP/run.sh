@@ -34,7 +34,7 @@ echo
 echo Restarting OCSP responder
 echo -------------------------
 echo -n 'Stopping OCSP responder ... '
-openssl_ocsp_responder_stop && echo 'done.' || echo 'FAILED.'
+openssl_ocsp_responder_stop $AREX_RUN_DIR && echo 'done.' || echo 'FAILED.'
 echo -n 'Starting OCSP responder daemon .. '
 openssl_ocsp_responder_start $AREX_RUN_DIR
 ocspr_pid=$(get_pid_port $AREX_OCSP_PORT)
@@ -52,6 +52,6 @@ echo "Do not trust this server, certificate is $status!"
 
 echo
 echo -n 'Stopping OCSP responder ... '
-openssl_ocsp_responder_stop && echo 'done.' || echo 'FAILED.'
+openssl_ocsp_responder_stop $AREX_RUN_DIR && echo 'done.' || echo 'FAILED.'
  
 exit $exit_code

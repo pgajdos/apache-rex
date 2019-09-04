@@ -189,6 +189,7 @@ function openssl_ocsp_responder_start()
 # stop OCSP responder
 function openssl_ocsp_responder_stop()
 {
+  dir=$1
   pid=$(cat $dir/ocsp-responder.pid)
   return $(kill_pid_port $pid $AREX_OCSP_PORT)
 }
