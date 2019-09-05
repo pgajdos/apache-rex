@@ -28,8 +28,8 @@ curl --cacert $AREX_RUN_DIR/ca/my.crt \
      --cert   $AREX_RUN_DIR/aclient.suse.cz/my.crt \
      --key    $AREX_RUN_DIR/aclient.suse.cz/private.key  \
      --resolve "aserver.suse.cz:$AREX_PORT:127.0.0.1" https://aserver.suse.cz:$AREX_PORT/ 2>&1 \
-  | grep 'certificate revoked' || exit_code=2
-  grep 'error.*SSL' $AREX_RUN_DIR/error_log || exit_code=2
+  | grep 'error.*SSL' || exit_code=2
+  grep 'certificate revoked' $AREX_RUN_DIR/error_log || exit_code=2
 
 echo "[3] client correctly verified"
 curl -s --cacert $AREX_RUN_DIR/ca/my.crt \
