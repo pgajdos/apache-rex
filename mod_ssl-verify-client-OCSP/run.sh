@@ -41,6 +41,6 @@ curl -s --cacert $AREX_RUN_DIR/ca/my.crt \
 
 echo
 echo -n 'Stopping OCSP responder ... '
-openssl_ocsp_responder_stop $AREX_RUN_PORT && echo 'done.' || echo 'FAILED.'
+openssl_ocsp_responder_stop $AREX_RUN_DIR && echo 'done.' || echo 'FAILED.'
  
 exit $exit_code
