@@ -22,7 +22,8 @@ socket           = $mysql_dir/mysql.sock
 EOF
 
 echo '>>> Initializing databases'
-mysql_install_db --defaults-file=$mysql_dir/my.cnf
+# --force is required by at least 10.0.38 on SLE 12 change root
+mysql_install_db --defaults-file=$mysql_dir/my.cnf --force
 
 echo '>>> Invoking mysqld'
 mysqld           --defaults-file=$mysql_dir/my.cnf&
