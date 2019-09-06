@@ -14,4 +14,8 @@ echo "[3] access to the same address under different name not allowed"
 curl -v -s --cacert $AREX_RUN_DIR/ca/my.crt --resolve "test.suse.cz:$AREX_PORT:127.0.0.1" https://test.suse.cz:$AREX_PORT/ \
     2>&1 | grep 'does not match target host name' || exit_code=3
 
+echo "[4] show protocol used by default"
+curl -v -s --cacert $AREX_RUN_DIR/ca/my.crt --resolve "aserver.suse.cz:$AREX_PORT:127.0.0.1" https://aserver.suse.cz:$AREX_PORT/ \
+    2>&1 | grep 'TLS handshake' || exit_code=4
+
 exit $exit_code
