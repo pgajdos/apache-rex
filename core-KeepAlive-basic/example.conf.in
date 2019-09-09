@@ -1,3 +1,10 @@
+<IfVersion >= 2.4.0>
+  LogLevel debug
+  # http://httpd.apache.org/docs/2.4/mod/core.html#errorlogformat
+  ErrorLogFormat "[%{uc}t] [%-m:%-l] [R:%L] [C:%{C}L] %7F: %E: %M"
+  ErrorLogFormat request "[%{uc}t] [R:%L] Request %k on C:%{c}L pid:%P tid:%T"
+  ErrorLogFormat connection "[%{uc}t] [C:%{c}L] local\ %a remote\ %A"
+</IfVersion>
 Listen @AREX_PORT1@
 <VirtualHost *:@AREX_PORT1@>
   DocumentRoot @AREX_RUN_DIR@/htdocs-vh1
