@@ -1,8 +1,14 @@
 <IfVersion >= 2.4>
   # http://events.linuxfoundation.org/sites/events/files/slides/AC2014-Debug.pdf
-  <If "%{REMOTE_ADDR} =~ /(127.0.0|::1)/">
-    LogLevel trace8
-  </If>
+  <Location /problem/>
+    LogLevel info
+    <If "%{REMOTE_ADDR} =~ /(127.0.0|::1)/">
+      LogLevel trace4
+    </If>
+  </Location>
+  <Location /no-problem/>
+    LogLevel trace3
+  </Location>
 </IfVersion>
 <IfVersion < 2.4>
   LogLevel debug
