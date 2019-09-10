@@ -1,3 +1,12 @@
-LogFormat "%a %A %s" my_format
-CustomLog @AREX_RUN_DIR@/my_log my_format
-
+LogLevel info
+<IfVersion >= 2.4.0>
+  ErrorLogFormat "%L| [%l] %E: %M"
+  LogFormat "%L| [local ip: %A] [peer ip: %a] [url: %U]" my_request
+  LogFormat "%L| [handler: %R] [status: %s] [size: %B] [serve time: %D ms]" my_response
+</IfVersion>
+<IfVersion < 2.4.0>
+  LogFormat "[local ip: %A] [peer ip: %a] [url: %U]" my_request
+  LogFormat "[handler: %R] [status: %s] [size: %B] [serve time: %D ms]" my_response
+</IfVersion>
+CustomLog @AREX_RUN_DIR@/requests my_request
+CustomLog @AREX_RUN_DIR@/responses my_response
