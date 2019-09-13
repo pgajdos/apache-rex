@@ -1,11 +1,24 @@
-ErrorLogFormat '[%{cu}t] %M'
+ErrorLogFormat "[%{cu}t] %M"
 LogLevel info
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+<Directory "@AREX_DOCUMENT_ROOT@/a/">
+  LogMessage "request under /a/ (%{THE_REQUEST})"
+</Directory>
+
 <Directory "@AREX_DOCUMENT_ROOT@/foo/">
   RewriteEngine on
   RewriteBase "/foo/"
   RewriteRule "(.*)\.html" "welcome.html" [L]
-  LogMessage  "%{REQUEST_URI} has been requested, serving %{REQUEST_FILENAME}" hook=all
+  LogMessage  "[%{HANDLER}] %{REQUEST_URI} has been requested, serving %{REQUEST_FILENAME}" hook=all
+</Directory>
 
-  @AREX_ALLOW_FROM_LOCALHOST@
+<Directory "@AREX_DOCUMENT_ROOT@/weather/">
+  LogMessage "weather info: hi"
+  # according to doc, it should be %{reqenv:Range}, but that does not work
+  LogMessage "weather info: %{req:Range}" hook=handler
 </Directory>
 
