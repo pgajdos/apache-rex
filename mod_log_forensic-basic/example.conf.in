@@ -1,6 +1,15 @@
+# make sure there is only one child for subexample [3]
+StartServers    1
+MinSpareServers 1
+MaxSpareServers 1
+
 ForensicLog @AREX_RUN_DIR@/forensic_log
 
 <Directory @AREX_DOCUMENT_DIR@>
   @AREX_ALLOW_FROM_LOCALHOST@
 </Directory>
 
+ScriptAlias /cgi-bin/ "@AREX_RUN_DIR@/cgi-bin/"
+<Directory "@AREX_RUN_DIR@/cgi-bin/">
+  Options +ExecCGI
+</Directory>

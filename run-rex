@@ -281,6 +281,11 @@ function vsftpd_command()
   which vsftpd 2>/dev/null
 }
 
+function check_forensic_command()
+{
+  which check_forensic 2>/dev/null
+}
+
 function vsftpd_version()
 {
   vsftpd -v 0>&1 | sed 's:.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*:\1:' | tr -d '.'
@@ -396,6 +401,9 @@ function check_system()
   VSFTPD_COMMAND=$(vsftpd_command)
   register_command "$VSFTPD_COMMAND"      vsftpd
   echod -n '.'
+  CHECK_FORENSIC_COMMAND=$(check_forensic_command)
+  register_command "$CHECK_FORENSIC_COMMAND" check_forensic
+  echod -n '.'
   # filter definitions need full path, otherwise
   # it is expected that sed is in the PATH
   export AREX_SED_COMMAND=$(sed_command)
@@ -463,6 +471,7 @@ function check_system()
   echod "lsof command ............................. $LSOF_COMMAND"
   echod "vsftpd command ........................... $VSFTPD_COMMAND"
   echod "vsftpd version ........................... $AREX_VSFTPD_VERSION"
+  echod "check_forensic command ................... $CHECK_FORENSIC_COMMAND"
   echod "system have python-tornado ............... $AREX_HAVE_PYTHON_TORNADO"
   echod "system have perl-scgi .................... $AREX_HAVE_PERL_SCGI"
   echod "system have python-websocket-client ...... $AREX_HAVE_PYTHON_WEBSOCKET_CLIENT"
