@@ -1,6 +1,11 @@
-LogFormat "%{UNIQUE_ID}e %{%d/%b/%Y %T}t.%{msec_frac}t %f %s" mylog
-CustomLog "@AREX_RUN_DIR@/access.log" mylog
+LogFormat      "%{UNIQUE_ID}e %{%d/%b/%Y %T}t.%{msec_frac}t %f %s" mylog
+CustomLog      @AREX_RUN_DIR@/access_log mylog
+ForensicLog    @AREX_RUN_DIR@/forensic_log
+# LogLevel info for LogMessage to be logged
+LogLevel       info
+ErrorLogFormat "%L| [%l] %E: %M"    
 
 <Directory "@AREX_DOCUMENT_ROOT@">
   @AREX_ALLOW_FROM_LOCALHOST@
+  LogMessage "Request: %{env:UNIQUE_ID}"
 </Directory>
