@@ -16,8 +16,7 @@ grep '+.*|POST.*|my-header:hello_world' $AREX_RUN_DIR/forensic_log || exit_code=
 echo
 echo "[3] after apache child pid kill, there will be no pairwise line"
 main_process_pid=$(cat $AREX_RUN_DIR/pid)
-child_pid=$(ps -A | grep httpd | grep -v "^$main_process_pid" | sed 's:^\([0-9]*\).*:\1:')
-
+child_pid=$(ps -A | grep httpd | grep -v "$main_process_pid" | sed 's:^\s*\([0-9]*\).*:\1:')
 cgi_dir=$AREX_RUN_DIR/cgi-bin
 mkdir -p  $cgi_dir
 cat << EOF > $cgi_dir/long.cgi
@@ -33,7 +32,7 @@ echo "Make request, but there is only child $child_pid and request takes long"
 curl -s http://localhost:$AREX_PORT/cgi-bin/long.cgi&
 sleep 1
 
-echo "Killing child $child_pid"
+echo "Killing child pid $child_pid"
 kill -9 $child_pid
 
 echo "forensic_log contains only + line, but not the - line"
