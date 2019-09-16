@@ -155,7 +155,7 @@ mod_cache-disk
 mod_cache-filter
 mod_file_cache-basic
 mod_expires-basic
-mod_unique-id-basic
+mod_unique_id-basic
 mod_lua-basic
 mod_lua-authz-provider
 mod_lua-authz-provider-abz57204
