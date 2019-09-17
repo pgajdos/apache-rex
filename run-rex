@@ -261,6 +261,11 @@ function python_command()
   which python3 python 2>/dev/null | head -n 1
 }
 
+function sysctl_command()
+{
+  which sysctl 2>/dev/null
+}
+
 function coredumpctl_command()
 {
   which coredumpctl 2>/dev/null | head -n 1
@@ -323,7 +328,13 @@ function core_pattern()
 
 function have_systemd_coredump()
 {
-  core_pattern | grep -q 'systemd-coredump' && echo '1' || echo '0'
+  # check whether: 1. system is configured to dump coredumps into systemd-coredump
+  #                2. coredumpctl command exists and user have enough privileges to gather dumps 
+  if sysctl kernel.core_pattern | grep -q 'systemd-coredump' && coredumpctl list | grep -q 'TIME\|No coredumps found.'; then
+    echo '1'
+  else 
+    echo '0'
+  fi
 }
 
 function check_system()
@@ -388,6 +399,9 @@ function check_system()
   echod -n '.'
   PYTHON_COMMAND=$(python_command)
   register_command "$PYTHON_COMMAND"      python
+  echod -n '.'
+  SYSCTL_COMMAND=$(sysctl_command)
+  register_command "$SYSCTL_COMMAND"      sysctl
   echod -n '.'
   COREDUMPCTL_COMMAND=$(coredumpctl_command)
   register_command "$COREDUMPCTL_COMMAND" coredumpctl
@@ -464,6 +478,7 @@ function check_system()
   echod "wget command ............................. $WGET_COMMAND"
   echod "nc command ............................... $NC_COMMAND"
   echod "python command ........................... $PYTHON_COMMAND"
+  echod "sysctl command ........................... $SYSCTL_COMMAND"
   echod "coredumpctl command ...................... $COREDUMPCTL_COMMAND"
   echod "openssl command .......................... $OPENSSL_COMMAND"
   echod "openssl engine ........................... $AREX_AN_OPENSSL_ENGINE"
