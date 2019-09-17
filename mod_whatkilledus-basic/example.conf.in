@@ -1,0 +1,16 @@
+# make sure there is only one child
+StartServers    1
+MinSpareServers 1
+MaxSpareServers 1
+
+EnableExceptionHook On
+
+ErrorLogFormat "[%t] [%l] [pid\ %P] [client\ %a] %M [%{/AH00051/}B]"
+WKUObscureInRequest hdr:Authorization hdr:Cookie hdr:Proxy-Authorization user password query unparsed-line
+WKULogfile @AREX_RUN_DIR@/wku_log
+
+ScriptAlias /cgi-bin/ "@AREX_RUN_DIR@/cgi-bin/"
+<Directory "@AREX_RUN_DIR@/cgi-bin/">
+  Options +ExecCGI
+</Directory>
+

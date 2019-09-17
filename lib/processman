@@ -31,3 +31,4 @@ function a_child_pid()
   main_process_pid=$(cat $AREX_RUN_DIR/pid)
   ps -A | grep httpd | grep -v "$main_process_pid" | head -n 1 | sed 's:^\s*\([0-9]*\).*:\1:'
 }
+
