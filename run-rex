@@ -191,6 +191,11 @@ function httxt2dbm_command()
   which httxt2dbm 2>/dev/null
 }
 
+function check_forensic_command()
+{
+  which check_forensic 2>/dev/null
+}
+
 function curl_command()
 {
   which curl 2>/dev/null
@@ -281,11 +286,6 @@ function vsftpd_command()
   which vsftpd 2>/dev/null
 }
 
-function check_forensic_command()
-{
-  which check_forensic 2>/dev/null
-}
-
 function vsftpd_version()
 {
   vsftpd -v 0>&1 | sed 's:.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*:\1:' | tr -d '.'
@@ -359,6 +359,9 @@ function check_system()
   HTTXT2DBM_COMMAND=$(httxt2dbm_command)
   register_command "$HTTXT2DBM_COMMAND"   httxt2dbm
   echod -n '.'
+  CHECK_FORENSIC_COMMAND=$(check_forensic_command)
+  register_command "$CHECK_FORENSIC_COMMAND" check_forensic
+  echod -n '.'
   CURL_COMMAND=$(curl_command)
   register_command "$CURL_COMMAND"        curl
   echod -n '.'
@@ -400,9 +403,6 @@ function check_system()
   echod -n '.'
   VSFTPD_COMMAND=$(vsftpd_command)
   register_command "$VSFTPD_COMMAND"      vsftpd
-  echod -n '.'
-  CHECK_FORENSIC_COMMAND=$(check_forensic_command)
-  register_command "$CHECK_FORENSIC_COMMAND" check_forensic
   echod -n '.'
   # filter definitions need full path, otherwise
   # it is expected that sed is in the PATH
@@ -450,6 +450,7 @@ function check_system()
   echod "htdbm command ............................ $HTDBM_COMMAND"
   echod "rotatelogs command ....................... $AREX_ROTATELOGS_COMMAND"
   echod "httxt2dbm command ........................ $HTTXT2DBM_COMMAND"
+  echod "check_forensic command ................... $CHECK_FORENSIC_COMMAND"
   echod "curl command ............................. $CURL_COMMAND"
   echod "curl have --resolve switch ............... $AREX_CURL_HAVE_RESOLVE"
   echod "curl have --cert-status switch ........... $AREX_CURL_HAVE_CERT_STATUS"
@@ -471,7 +472,6 @@ function check_system()
   echod "lsof command ............................. $LSOF_COMMAND"
   echod "vsftpd command ........................... $VSFTPD_COMMAND"
   echod "vsftpd version ........................... $AREX_VSFTPD_VERSION"
-  echod "check_forensic command ................... $CHECK_FORENSIC_COMMAND"
   echod "system have python-tornado ............... $AREX_HAVE_PYTHON_TORNADO"
   echod "system have perl-scgi .................... $AREX_HAVE_PERL_SCGI"
   echod "system have python-websocket-client ...... $AREX_HAVE_PYTHON_WEBSOCKET_CLIENT"
