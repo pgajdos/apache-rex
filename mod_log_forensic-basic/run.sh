@@ -34,6 +34,7 @@ sleep 1
 
 echo "Killing child pid $child_pid"
 kill -9 $child_pid
+sleep 1
 
 echo "forensic_log contains only + line, but not the - line"
 grep 'long.cgi' $AREX_RUN_DIR/forensic_log | grep long.cgi | tee $AREX_RUN_DIR/forensic_log-excerpt
