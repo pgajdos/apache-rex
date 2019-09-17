@@ -17,7 +17,7 @@ function kill_pid_port()
   lsof -i | grep ":$port (LISTEN)" && return 1 || return 0
 }
 
-function httpd_restart
+function httpd_restart()
 {
   ps -A | grep httpd
   kill -HUP $(cat $AREX_RUN_DIR/pid)
@@ -26,3 +26,8 @@ function httpd_restart
   ps -A | grep httpd
 }
 
+function a_child_pid()
+{
+  main_process_pid=$(cat $AREX_RUN_DIR/pid)
+  ps -A | grep httpd | grep -v "$main_process_pid" | head -n 1 | sed 's:^\s*\([0-9]*\).*:\1:'
+}
