@@ -31,34 +31,31 @@ echo "Killing child pid $child_pid with another signal"
 kill -BUS $child_pid
 sleep 1
 
-echo "[1] error_log contains backtrace for AH00051"
-grep ap_process_child_status $AREX_RUN_DIR/error_log || exit_code=1
-
 echo
-echo "[2] wku_log contains data of the crash"
+echo "[1] wku_log contains data of the crash"
 echo "The report contains:"
 echo "===================="
 # highlights in the report
 echo "(a) Crash happened, when"
 echo "------------------------"
 grep '**** Crash at'          $AREX_RUN_DIR/wku_log | tee $AREX_RUN_DIR/wku_log-excerpt
-wc -l $AREX_RUN_DIR/wku_log-excerpt | grep -q '^2 ' || exit_code=2
+wc -l $AREX_RUN_DIR/wku_log-excerpt | grep -q '^2 ' || exit_code=1
 echo "(b) What uncaught signal caused it"
 echo "----------------------------------"
 grep 'Fatal signal:'          $AREX_RUN_DIR/wku_log | tee $AREX_RUN_DIR/wku_log-excerpt
-wc -l $AREX_RUN_DIR/wku_log-excerpt | grep -q '^2 ' || exit_code=2
+wc -l $AREX_RUN_DIR/wku_log-excerpt | grep -q '^2 ' || exit_code=1
 echo "(c) Backtrace, where the crash happened"
 echo "---------------------------------------"
 grep 'mod_cgi.so'             $AREX_RUN_DIR/wku_log | tee $AREX_RUN_DIR/wku_log-excerpt
-wc -l $AREX_RUN_DIR/wku_log-excerpt | grep -q '^4 ' || exit_code=2
+wc -l $AREX_RUN_DIR/wku_log-excerpt | grep -q '^4 ' || exit_code=1
 echo "(d) Request line processed"
 echo "--------------------------"
 grep -A 1 'Request line'      $AREX_RUN_DIR/wku_log | tee $AREX_RUN_DIR/wku_log-excerpt
-wc -l $AREX_RUN_DIR/wku_log-excerpt | grep -q '^5 ' || exit_code=2
+wc -l $AREX_RUN_DIR/wku_log-excerpt | grep -q '^5 ' || exit_code=1
 echo "(e) Client connection processed"
 echo "-------------------------------"
 grep -A 1 'Client connection' $AREX_RUN_DIR/wku_log | tee $AREX_RUN_DIR/wku_log-excerpt
-wc -l $AREX_RUN_DIR/wku_log-excerpt | grep -q '^5 ' || exit_code=2
+wc -l $AREX_RUN_DIR/wku_log-excerpt | grep -q '^5 ' || exit_code=1
 
 echo
 echo See $AREX_RUN_DIR/wku_log for details.

@@ -5,7 +5,6 @@ MaxSpareServers 1
 
 EnableExceptionHook On
 
-ErrorLogFormat "[%t] [%l] [pid\ %P] [client\ %a] %M [%{/AH00051/}B]"
 WKUObscureInRequest hdr:Authorization hdr:Cookie hdr:Proxy-Authorization user password query unparsed-line
 WKULogfile @AREX_RUN_DIR@/wku_log
 
