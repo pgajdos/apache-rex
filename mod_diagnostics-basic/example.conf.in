@@ -1,0 +1,39 @@
+LogLevel info substitute:trace8 deflate:trace8
+
+<Directory "@AREX_DOCUMENT_ROOT@">
+   @AREX_ALLOW_FROM_LOCALHOST@
+
+  LogMessage "Request BEGIN: %{THE_REQUEST}" hook=handler
+  LogMessage "Request END:   %{THE_REQUEST}" hook=log_transaction
+</Directory>
+  
+DeflateCompressionLevel 7
+
+<Location /a/>
+  # no filter applied
+  SetOutputfilter o-resource-1;o-resource-2
+</Location>
+
+<Location /b/>
+  # using o-resource as mod_substitute is registered as AP_FTYPE_RESOURCE
+  SetOutputfilter o-resource-1;SUBSTITUTE;o-resource-2
+</Location>
+
+<Location /c/>
+  # using o-resource as mod_substitute is registered as AP_FTYPE_RESOURCE
+  SetOutputfilter o-resource-1;SUBSTITUTE;o-resource-2
+  Substitute 's/L/l/'
+</Location>
+
+<Location /d/>
+  # using o-resource as mod_substitute is registered as AP_FTYPE_RESOURCE
+  SetOutputfilter o-resource-1;SUBSTITUTE;o-resource-2
+  Substitute 's/^h/H/'
+  Substitute 's/FUN/fun/'
+</Location>
+
+<Location /e/>
+  # using o-resource as mod_data is registered as AP_FTYPE_CONTENT_SET
+  SetOutputfilter o-content-1;DEFLATE;o-content-2
+</Location>
+
