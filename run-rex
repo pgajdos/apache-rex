@@ -276,6 +276,16 @@ function openssl_command()
   which openssl 2>/dev/null
 }
 
+function softhsm2_command()
+{
+  which softhsm2-util 2>/dev/null
+}
+
+function pkcs11_tool_command()
+{
+  which pkcs11-tool 2>/dev/null
+}
+
 function nss_pcache_command()
 {
   which nss_pcache 2>/dev/null
@@ -299,6 +309,11 @@ function vsftpd_version()
 function openssl_an_engine()
 {
   openssl engine | grep -v dynamic | head -n 1 | sed 's:^(\([^()]*\)).*:\1:'
+}
+
+function softhsm2_so()
+{
+  ls /usr/lib{,64}/pkcs11/libsofthsm2.so /usr/lib{,64}/shofthsm2/libsofthsm2.so 2>/dev/null | head -n 1
 }
 
 function openssl_have_alpn()
@@ -409,6 +424,12 @@ function check_system()
   OPENSSL_COMMAND=$(openssl_command)
   register_command "$OPENSSL_COMMAND"     openssl
   echod -n '.'
+  SOFTHSM2_COMMAND=$(softhsm2_command)
+  register_command "$SOFTHSM2_COMMAND"    softhsm2
+  echod -n '.'
+  PKCS11_TOOL_COMMAND=$(pkcs11_tool_command)
+  register_command "$PKCS11_TOOL_COMMAND" pkcs11-tool
+  echod -n '.'
   NSS_PCACHE_COMMAND=$(nss_pcache_command)
   register_command "$NSS_PCACHE_COMMAND"  nss_pcache
   echod -n '.'
@@ -438,6 +459,9 @@ function check_system()
   if command_exists openssl; then
     export AREX_OPENSSL_HAVE_ALPN=$(openssl_have_alpn)
     echod -n '.'
+  fi
+  if command_exists softhsm2; then
+    export AREX_SOFTHSM2_SO=$(softhsm2_so)
   fi
   if command_exists python; then
     export AREX_HAVE_PYTHON_TORNADO=$(have_python_tornado)
@@ -481,8 +505,11 @@ function check_system()
   echod "sysctl command ........................... $SYSCTL_COMMAND"
   echod "coredumpctl command ...................... $COREDUMPCTL_COMMAND"
   echod "openssl command .......................... $OPENSSL_COMMAND"
+  echod "softhsm2 command ......................... $SOFTHSM2_COMMAND"
+  echod "pkcs11-tool command ...................... $PKCS11_TOOL_COMMAND"
   echod "openssl engine ........................... $AREX_AN_OPENSSL_ENGINE"
   echod "openssl have alpn support ................ $AREX_OPENSSL_HAVE_ALPN"
+  echod "softhsm2 shared object ................... $AREX_SOFTHSM2_SO"
   echod "nss_pcache command ....................... $NSS_PCACHE_COMMAND"
   echod "lsof command ............................. $LSOF_COMMAND"
   echod "vsftpd command ........................... $VSFTPD_COMMAND"
@@ -726,6 +753,10 @@ function prepare_run()
     sh $AREX_RUN_DIR/pre-run.sh
   fi
 
+  # source $AREX_RUN_DIR/server_environment, which pre-run.sh
+  # can write
+  . $AREX_RUN_DIR/server_environment
+
   # create default DocumentRoot
   mkdir -p $AREX_RUN_DIR/htdocs
 
@@ -755,6 +786,7 @@ function syntax_check()
 function start_apache()
 {
   start_ok=1
+
   httpd -f $AREX_RUN_DIR/httpd.conf $SERVER_FLAGS -k start 2>$AREX_RUN_DIR/start_log || start_ok=0
   if [ $start_ok -ne 1 ]; then
     echo '0'
