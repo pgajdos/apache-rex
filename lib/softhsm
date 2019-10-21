@@ -1,0 +1,79 @@
+#!/bin/bash
+
+source $(dirname ${BASH_SOURCE[0]})/openssl
+
+shsm2_pin=1234
+shsm2_puk=4321
+
+# create the softhsm database, which is a plain dir
+function softhsm2_create_database()
+{
+  dir=$1
+  shsm2_database_dir="$dir/softhsm.db"
+  echo -n "~ Creating $shsm2_database_dir .. "
+  mkdir -p $shsm2_database_dir
+  echo '~ .. done.'
+}
+
+# create softhsm configuration pointing to the database
+function softhsm2_configuration()
+{
+  dir=$1
+  shsm2_database_dir="$dir/softhsm.db"
+  shsm2_configuration_file="$dir/softhsm.conf"
+  echo -n '~ Creating softhsm2 configuration file .. '
+  echo 'objectstore.backend = file'                 >> $shsm2_configuration_file
+  echo "directories.tokendir = $shsm2_database_dir" >  $shsm2_configuration_file
+  echo 'done.'
+  echo '~ Exporting SOFTHSM2_CONF' 
+}
+
+# inits a softhsm token in the slot
+function softhsm2_init_token()
+{
+  dir=$1
+  label=$2
+  echo '~ Creating softhsm2 token ... '
+  export SOFTHSM2_CONF="$dir/softhsm.conf"
+  softhsm2 --init-token --free --label "$label" --so-pin $shsm2_puk --pin $shsm2_pin
+  if softhsm2 --show-slots | grep "$label"; then
+    echo '~ .. done.'
+    return 0
+  fi
+  echo '~ .. failure.'
+  return 1
+}
+
+# shortcut for the above
+function softhsm2_create_token()
+{
+  dir=$1
+  token_label=$2
+  softhsm2_create_database $dir
+  softhsm2_configuration $dir
+  softhsm2_init_token $dir $token_label || return 1
+} 
+
+# load a file to the softhsm token
+function softhsm2_token_load_file()
+{
+  dir=$1
+  token_label=$2
+  id=$3
+  file_path=$4
+  file_label=$5
+  file_type=$6
+  export SOFTHSM2_CONF="$dir/softhsm.conf"
+  echo "~ Writing $file_type $file_label ($file_path) to $token_label .. "
+  success='yes'
+  pkcs11-tool -p $shsm2_pin --module $AREX_SOFTHSM2_SO --id $id --token-label $token_label --label $file_label --write-object $file_path -y $file_type || success='no'
+  if [ $success == 'yes' ]; then
+    echo '~ .. done.'
+    return 0
+  else
+    echo '~ .. failure.'
+    return 1
+  fi
+}
+
+
