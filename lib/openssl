@@ -208,3 +208,10 @@ function openssl_ocsp_cert_status()
                | grep 'Cert Status' | sed 's/.*Cert Status:[^a-z]*\([a-z]*\)[^a-z]*/\1/'
 }
 
+function openssl_pem_to_der()
+{
+  pem_file=$1
+  der_file=$2
+  openssl rsa -in $pem_file -inform pem -out $der_file -outform der
+}
+
