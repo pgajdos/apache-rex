@@ -101,6 +101,8 @@ Each example has its own directory, which contains:
 * `pre-run.sh` (optional)  
   Shows what has to be done before apache start (e. g. place test ssl 
   certificate on correct place). `pre-run.sh` return value is not checked.
+  It can write `$AREX_RUN_DIR/server_environment`, which will be sourced
+  into httpd environment.
 * `run.sh` (required)  
   Determines an example flow. Script exits `0` in case whole example passed
   or number of failed subexample. If there are more subexamples failing, 
@@ -152,4 +154,5 @@ in `run.sh`.
   Full path to `sed` command (required for some Filter example definitions).
 * `AREX_ROTATELOGS_COMMAND`  
   Full path to `rotatelogs` or `rotatelogs2` command (required e. g. in piped logs).
-
+* `AREX_SOFTHSM2_SO`
+  mailny used in lib/softhsm, it is softhsm shared library module
