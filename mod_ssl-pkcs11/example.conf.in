@@ -1,0 +1,37 @@
+LogLevel   info
+ServerName aserver.suse.cz
+
+<IfVersion >= 2.4.2>
+  DefaultRuntimeDir @AREX_RUN_DIR@/run
+</IfVersion>
+
+AddType application/x-x509-ca-cert .crt
+AddType application/x-pkcs7-crl    .crl
+
+SSLEngine             on
+
+SSLCryptoDevice       pkcs11
+SSLCertificateFile    @AREX_RUN_DIR@/aserver.suse.cz/my.crt
+SSLCertificateKeyFile "pkcs11:token=aserver.suse.cz-token;object=aserver.suse.cz-privkey;type=private;pin-value=1234"
+
+SSLSessionCache         shmcb:@AREX_RUN_DIR/ssl_scache(512000)
+SSLSessionCacheTimeout  300
+
+SSLRandomSeed startup builtin
+SSLRandomSeed connect builtin
+
+SSLProtocol all
+<IfVersion >= 2.3.0>
+SSLCipherSuite DEFAULT
+</IfVersion>
+<IfVersion < 2.3.0>
+SSLCipherSuite ALL
+</IfVersion>
+SSLHonorCipherOrder on
+
+CustomLog             @AREX_RUN_DIR@/test-server_log   ssl_combined
+
+<Directory @AREX_DOCUMENT_ROOT@>
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
