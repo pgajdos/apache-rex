@@ -154,5 +154,5 @@ in `run.sh`.
   Full path to `sed` command (required for some Filter example definitions).
 * `AREX_ROTATELOGS_COMMAND`  
   Full path to `rotatelogs` or `rotatelogs2` command (required e. g. in piped logs).
-* `AREX_SOFTHSM2_SO` 
+* `AREX_SOFTHSM2_SO`  
   Mainly used in lib/softhsm, it is softhsm shared library module.
