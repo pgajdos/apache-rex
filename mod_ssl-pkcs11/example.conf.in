@@ -1,4 +1,6 @@
 LogLevel   info
+
+
 ServerName aserver.suse.cz
 
 <IfVersion >= 2.4.2>
@@ -11,7 +13,7 @@ AddType application/x-pkcs7-crl    .crl
 SSLEngine             on
 
 SSLCryptoDevice       pkcs11
-SSLCertificateFile    @AREX_RUN_DIR@/aserver.suse.cz/my.crt
+SSLCertificateFile    "pkcs11:token=aserver.suse.cz-token;object=aserver.suse.cz-cert;type=cert;pin-value=1234"
 SSLCertificateKeyFile "pkcs11:token=aserver.suse.cz-token;object=aserver.suse.cz-privkey;type=private;pin-value=1234"
 
 SSLSessionCache         shmcb:@AREX_RUN_DIR/ssl_scache(512000)

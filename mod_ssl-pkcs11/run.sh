@@ -7,6 +7,6 @@ curl -s --cacert $AREX_RUN_DIR/ca/my.crt --resolve "aserver.suse.cz:$AREX_PORT:1
     | grep 'Test SSL' || exit_code=1
 
 echo "[2] error_log contains references to pkcs11"
-grep 'pkcs11:token=aserver.suse.cz-token' $AREX_RUN_DIR/error_log || exit_code=2
+grep 'Certificate and private key.*pkcs11:token=aserver.suse.cz-token' $AREX_RUN_DIR/error_log || exit_code=2
 
 exit $exit_code

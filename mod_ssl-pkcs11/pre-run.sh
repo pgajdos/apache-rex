@@ -29,10 +29,19 @@ fi
 # PEM format, we need DER
 echo 'Converting PEM to DER'
 openssl_pem_to_der $AREX_RUN_DIR/aserver.suse.cz/private.key $AREX_RUN_DIR/aserver.suse.cz/private.key.der
+openssl_pem_to_der $AREX_RUN_DIR/aserver.suse.cz/my.crt      $AREX_RUN_DIR/aserver.suse.cz/my.crt.der
 # load the key in DER format
-echo "--- Write key to token ---------------------"
+echo "--- Write private key to token ---------------------"
 success='yes'
 softhsm2_token_load_file "$AREX_RUN_DIR/pkcs11" 'aserver.suse.cz-token' 010203 $AREX_RUN_DIR/aserver.suse.cz/private.key.der 'aserver.suse.cz-privkey' privkey || success='no'
+if [ $success == 'yes' ]; then
+  echo '--- Done. ----------------------------------'
+else
+  echo '--- Failed. --------------------------------'
+fi
+echo "--- Write certiicate to token ---------------------"
+success='yes'
+softhsm2_token_load_file "$AREX_RUN_DIR/pkcs11" 'aserver.suse.cz-token' 010203 $AREX_RUN_DIR/aserver.suse.cz/my.crt 'aserver.suse.cz-cert' cert || success='no'
 if [ $success == 'yes' ]; then
   echo '--- Done. ----------------------------------'
 else
