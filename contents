@@ -84,6 +84,7 @@ mod_proxy_connect-basic
 mod_proxy_ftp-basic
 mod_proxy_fcgi-basic
 mod_proxy_fcgi-sock
+mod_wsgi-basic
 mod_proxy_uwsgi-basic
 mod_php-basic
 mod_proxy_fcgi-php-fpm
