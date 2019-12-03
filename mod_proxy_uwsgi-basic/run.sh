@@ -4,8 +4,9 @@ exit_code=0
 cp helloworld.py $AREX_RUN_DIR/
 # run uwsgi daemon
 echo -n "Starting uWSGI daemon .. "
-uwsgi --plugin $AREX_UWSGI_PLUGIN_HTTP,$AREX_UWSGI_PLUGIN_PYTHON \
-      --http localhost:$AREX_UWSGI_PORT --wsgi-file $AREX_RUN_DIR/helloworld.py \
+uwsgi --plugin $AREX_UWSGI_PLUGIN_PYTHON \
+      --socket localhost:$AREX_UWSGI_PORT \
+      --wsgi-file $AREX_RUN_DIR/helloworld.py \
       --pidfile $AREX_RUN_DIR/uwsgi.pid \
       --logto $AREX_RUN_DIR/uwsgi.log &
 sleep 1
@@ -18,7 +19,7 @@ fi
 echo
 
 echo "[1] run an uWSGI application"
-curl -s http://localhost:$AREX_UWSGI_PORT/ | grep "Hello World!" || exit_code=1
+curl -s http://localhost:$AREX_PORT/ | grep "Hello World!" || exit_code=1
 
 # stop uwsgi daemon
 echo
