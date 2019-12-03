@@ -32,7 +32,7 @@ fi
 echo
 
 echo "[1] run an uWSGI application, uwsgi protocol"
-curl -s http://localhost:$AREX_PORT/uwsgi/ #| grep "Hello World!" || exit_code=1
+curl -s http://localhost:$AREX_PORT/uwsgi/ | grep "Hello World!" || exit_code=1
 
 echo "[2] run an uWSGI application, http protocol"
 curl -s http://localhost:$AREX_PORT/http/ | grep "Hello World!" || exit_code=2
