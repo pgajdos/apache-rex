@@ -1,0 +1,3 @@
+# https://www.shellhacks.com/modwsgi-hello-world-example/
+WSGIScriptAlias /helloapp @AREX_RUN_DIR@/helloworld.py
+
