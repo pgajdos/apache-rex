@@ -1,1 +1,2 @@
-ProxyPass "/" "uwsgi://localhost:@AREX_UWSGI_PORT@/"
+ProxyPass "/uwsgi/" "uwsgi://localhost:@AREX_UWSGI_PORT@/"
+ProxyPass "/http/"  "http://localhost:@AREX_UWSGI_PORT2@/"

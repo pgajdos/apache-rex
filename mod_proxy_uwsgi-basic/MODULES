@@ -1,1 +1,1 @@
-proxy proxy_uwsgi
+proxy proxy_uwsgi proxy_http
