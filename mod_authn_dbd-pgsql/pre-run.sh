@@ -14,6 +14,7 @@ echo "unix_socket_directories = '$pgsql_dir'" >> $pgsql_dir/postgresql.conf
 
 echo '>>> Invoking postgresql'
 pg_ctl start  -D $pgsql_dir -l $pgsql_dir/pgsql.log
+sleep 2
 
 echo '>>> Creating authentication database'
 createdb --host='localhost' --port "$AREX_PGSQL_PORT" httpd_auth
