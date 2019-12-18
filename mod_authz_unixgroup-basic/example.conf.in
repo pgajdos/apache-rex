@@ -1,0 +1,17 @@
+DefineExternalAuth dummy_auth pipe @AREX_RUN_DIR@/dummy-auth
+<Directory @AREX_DOCUMENT_ROOT@/users>
+  AuthType Basic
+  AuthName "Users Area"
+  AuthBasicProvider external
+  AuthExternal dummy_auth
+  Require unix-group @AREX_GROUP@
+</Directory>
+
+<Directory @AREX_DOCUMENT_ROOT@/admin>
+  AuthType Basic
+  AuthName "Admin Area"
+  AuthBasicProvider external
+  AuthExternal dummy_auth
+  Require unix-group admin
+</Directory>
+
