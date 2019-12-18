@@ -8,12 +8,15 @@ hans_sha1_passwd=$(htpasswd -nbs hans hans_secret | head -n 1 | sed 's/hans://')
 echo '>>> Initializing databases'
 pg_ctl initdb -D $pgsql_dir
 
-echo '>>> Invoking postgres'
+echo '>>> Configuration'
+echo "port = $AREX_PGSQL_PORT"                >> $pgsql_dir/postgresql.conf
+echo "unix_socket_directories = '$pgsql_dir'" >> $pgsql_dir/postgresql.conf
+
+echo '>>> Invoking postgresql'
 pg_ctl start  -D $pgsql_dir -l $pgsql_dir/pgsql.log
-sleep 2
 
 echo '>>> Creating authentication database'
-createdb httpd_auth
+createdb --host='localhost' --port "$AREX_PGSQL_PORT" httpd_auth
 
 echo '>>> Creating authentication table'
 cat << EOF > $pgsql_dir/create-auth-table.sql
@@ -24,20 +27,20 @@ groups varchar(255),
 primary key (username)
 );
 EOF
-psql -f $pgsql_dir/create-auth-table.sql -d httpd_auth
+psql --host='localhost' --port "$AREX_PGSQL_PORT" -f $pgsql_dir/create-auth-table.sql -d httpd_auth
 
 echo '>>> Filling authentication table with example data'
 cat << EOF > $pgsql_dir/insert-users.sql
 INSERT INTO password_table (username, passwd, groups) VALUES('john', '$john_sha1_passwd', 'employees');
 INSERT INTO password_table (username, passwd, groups) VALUES('hans', '$hans_sha1_passwd', 'customers');
 EOF
-psql -f $pgsql_dir/insert-users.sql -d httpd_auth
+psql --host='localhost' --port "$AREX_PGSQL_PORT" -f $pgsql_dir/insert-users.sql -d httpd_auth
 
 echo '>>> Testing the postgres is running and database is ready via password query'
 cat << EOF > $pgsql_dir/password-get.sql
 SELECT passwd FROM password_table WHERE username = 'hans';
 EOF
-psql -f $pgsql_dir/password-get.sql -d httpd_auth > $pgsql_dir/test-password.txt
+psql --host='localhost' --port "$AREX_PGSQL_PORT" -f $pgsql_dir/password-get.sql -d httpd_auth > $pgsql_dir/test-password.txt
 grep "$hans_sha1_passwd" $pgsql_dir/test-password.txt && echo "SUCCESS" || echo "FAILURE";
 
 echo

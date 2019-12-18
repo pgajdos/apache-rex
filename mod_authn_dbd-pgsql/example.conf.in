@@ -1,7 +1,7 @@
 #LogLevel trace8
 
 DBDriver pgsql
-DBDParams "dbname=httpd_auth user=@AREX_USER@"
+DBDParams "host=localhost port=@AREX_PGSQL_PORT@ dbname=httpd_auth user=@AREX_USER@"
 
 DBDMin 4
 DBDKeep 8
