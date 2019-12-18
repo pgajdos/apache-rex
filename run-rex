@@ -105,6 +105,10 @@ if [ -z "$OCSP_PORT"]; then
   OCSP_PORT=60888
 fi
 
+if [ -z "$PGSQL_PORT"]; then
+  PGSQL_PORT=65432
+fi
+
 # verbosity of the output: normal=0, verbose=1, debug=2
 if [ -z "$VERBOSITY" ]; then
   VERBOSITY=0
@@ -615,6 +619,9 @@ function prepare_env()
 
   export AREX_OCSP_PORT=$OCSP_PORT
   echod "ocsp responedr daemon will listen on ..... $AREX_OCSP_PORT"
+
+  export AREX_PGSQL_PORT=$PGSQL_PORT
+  echod "postgress daemon will listen on .......... $AREX_PGSQL_PORT"
   
   echod -n "authz_core module present ................ "
   if [ -n "$(find_module authz_core)" ]; then
@@ -781,6 +788,7 @@ function prepare_run()
     sed -i "s:@AREX_UWSGI_PORT@:$AREX_UWSGI_PORT:"                     $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_UWSGI_PORT2@:$AREX_UWSGI_PORT2:"                   $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_OCSP_PORT@:$AREX_OCSP_PORT:"                       $AREX_RUN_DIR/httpd.conf
+    sed -i "s:@AREX_PGSQL_PORT@:$AREX_PGSQL_PORT:"                     $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_SED_COMMAND@:$AREX_SED_COMMAND:"                   $AREX_RUN_DIR/httpd.conf
     sed -i "s:@AREX_ROTATELOGS_COMMAND@:$AREX_ROTATELOGS_COMMAND:"     $AREX_RUN_DIR/httpd.conf
   else
