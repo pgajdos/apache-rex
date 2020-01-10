@@ -8,11 +8,11 @@ such.
 
 Quick Start
 -----------
-    git clone https://github.com/pgajdos/apache-rex.git
-    cd apache-rex
-    ./run-rex mod_macro-basic
-    /usr/sbin/httpd -f /tmp/apache-rex/mod_macro-basic/httpd.conf
-
+    $ git clone https://github.com/pgajdos/apache-rex.git
+    $ cd apache-rex
+    $ ./run-rex mod_macro-basic
+    $ /usr/sbin/httpd -f /tmp/apache-rex/mod_macro-basic/httpd.conf
+    $ /usr/sbin/httpd -f /tmp/apache-rex/mod_macro-basic/httpd.conf -k stop
 
 Prerequisites
 -------------
