@@ -6,6 +6,14 @@ This package contains several runnable examples and utility to run them
 not required to be minimal or usable in practice, but are allowed to be
 such.
 
+Quick Start
+-----------
+    git clone https://github.com/pgajdos/apache-rex.git
+    cd apache-rex
+    ./run-rex mod_macro-basic
+    /usr/sbin/httpd -f /tmp/apache-rex/mod_macro-basic/httpd.conf
+
+
 Prerequisites
 -------------
 1. Examples assume basic commands (echo, touch, mkdir, etc.) in the `PATH`.
