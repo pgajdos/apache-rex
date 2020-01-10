@@ -1,0 +1,24 @@
+# configure frontend
+<Location /app-wrong/>
+  ProxyPass "http://localhost:@AREX_PORT1@/"
+</Location>
+
+<Location /app/>
+  AuthBasicFake john StrongPassword
+  ProxyPass "http://localhost:@AREX_PORT1@/"
+</Location>
+
+# configure backend
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+  DocumentRoot "@AREX_RUN_DIR@/backend/htdocs"
+  ErrorLog "@AREX_RUN_DIR@/backend/error_log"
+  <Directory "@AREX_RUN_DIR@/backend/htdocs">
+    AuthType Basic
+    AuthBasicProvider file
+    AuthName "Restricted Area"
+    AuthUserFile @AREX_RUN_DIR@/backend/htpasswd
+    Require valid-user
+  </Directory>
+</VirtualHost>
+

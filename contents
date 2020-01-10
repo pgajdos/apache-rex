@@ -100,6 +100,7 @@ mod_perl-basic
 mod_xml2enc-basic
 mod_authz_user-basic
 mod_auth_basic-basic
+mod_auth_basic-AuthBasicFake
 mod_authn_dbm-basic
 mod_auth_digest-basic
 mod_auth_digest-Authorization
