@@ -33,6 +33,7 @@ core-KeepAlive-basic
 core-HttpProtocolOptions-basic
 core-FileETag-basic
 debug-coredump
+debug-wku
 devel-mod_example_1
 devel-mod_example_2
 devel-mod_example_config_basic
