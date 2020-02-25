@@ -39,7 +39,7 @@ if [ $success == 'yes' ]; then
 else
   echo '--- Failed. --------------------------------'
 fi
-echo "--- Write certiicate to token ---------------------"
+echo "--- Write certificate to token ---------------------"
 success='yes'
 softhsm2_token_load_file "$AREX_RUN_DIR/pkcs11" 'aserver.suse.cz-token' 010203 $AREX_RUN_DIR/aserver.suse.cz/my.crt 'aserver.suse.cz-cert' cert || success='no'
 if [ $success == 'yes' ]; then
