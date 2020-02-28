@@ -1,0 +1,6 @@
+<Directory  "@AREX_DOCUMENT_ROOT@">
+  <FilesMatch "\.ph(p|tml)">
+    SetHandler application/x-httpd-php
+  </FilesMatch>
+</Directory>
+

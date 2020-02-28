@@ -1,0 +1,11 @@
+<?php
+    ini_set('mysqli.default_socket', '@mysql_socket@');
+    $link = mysqli_connect('localhost', 'dbuser', 'dbuserpw', 'testdb');
+    $result = mysqli_query($link, "INSERT INTO testtab VALUES('honza', 'Honza', 'Hloupy')");
+    print("add honza: "); var_dump($result);
+    $result = mysqli_query($link, "SELECT username FROM testtab");
+    while($row = mysqli_fetch_assoc($result)){
+        print("${row['username']}\n");
+    }
+?>
+

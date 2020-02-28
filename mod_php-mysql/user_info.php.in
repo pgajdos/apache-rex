@@ -1,0 +1,8 @@
+<?php
+    ini_set('mysqli.default_socket', '@mysql_socket@');
+    $link = mysqli_connect('localhost', 'dbuser', 'dbuserpw', 'testdb');
+    $result = mysqli_query($link, "SELECT * FROM testtab WHERE username = '$_GET[un]'");
+    while($row = mysqli_fetch_assoc($result)){
+        print("${row['username']} ${row['name']} ${row['surname']}\n");
+    }
+?>
