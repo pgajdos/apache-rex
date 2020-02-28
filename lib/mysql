@@ -2,6 +2,11 @@
 
 # $AREX_USER is invoking mysqld and is admin of the db
 
+function mysql_socket_path()
+{
+  echo -n "$mysql_dir/mysql.sock"
+}
+
 function mysql_create_config()
 {
   mysql_dir=$1
@@ -10,14 +15,14 @@ function mysql_create_config()
   mkdir $mysql_dir/datadir $mysql_dir/datadir-private
   cat << EOF > $mysql_dir/my.cnf
 [client]
-socket = $mysql_dir/mysql.sock
+socket = $(mysql_socket_path)
 
 [mysqld]
 log-error        = $mysql_dir/mysqld.log
 secure_file_priv = $mysql_dir/datadir-private
 datadir          = $mysql_dir/datadir
 server-id        = 1
-socket           = $mysql_dir/mysql.sock
+socket           = $(mysql_socket_path)
 EOF
 }
 
