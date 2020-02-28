@@ -1,0 +1,35 @@
+#
+# mod_backtrace and mod_whatkilledus configuration
+#
+# see https://emptyhammock.com/projects/httpd/diag/
+EnableExceptionHook On
+# mod_backtrace provide %B, see the documentation
+ErrorLogFormat "[%t] [%l] [pid\ %P] [client\ %a] %M backtrace: [%{//}B]"
+<Location /backtrace>
+SetHandler backtrace-handler
+</Location>
+# mod_crash provides test crash of one of the child
+<Location /crash>
+SetHandler crash-handler
+</Location>
+WKUObscureInRequest hdr:Authorization hdr:Cookie hdr:Proxy-Authorization user password query unparsed-line
+# * httpd MUST NOT be started by systemctl
+# * this file must be writeable by user:group under which apache servers running on
+#   (wwwrun:www for SUSE at time of writing) 
+WKULogfile @AREX_RUN_DIR@/wku_log
+
+#
+# mod_backdoor configuration
+#
+BackdoorAddress 127.0.0.1:65535
+
+#
+# diagnostic_filter configuration
+#
+<Directory "@AREX_DOCUMENT_ROOT@">
+  SetOutputfilter o-resource-1;SUBSTITUTE;o-resource-2
+  Substitute 's/have lot of fun/HAVE LOT OF FUN/'
+  @AREX_ALLOW_FROM_LOCALHOST@
+</Directory>
+
+
