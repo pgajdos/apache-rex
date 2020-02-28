@@ -114,6 +114,10 @@ if [ -z "$VERBOSITY" ]; then
   VERBOSITY=0
 fi
 
+if [ -z "$MYSQL_ADMIN" ]; then
+  MYSQL_ADMIN=$USER
+fi
+
 echod
 
 #
@@ -674,6 +678,9 @@ function prepare_env()
   echod "httpd user ............................... $AREX_USER"
   export AREX_GROUP=$(id -gn)
   echod "httpd user group ......................... $AREX_GROUP"
+
+  export AREX_MYSQL_ADMIN="$MYSQL_ADMIN"
+  echod "mysql admin .............................. $AREX_MYSQL_ADMIN"
   echod
 }
 

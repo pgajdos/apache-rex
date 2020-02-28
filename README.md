@@ -81,6 +81,8 @@ utility. See the `CONFIGURATION` section of `run-rex` for defaults.
 * `VERBOSITY`  
   Amount of information written by `run-rex` to the stdout. Possible
   values are 0 (normal), 1 (verbose) and 2 (debug).
+* `MYSQL_ADMIN`
+  Admin of the mysql server (mysqladmin, create table).
 
 Example Structure
 -----------------
