@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# $AREX_USER is invoking mysqld and is admin of the db
+
+function mysql_create_config()
+{
+  mysql_dir=$1
+
+  echo '>>> Create mysql configuration'
+  mkdir $mysql_dir/datadir $mysql_dir/datadir-private
+  cat << EOF > $mysql_dir/my.cnf
+[client]
+socket = $mysql_dir/mysql.sock
+
+[mysqld]
+log-error        = $mysql_dir/mysqld.log
+secure_file_priv = $mysql_dir/datadir-private
+datadir          = $mysql_dir/datadir
+server-id        = 1
+socket           = $mysql_dir/mysql.sock
+EOF
+}
+
+function mysql_initialize_db()
+{
+  mysql_dir=$1
+  echo '>>> Initializing databases'
+  # --force is required by at least 10.0.38 on SLE 12 changeroot
+  mysql_install_db --defaults-file=$mysql_dir/my.cnf --force
+}
+
+function mysql_invoke_mysqld()
+{
+  mysql_dir=$1
+  mysqld           --defaults-file=$mysql_dir/my.cnf&
+  sleep 2
+}
+
+function mysql_create_database
+{
+  mysql_dir=$1
+  db_name=$2
+  echo '>>> Creating  database'
+  mysqladmin       --defaults-file=$mysql_dir/my.cnf --user=$AREX_MYSQL_ADMIN password 'strong_secret'
+  mysqladmin       --defaults-file=$mysql_dir/my.cnf --user=$AREX_MYSQL_ADMIN --password='strong_secret' create $db_name
+}
+
+function mysql_invoke_script
+{
+  mysql_dir=$1
+  mysql_script=$2
+  user=$3
+  pass=$4
+  if [ -z "$user" ]; then
+    user=$AREX_MYSQL_ADMIN
+    pass='strong_secret'
+  fi
+  mysql            --defaults-file=$mysql_dir/my.cnf --user=$user --password=$pass < $mysql_script
+}
+
+function mysql_shutdown_server()
+{
+  mysql_dir=$1
+
+  echo
+  echo '>>> Shutting the mysql server down'
+  cat << EOF > $mysql_dir/shutdown.sql
+SHUTDOWN;
+EOF
+  mysql_invoke_script $mysql_dir $mysql_dir/shutdown.sql
+  sleep 2
+}
