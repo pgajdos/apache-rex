@@ -270,6 +270,26 @@ function nc_command()
   which nc 2>/dev/null
 }
 
+function mysql_install_db_command
+{
+  which mysql_install_db 2>/dev/null
+}
+
+function mysqld_command
+{
+  which mysqld 2>/dev/null
+}
+
+function mysqladmin_command
+{
+  which mysqladmin 2>/dev/null
+}
+
+function mysql_command
+{
+  which mysql 2>/dev/null
+}
+
 function python_command()
 {
   which python3 python 2>/dev/null | head -n 1
@@ -438,6 +458,18 @@ function check_system()
   echod -n '.'
   NC_COMMAND=$(nc_command)
   register_command "$NC_COMMAND"          nc
+  echod -n '.'
+  MYSQL_INSTALL_DB_COMMAND=$(mysql_install_db_command)
+  register_command "$MYSQL_INSTALL_DB_COMMAND"    mysql_install_db
+  echod -n '.'
+  MYSQLD_COMMAND=$(mysqld_command)
+  register_command "$MYSQLD_COMMAND"      mysqld
+  echod -n '.'
+  MYSQLADMIN_COMMAND=$(mysqladmin_command)
+  register_command "$MYSQLADMIN_COMMAND"  mysqladmin
+  echod -n '.'
+  MYSQL_COMMAND=$(mysql_command)
+  register_command "$MYSQL_COMMAND"       mysql
   echod -n '.'
   PYTHON_COMMAND=$(python_command)
   register_command "$PYTHON_COMMAND"      python
