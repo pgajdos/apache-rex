@@ -1,0 +1,67 @@
+LogLevel proxy_http2:debug
+
+SSLSessionCache         shmcb:@AREX_RUN_DIR/ssl_scache(512000)
+SSLSessionCacheTimeout  300
+
+SSLRandomSeed startup builtin
+SSLRandomSeed connect builtin
+  
+ 
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+  ServerName aserver.suse.cz
+
+  <IfVersion >= 2.4.2>
+    DefaultRuntimeDir @AREX_RUN_DIR@/run
+  </IfVersion>
+  
+  AddType application/x-x509-ca-cert .crt
+  AddType application/x-pkcs7-crl    .crl
+  
+  SSLEngine             on
+  
+  SSLCertificateFile    @AREX_RUN_DIR@/aserver.suse.cz/my.crt
+  SSLCertificateKeyFile @AREX_RUN_DIR@/aserver.suse.cz/private.key
+  
+  SSLProtocol all
+  <IfVersion >= 2.3.0>
+  SSLCipherSuite DEFAULT
+  </IfVersion>
+  <IfVersion < 2.3.0>
+  SSLCipherSuite ALL
+  </IfVersion>
+  SSLHonorCipherOrder on
+
+  SSLEngine             on
+  
+  Protocols h2  http/1.1
+  
+  <Directory "@AREX_DOCUMENT_ROOT@/vh1">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
+  Protocols h2c http/1.1
+
+  <Directory "@AREX_DOCUMENT_ROOT@/vh2">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_PORT3@
+<VirtualHost *:@AREX_PORT3@>
+  SSLProxyEngine on
+  SSLProxyCACertificateFile @AREX_RUN_DIR@/ca/my.crt
+
+  ProxyPass        "/app-h2" "h2://aserver.suse.cz:@AREX_PORT1@/vh1/"
+  ProxyPassReverse "/app-h2" "https://aserver.suse.cz:@AREX_PORT1@/vh1/"
+</VirtualHost>
+
+Listen @AREX_PORT4@
+<VirtualHost *:@AREX_PORT4@>
+  ProxyPass        "/app-h2c" "h2c://localhost:@AREX_PORT2@/vh2/"
+  ProxyPassReverse "/app-h2c" "http://localhost:@AREX_PORT2@/vh2/"
+</VirtualHost>
+

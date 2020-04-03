@@ -140,6 +140,7 @@ mod_asis-basic
 mod_http2-basic
 mod_http2-push
 mod_http2-issue-167
+mod_proxy_http2-basic
 mod_access_compat-basic
 mod_vhost_alias-basic
 mod_setenvif-basic
