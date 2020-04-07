@@ -1,0 +1,93 @@
+<IfVersion >= 2.4.2>
+  DefaultRuntimeDir @AREX_RUN_DIR@/run
+</IfVersion>
+ 
+SSLSessionCache         shmcb:@AREX_RUN_DIR/ssl_scache(512000)
+SSLSessionCacheTimeout  300
+
+SSLRandomSeed startup builtin
+SSLRandomSeed connect builtin
+  
+AddType application/x-x509-ca-cert .crt
+AddType application/x-pkcs7-crl    .crl
+  
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+  ServerName backend.suse.de
+
+  SSLEngine             on
+  
+  SSLCertificateFile    @AREX_RUN_DIR@/backend.suse.de/my.crt
+  SSLCertificateKeyFile @AREX_RUN_DIR@/backend.suse.de/private.key
+  
+  SSLProtocol all
+  <IfVersion >= 2.3.0>
+  SSLCipherSuite DEFAULT
+  </IfVersion>
+  <IfVersion < 2.3.0>
+  SSLCipherSuite ALL
+  </IfVersion>
+  SSLHonorCipherOrder on
+
+  SSLEngine             on
+  
+  <Directory "@AREX_DOCUMENT_ROOT@/backend">
+    @AREX_ALLOW_FROM_LOCALHOST@
+  </Directory>
+</VirtualHost>
+
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
+  SSLProxyEngine on
+  SSLProxyCACertificateFile @AREX_RUN_DIR@/ca/my.crt
+
+  # no hosts entry for backend.suse.de
+  <IfVersion >= 2.4.5>
+    SSLProxyCheckPeerName off
+  </IfVersion>
+  # version < 2.4.5             SSLProxyCheckPeerCN to off
+  # 2.4.5  <= version < 2.4.21  SSLProxyCheckPeerName off and SSLProxyCheckPeerCN off
+  # 2.4.21 <= version           SSLProxyCheckPeerName off is enough
+  # https://httpd.apache.org/docs/current/mod/mod_ssl.html#sslproxycheckpeercn  
+  SSLProxyCheckPeerCN off
+
+  ProxyPass        "/app-ssl" "https://127.0.0.1:@AREX_PORT1@/backend/"
+  ProxyPassReverse "/app-ssl" "https://127.0.0.1:@AREX_PORT1@/backend/"
+</VirtualHost>
+
+Listen @AREX_PORT3@
+<VirtualHost *:@AREX_PORT3@>
+  ServerName frontend.suse.de
+
+  SSLEngine             on
+  
+  SSLCertificateFile    @AREX_RUN_DIR@/frontend.suse.de/my.crt
+  SSLCertificateKeyFile @AREX_RUN_DIR@/frontend.suse.de/private.key
+  
+  SSLProtocol all
+  <IfVersion >= 2.3.0>
+  SSLCipherSuite DEFAULT
+  </IfVersion>
+  <IfVersion < 2.3.0>
+  SSLCipherSuite ALL
+  </IfVersion>
+  SSLHonorCipherOrder on
+
+  SSLProxyEngine on
+  SSLProxyCACertificateFile @AREX_RUN_DIR@/ca/my.crt
+
+  # no hosts entry for frontend.suse.de
+  <IfVersion >= 2.4.5>
+    SSLProxyCheckPeerName off
+  </IfVersion>
+  # version < 2.4.5             SSLProxyCheckPeerCN to off
+  # 2.4.5  <= version < 2.4.21  SSLProxyCheckPeerName off and SSLProxyCheckPeerCN off
+  # 2.4.21 <= version           SSLProxyCheckPeerName off is enough
+  # https://httpd.apache.org/docs/current/mod/mod_ssl.html#sslproxycheckpeercn  
+  SSLProxyCheckPeerCN off
+
+  ProxyPass        "/app-ssl" "https://127.0.0.1:@AREX_PORT1@/backend/"
+  ProxyPassReverse "/app-ssl" "https://127.0.0.1:@AREX_PORT1@/backend/"
+</VirtualHost>
+
+
