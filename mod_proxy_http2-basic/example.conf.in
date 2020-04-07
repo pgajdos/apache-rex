@@ -55,8 +55,18 @@ Listen @AREX_PORT3@
   SSLProxyEngine on
   SSLProxyCACertificateFile @AREX_RUN_DIR@/ca/my.crt
 
-  ProxyPass        "/app-h2" "h2://aserver.suse.cz:@AREX_PORT1@/vh1/"
-  ProxyPassReverse "/app-h2" "https://aserver.suse.cz:@AREX_PORT1@/vh1/"
+  # no hosts entry for aserver.suse.cz
+  <IfVersion >= 2.4.5>
+    SSLProxyCheckPeerName off
+  </IfVersion>
+  # version < 2.4.5             SSLProxyCheckPeerCN to off
+  # 2.4.5  <= version < 2.4.21  SSLProxyCheckPeerName off and SSLProxyCheckPeerCN off
+  # 2.4.21 <= version           SSLProxyCheckPeerName off is enough
+  # https://httpd.apache.org/docs/current/mod/mod_ssl.html#sslproxycheckpeercn
+  SSLProxyCheckPeerCN off
+
+  ProxyPass        "/app-h2" "h2://127.0.0.1:@AREX_PORT1@/vh1/"
+  ProxyPassReverse "/app-h2" "https://127.0.0.1:@AREX_PORT1@/vh1/"
 </VirtualHost>
 
 Listen @AREX_PORT4@
