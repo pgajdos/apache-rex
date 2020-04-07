@@ -13,12 +13,12 @@ AddType application/x-pkcs7-crl    .crl
   
 Listen @AREX_PORT1@
 <VirtualHost *:@AREX_PORT1@>
-  ServerName backend.suse.de
+  ServerName backend.suse.cz
 
   SSLEngine             on
   
-  SSLCertificateFile    @AREX_RUN_DIR@/backend.suse.de/my.crt
-  SSLCertificateKeyFile @AREX_RUN_DIR@/backend.suse.de/private.key
+  SSLCertificateFile    @AREX_RUN_DIR@/backend.suse.cz/my.crt
+  SSLCertificateKeyFile @AREX_RUN_DIR@/backend.suse.cz/private.key
   
   SSLProtocol all
   <IfVersion >= 2.3.0>
@@ -41,7 +41,7 @@ Listen @AREX_PORT2@
   SSLProxyEngine on
   SSLProxyCACertificateFile @AREX_RUN_DIR@/ca/my.crt
 
-  # no hosts entry for backend.suse.de
+  # no hosts entry for backend.suse.cz
   <IfVersion >= 2.4.5>
     SSLProxyCheckPeerName off
   </IfVersion>
@@ -57,12 +57,12 @@ Listen @AREX_PORT2@
 
 Listen @AREX_PORT3@
 <VirtualHost *:@AREX_PORT3@>
-  ServerName frontend.suse.de
+  ServerName frontend.suse.cz
 
   SSLEngine             on
   
-  SSLCertificateFile    @AREX_RUN_DIR@/frontend.suse.de/my.crt
-  SSLCertificateKeyFile @AREX_RUN_DIR@/frontend.suse.de/private.key
+  SSLCertificateFile    @AREX_RUN_DIR@/frontend.suse.cz/my.crt
+  SSLCertificateKeyFile @AREX_RUN_DIR@/frontend.suse.cz/private.key
   
   SSLProtocol all
   <IfVersion >= 2.3.0>
@@ -76,7 +76,7 @@ Listen @AREX_PORT3@
   SSLProxyEngine on
   SSLProxyCACertificateFile @AREX_RUN_DIR@/ca/my.crt
 
-  # no hosts entry for frontend.suse.de
+  # no hosts entry for frontend.suse.cz
   <IfVersion >= 2.4.5>
     SSLProxyCheckPeerName off
   </IfVersion>

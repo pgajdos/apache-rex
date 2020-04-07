@@ -8,11 +8,11 @@ openssl_setup_ca $AREX_RUN_DIR
 echo
 echo Setup BACKEND SERVER 
 echo ~~~~~~~~~~~~~~~~~~~~
-openssl_setup_entity $AREX_RUN_DIR backend.suse.de
+openssl_setup_entity $AREX_RUN_DIR backend.suse.cz
 echo
 echo Setup FRONTEND SERVER
 echo ~~~~~~~~~~~~~~~~~~~~~
-openssl_setup_entity $AREX_RUN_DIR frontend.suse.de
+openssl_setup_entity $AREX_RUN_DIR frontend.suse.cz
 echo
 #
 # create runtime dir, see DefaultRuntimeDir directive
