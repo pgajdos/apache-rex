@@ -4,6 +4,11 @@
 # start a php-fpm server
 function start_fpm()
 {
+  listen="$1"
+  if [ -z "$listen" ]; then
+    listen="127.0.0.1:$AREX_FCGI_PORT"
+  fi
+
   echo -n 'Starting php-fpm .. '
 cat << EOF > $AREX_RUN_DIR/php-fpm.conf
 [global]
@@ -11,7 +16,7 @@ pid       = $AREX_RUN_DIR/php-fpm.pid
 error_log = $AREX_RUN_DIR/php-fpm.log
 
 [www]
-listen   = 127.0.0.1:$AREX_FCGI_PORT
+listen   = $listen
 pm                   = dynamic
 pm.max_children      = 5
 pm.start_servers     = 2
