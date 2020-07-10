@@ -1,0 +1,3 @@
+Demonstrate binding proxy_fcgi module to php-fpm,
+this time over unix domain socket.
+https://cwiki.apache.org/confluence/display/HTTPD/PHP-FPM

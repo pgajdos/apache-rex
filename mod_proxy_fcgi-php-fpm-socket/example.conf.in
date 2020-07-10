@@ -1,0 +1,2 @@
+# https://wiki.apache.org/httpd/PHP-FPM
+ProxyPassMatch ^/(.*\.php)$ unix:@AREX_RUN_DIR@/run/php-fpm.sock|fcgi://localhost/@AREX_DOCUMENT_ROOT@/
