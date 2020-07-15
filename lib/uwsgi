@@ -1,0 +1,39 @@
+#!/bin/bash
+. ../lib/processman
+
+# start a uwsgi daemon
+function uwsgi_daemon_start()
+{
+  name=$1
+  plugins=$2
+  application=$3
+  port=$4
+  case "$plugins" in
+    *http*)
+           protocol="http"
+           option=--http
+           ;;
+    *)
+           protocol="uwsgi"
+           option=--socket
+           ;;
+  esac
+  echo -n "Starting [$name] uWSGI daemon (speaks $protocol) .. "
+  uwsgi --plugin $plugins \
+        $option localhost:$port \
+        --wsgi-file $application \
+        --pidfile $AREX_RUN_DIR/uwsgi-$name.pid \
+        --logto $AREX_RUN_DIR/uwsgi-$name.log &
+  sleep 1
+  echo done.
+}
+
+# stop uwsgi daemon
+function uwsgi_daemon_stop()
+{
+  name=$1
+  port=$2
+  echo -n "Stopping [$name] uWSGI daemon ... "
+  kill_pid_port $(cat $AREX_RUN_DIR/uwsgi-$name.pid) $port && echo 'done.' || echo 'FAILED.'
+}
+
