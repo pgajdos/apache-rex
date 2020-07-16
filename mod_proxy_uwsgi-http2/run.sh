@@ -11,11 +11,17 @@ uwsgi_daemon_start '2-http'  $AREX_UWSGI_PLUGIN_PYTHON,$AREX_UWSGI_PLUGIN_HTTP \
                    $AREX_RUN_DIR/helloworld.py $AREX_UWSGI_PORT2
 echo
 
-echo "[1] run an uWSGI application, uwsgi protocol"
-curl -s -k https://localhost:$AREX_PORT1/uwsgi/ | grep "Hello World!" || exit_code=1
+echo "[1] run an uWSGI application, uwsgi protocol, http1.1 request"
+curl -s -k --http1.1 https://localhost:$AREX_PORT1/uwsgi/ | grep "Hello World!" || exit_code=1
 
-echo "[2] run an uWSGI application, http protocol"
-curl -s -k https://localhost:$AREX_PORT1/http/ | grep "Hello World!" || exit_code=2
+echo "[2] run an uWSGI application, http protocol, http1.1 request"
+curl -s -k --http1.1 https://localhost:$AREX_PORT1/http/ | grep "Hello World!" || exit_code=2
+
+echo "[3] run an uWSGI application, uwsgi protocol, http2 request"
+curl -s -k --http2 https://localhost:$AREX_PORT1/uwsgi/ | grep "Hello World!" || exit_code=3
+
+echo "[4] run an uWSGI application, http protocol, http2 request"
+curl -s -k --http2 https://localhost:$AREX_PORT1/http/ | grep "Hello World!" || exit_code=4
 
 # stop uwsgi daemons
 echo
