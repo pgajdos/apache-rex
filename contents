@@ -81,6 +81,7 @@ mod_proxy_balancer-failonstatus
 mod_proxy_balancer-abz56925
 mod_proxy_html-basic
 mod_proxy_express-basic
+mod_proxy_express-basic-gdbm
 mod_proxy_connect-basic
 mod_proxy_ftp-basic
 mod_proxy_fcgi-basic
