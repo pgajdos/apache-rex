@@ -12,7 +12,7 @@ www1.example.com http://localhost:$AREX_PORT1
 www2.example.com http://localhost:$AREX_PORT2
 www3.example.com http://localhost:$AREX_PORT3
 EOF
-httxt2dbm -f DB -i $AREX_RUN_DIR/express-map.txt -o $AREX_RUN_DIR/emap.db
+httxt2dbm -f sdbm -i $AREX_RUN_DIR/express-map.txt -o $AREX_RUN_DIR/emap.db
 
 for i in 1 2 3; do
   mkdir -p $AREX_RUN_DIR/htdocs-vh$i

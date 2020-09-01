@@ -1,6 +1,5 @@
-LogLevel trace8
 ProxyExpressEnable on
-ProxyExpressDBMType db
+ProxyExpressDBMType sdbm
 ProxyExpressDBMFile @AREX_RUN_DIR@/emap.db
 
 Listen @AREX_PORT1@
