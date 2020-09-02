@@ -396,7 +396,8 @@ function have_systemd_coredump()
 {
   # check whether: 1. system is configured to dump coredumps into systemd-coredump
   #                2. coredumpctl command exists and user have enough privileges to gather dumps 
-  if sysctl kernel.core_pattern | grep -q 'systemd-coredump' && coredumpctl list | grep -q 'TIME\|No coredumps found.'; then
+  if sysctl kernel.core_pattern | grep -q 'systemd-coredump' && \
+     coredumpctl list 2>&1 | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | grep -q 'TIME\|No coredumps found.'; then
     echo '1'
   else 
     echo '0'
