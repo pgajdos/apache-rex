@@ -221,12 +221,12 @@ function curl_command()
 
 function curl_have_resolve()
 {
-  curl -h | grep -q '\--resolve' && echo -n 1 || echo -n 0
+  { curl --manual || curl --help; } | grep -q '\--resolve' && echo -n 1 || echo -n 0
 }
 
 function curl_have_cert_status()
 {
-  curl -h | grep -q '\--cert-status' && echo -n 1 || echo -n 0
+  { curl --manual || curl --help; } | grep -q '\--cert-status' && echo -n 1 || echo -n 0
 }
 
 function curl_have_http2()
