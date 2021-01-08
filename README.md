@@ -95,7 +95,9 @@ Each example has its own directory, which contains:
   Contains summary what the example is showing.
 * `MODULES` (required, even if empty)  
   Lists required modules apache should provide to run the example. Module
-  names in the list can be separated by white space or colon.
+  names in the list can be separated by white space or colon. Module name
+  can be regexp, too. It has to match <name>_module symbol provided by
+  the module.
 * `MODULES_OPT` (optional)  
   Lists modules that are either optional for given example (see `mod_sed` in 
   `mod_filter-basic` for instance) or are required just for some apache 
