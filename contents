@@ -124,6 +124,7 @@ mod_mime-TypesConfig
 mod_actions-basic
 mod_userdir-basic
 mod_ssl-basic
+mod_ssl-proxy
 mod_ssl-SSLCryptoDevice
 mod_ssl-verify-server-CRL
 mod_ssl-verify-server-OCSP
