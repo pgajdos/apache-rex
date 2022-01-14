@@ -1,0 +1,76 @@
+<IfVersion >= 2.4.2>
+  DefaultRuntimeDir @AREX_RUN_DIR@/run
+</IfVersion>
+
+SSLSessionCache         shmcb:@AREX_RUN_DIR/ssl_scache(512000)
+SSLSessionCacheTimeout  300
+
+SSLRandomSeed startup builtin
+SSLRandomSeed connect builtin  
+
+LogLevel debug
+
+Listen @AREX_PORT1@
+<VirtualHost *:@AREX_PORT1@>
+  ServerName frontend.su.se
+  ErrorLog "@AREX_RUN_DIR@/error_log-frontend"
+
+  AddType application/x-x509-ca-cert .crt
+  AddType application/x-pkcs7-crl    .crl
+
+  RequestHeader unset Expect early
+  
+  SSLEngine             on
+  SSLProxyEngine        on
+  
+  SSLCertificateFile    @AREX_RUN_DIR@/frontend.su.se/my.crt
+  SSLCertificateKeyFile @AREX_RUN_DIR@/frontend.su.se/private.key
+  
+  SSLProtocol all
+  <IfVersion >= 2.3.0>
+  SSLCipherSuite DEFAULT
+  </IfVersion>
+  <IfVersion < 2.3.0>
+  SSLCipherSuite ALL
+  </IfVersion>
+  SSLHonorCipherOrder on
+  
+  CustomLog             @AREX_RUN_DIR@/server_log-frontend   ssl_combined
+
+  SSLProxyCheckPeerName off  
+  ProxyPass / "https://127.0.0.1:@AREX_PORT2@/"
+</Virtualhost>
+
+Listen @AREX_PORT2@
+<VirtualHost *:@AREX_PORT2@>
+  ServerName backend.su.se
+  ErrorLog "@AREX_RUN_DIR@/error_log-backend"
+  
+  AddType application/x-x509-ca-cert .crt
+  AddType application/x-pkcs7-crl    .crl
+
+  SSLEngine             on
+  
+  SSLCertificateFile    @AREX_RUN_DIR@/backend.su.se/my.crt
+  SSLCertificateKeyFile @AREX_RUN_DIR@/backend.su.se/private.key
+  
+  SSLProtocol all
+  <IfVersion >= 2.3.0>
+  SSLCipherSuite DEFAULT
+  </IfVersion>
+  <IfVersion < 2.3.0>
+  SSLCipherSuite ALL
+  </IfVersion>
+  SSLHonorCipherOrder on
+  
+  CustomLog             @AREX_RUN_DIR@/server_log-backend   ssl_combined
+  
+  <Directory @AREX_DOCUMENT_ROOT@>
+    AuthType Basic
+    AuthBasicProvider file
+    AuthName "Restricted Area"
+    AuthUserFile @AREX_RUN_DIR@/htpasswd
+    Require valid-user
+  </Directory>
+</Virtualhost>
+
