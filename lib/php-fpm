@@ -1,7 +1,9 @@
 #!/bin/bash
 . ../lib/processman
 
+#session_dir=$AREX_RUN_DIR/sessions
 session_dir=$AREX_RUN_DIR/sessions
+
 
 # start a php-fpm server
 function start_fpm()
@@ -12,7 +14,7 @@ function start_fpm()
   fi
 
   # session dir
-  mkdir $AREX_RUN_DIR/sessions
+  mkdir $session_dir
 
   echo -n 'Starting php-fpm .. '
 cat << EOF > $AREX_RUN_DIR/php-fpm.conf
