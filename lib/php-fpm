@@ -1,6 +1,8 @@
 #!/bin/bash
 . ../lib/processman
 
+session_dir=$AREX_RUN_DIR/sessions
+
 # start a php-fpm server
 function start_fpm()
 {
@@ -8,6 +10,9 @@ function start_fpm()
   if [ -z "$listen" ]; then
     listen="127.0.0.1:$AREX_FCGI_PORT"
   fi
+
+  # session dir
+  mkdir $AREX_RUN_DIR/sessions
 
   echo -n 'Starting php-fpm .. '
 cat << EOF > $AREX_RUN_DIR/php-fpm.conf
@@ -22,6 +27,8 @@ pm.max_children      = 5
 pm.start_servers     = 2
 pm.min_spare_servers = 1
 pm.max_spare_servers = 3
+php_value[session.save_handler] = files
+php_value[session.save_path] = $session_dir
 EOF
   php-fpm --fpm-config $AREX_RUN_DIR/php-fpm.conf
   sleep 1
@@ -34,5 +41,6 @@ function stop_fpm()
 {
   echo -n 'Stopping php-fpm ... '
   kill_pid_port $(cat $AREX_RUN_DIR/php-fpm.pid) $AREX_FCGI_PORT && echo 'done.' || echo 'FAILED.'
+  echo "session files in $session_dir"
 }
 
