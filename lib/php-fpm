@@ -32,7 +32,7 @@ pm.max_spare_servers = 3
 php_value[session.save_handler] = files
 php_value[session.save_path] = $session_dir
 EOF
-  php-fpm --fpm-config $AREX_RUN_DIR/php-fpm.conf
+  php-fpm -n --fpm-config $AREX_RUN_DIR/php-fpm.conf
   sleep 1
   echo $(cat $AREX_RUN_DIR/php-fpm.pid)
   echo
