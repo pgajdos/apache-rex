@@ -1,0 +1,4 @@
+Listen @AREX_PORT1@
+# SITE variable is defined in pre-run.sh
+DocumentRoot "@AREX_DOCUMENT_ROOT@/${SITE}"
+

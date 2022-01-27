@@ -17,6 +17,7 @@ core-ErrorLogFormat-basic
 core-SetOutputFilter-basic
 core-SetInputFilter-basic
 core-UseCanonicalName-basic
+core-environment-in-conf
 core-If-basic
 core-LogLevel-basic
 core-Satisfy-basic
