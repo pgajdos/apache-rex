@@ -67,6 +67,7 @@ mod_rewrite-proxying
 mod_rewrite-dynamic-vhosts
 mod_rewrite-advanced
 mod_proxy-basic
+mod_proxy-hop-by-hop-headers
 mod_proxy-ordering-ProxyPass
 mod_proxy-ordering-Location
 mod_proxy-ordering-ProxyPass-Location
